@@ -221,26 +221,21 @@ var Quaderno = function () {
   }
 
   function serialize_tabs (elt) {
-
-    var tabs = [];
-    var labels = [];
-
-    var tds = spath(elt, 'table > tr > td');
-
-    for (var i = 0; i < tds.length; i++) {
-      labels.push(sc(tds[i], '.quad_label', 'first').value);
-    }
-
-    var trs = spath(elt, 'table > tr')[1];
-    var elts = spath(trs, 'td > .quad_tab_body > .quad_element');
-
-    for (var i = 0; i < elts.length; i++) {
-      var g = serializeElement(elts[i]);
-      g[1].label = labels[i];
-      tabs.push(g);
-    }
-
-    return [ 'tabs', {}, tabs ];
+    //var tabs = [];
+    //var labels = [];
+    //var tds = spath(elt, 'table > tr > td');
+    //for (var i = 0; i < tds.length; i++) {
+    //  labels.push(sc(tds[i], '.quad_label', 'first').value);
+    //}
+    //var trs = spath(elt, 'table > tr')[1];
+    //var elts = spath(trs, 'td > .quad_tab_body > .quad_element');
+    //for (var i = 0; i < elts.length; i++) {
+    //  var g = serializeElement(elts[i]);
+    //  g[1].label = labels[i];
+    //  tabs.push(g);
+    //}
+    //return [ 'tabs', {}, tabs ];
+    return [ 'nada', {}, [] ];
   }
 
   //
@@ -256,17 +251,14 @@ var Quaderno = function () {
     }
   }
 
-  function serialize_group (elt) {
-
-    var elts = sc(elt, '.quad_element');
-    var children = [];
-
-    for (var i = 0; i < elts.length; i++) {
-      children.push(serializeElement(elts[i]));
-    }
-
-    return [ 'group', {}, children ];
-  }
+  //function serialize_group (elt) {
+  //  var elts = sc(elt, '.quad_element');
+  //  var children = [];
+  //  for (var i = 0; i < elts.length; i++) {
+  //    children.push(serializeElement(elts[i]));
+  //  }
+  //  return [ 'group', {}, children ];
+  //}
 
   //
   // 'text'
@@ -286,11 +278,11 @@ var Quaderno = function () {
     }
   }
 
-  function serialize_text (elt) {
-    console.log(elt);
-    var text = sc(elt, '.quad_text', 'first').value;
-    return [ 'text', { 'label': text }, [] ];
-  }
+  //function serialize_text (elt) {
+  //  console.log(elt);
+  //  var text = sc(elt, '.quad_text', 'first').value;
+  //  return [ 'text', { 'label': text }, [] ];
+  //}
 
   //
   // 'text_input'
@@ -303,26 +295,78 @@ var Quaderno = function () {
     input.setAttribute('type', 'text');
   }
 
-  function serialize_text_input (elt) {
-    //console.log(elt);
-    return [ 'text_input', {}, [] ];
+  //function serialize_text_input (elt) {
+  //  //console.log(elt);
+  //  return [ 'text_input', {}, [] ];
+  //}
+
+  //
+  // *
+
+  function edit_ (container, template, data, options) {
+
+    // TODO
+  }
+
+  function serialize_children (elt) {
+
+    var children = [];
+    var elts = sc(elt, '.quad_element');
+
+    for (var i = 0; i < elts.length; i++) {
+      children.push(serializeElement(elts[i]));
+    }
+
+    return children;
+  }
+
+  function serialize_ (elt, serializeChildren) {
+
+    if (serializeChildren == undefined) serializeChildren = true;
+
+    var type = sc(elt, '.quad_type', 'first').value;
+
+    // TODO : repeatable
+
+    var id = sc(elt, '.quad_id', 'first');
+    var label = sc(elt, '.quad_label', 'first');
+    var title = sc(elt, '.quad_title', 'first');
+    var values = sc(elt, '.quad_values', 'first');
+
+    var atts = {};
+    if (id) atts['id'] = id.value;
+    if (label) atts['label'] = label.value;
+    if (title) atts['title'] = title.value;
+    if (values) atts['values'] = values.value;
+
+    var children;
+    if (serializeChildren) children = serialize_children(elt);
+    else children = [];
+
+    return [ type, atts, children ];
   }
 
   //
   // methods
 
+  function lookupFunction (funcPrefix, template) {
+
+    try { return eval(funcPrefix + template[0]); }
+    catch (e) { return eval(funcPrefix); }
+  }
+
+  function editElement (container, template, data, options) {
+
+    var f = lookupFunction('edit_', template);
+
+    f(div, template, data, options);
+
+    return div;
+  }
+
   function renderElement (container, template, data, options) {
 
-    var f;
-
-    try {
-      f = eval('render_' + template[0]);
-    }
-    catch (e) {
-      create(
-        container, 'div', {}, 'cannot render element "' + template[0] + '"');
-      return;
-    }
+    var f = lookupFunction('render_', template);
 
     var div = create(container, 'div', '.quad_element');
 
@@ -340,14 +384,9 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var type = sc(container, '.quad_type', 'first').value;
-    var f = eval('serialize_' + type);
+    var f = lookupFunction('serialize_', template);
 
-    var s = f(container);
-    var title = sc(container, '.quad_title', 'first');
-    if (title) s[1].title = title.value;
-
-    return s;
+    return f(container);
   }
 
   //
@@ -379,7 +418,12 @@ var Quaderno = function () {
 
     container.mode = options.mode;
 
-    renderElement(container, template, data, options);
+    if (options.mode == 'edit') {
+      editElement(container, template, data, options);
+    }
+    else {
+      renderElement(container, template, data, options);
+    }
 
     //container.undoStack = [ toTemplateWithData
   }
