@@ -24,6 +24,7 @@ var Quaderno = function () {
   }
 
   function hasClass (elt, cname) {
+    if ( ! cname) return false;
     if (cname[0] == '.') cname = cname.slice(1);
     var cs = elt.className.split(' ');
     for (var i = 0; i < cs.length; i++) { if (cs[i] == cname) return true; }
@@ -97,6 +98,22 @@ var Quaderno = function () {
     return a[index];
   }
 
+  function spath (elt, path) {
+
+    path = path.split(' > ');
+    var start = [ elt ];
+    var p;
+
+    while (p = path.shift()) {
+      start = start[0];
+      var c = sc(start, p);
+      if (c.length == 0) return [];
+      start = c;
+    }
+
+    return start;
+  }
+
   function create (container, tagName, attributes, innerText) {
 
     var e = document.createElement(tagName);
@@ -160,9 +177,12 @@ var Quaderno = function () {
     var td = create(container, 'td', {});
 
     if (options.mode == 'edit') {
+      hide(td, '.quad_label', template[1].label);
+      // TODO
       create(td, 'span', {}, template[1].label);
     }
     else {
+      hide(td, '.quad_label', template[1].label);
       var a = create(td, 'a', '.quad_tab', template[1].label);
       a.setAttribute('href', '');
       a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
@@ -204,10 +224,21 @@ var Quaderno = function () {
 
     var tabs = [];
     var labels = [];
-    var table = sc(elt, 'table', 'first');
-    var tr = sc(table, 'tr', 'first');
 
-    console.log(elt);
+    var tds = spath(elt, 'table > tr > td');
+
+    for (var i = 0; i < tds.length; i++) {
+      labels.push(sc(tds[i], '.quad_label', 'first').value);
+    }
+
+    var trs = spath(elt, 'table > tr')[1];
+    var elts = spath(trs, 'td > .quad_tab_body > .quad_element');
+
+    for (var i = 0; i < elts.length; i++) {
+      var g = serializeElement(elts[i]);
+      g[1].label = labels[i];
+      tabs.push(g);
+    }
 
     return [ 'tabs', {}, tabs ];
   }
@@ -223,6 +254,11 @@ var Quaderno = function () {
       var div = create(container, 'div', {});
       renderElement(div, children[i], data, options);
     }
+  }
+
+  function serialize_group (elt) {
+
+    return [ 'group', {}, [] ];
   }
 
   //
