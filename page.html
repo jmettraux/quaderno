@@ -1,0 +1,96 @@
+
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>Quaderno</title>
+  <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/datepicker.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/quaderno.css" type="text/css" media="screen" />
+  <script src="js/datepicker.packed.js"></script>
+  <script src="js/quaderno.js"></script>
+</head>
+<body>
+
+  <h1><a href="">Quaderno</a></h1>
+
+  <div id="quad" class="quad_root"></div>
+
+  <div id="output"></div>
+
+  <div class="buttons">
+    <a href="" onclick="toggleEdition(); return false;">edit</a>
+    <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
+    <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
+    <a href="" onclick="output(); return false;">output</a>
+  </div>
+
+  <script>
+
+    var template = [ 'tabs', {}, [
+      [ 'group', { 'label': 'tab.a' }, [
+        [ 'text', { 'label': 'this is a message' }, [] ],
+        [ 'text_input', { 'label': 'colour', 'id': 'colour' }, [] ]
+      ] ],
+      [ 'group', { 'label': 'tab.b' }, [
+        [ 'text', { 'label': 'this is a message' }, [] ],
+        [ 'text_input', { 'label': 'location', 'id': 'location' }, [] ]
+      ] ],
+      [ 'group', { 'label': 'tab.c' }, [
+        [ 'text', { 'label': 'tab.c.text' }, [] ],
+        [ 'text_input', { 'label': 'owner', 'id': 'stuff.owner' }, [] ]
+      ] ] ]
+    ];
+
+    var data = {
+      'colour': 'blue'
+    };
+    var translations = {
+      'tab': {
+        'c': {
+          'text': 'translated info'
+        }
+      }
+    };
+
+    function toggleEdition () {
+
+      var t = Quaderno.toTemplate('quad');
+      var d = Quaderno.toData('quad');
+
+      if (e.innerHTML == 'edit') {
+        Quaderno.render(
+          'quad', t, d, { 'translations': translations, 'mode': 'edit' });
+        e.innerHTML = 'view';
+      }
+      else if (e.innerHTML == 'view') {
+        Quaderno.render(
+          'quad', t, d, { 'translations': translations, 'mode': 'view' });
+        e.innerHTML = 'use';
+      }
+      else {
+        Quaderno.render(
+          'quad', t, d, { 'translations': translations, 'mode': 'use' });
+        e.innerHTML = 'edit';
+      }
+    }
+
+    function render () {
+      Quaderno.render(
+        'quad', template, data, { 'translations': translations, 'mode': 'use' });
+    }
+
+    function output () {
+      var s = Quaderno.serialize('quad');
+      s = JSON.stringify(s);
+      var out = document.getElementById('output')
+      out.style.display = 'block';
+      out.innerHTML = s;
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
+
