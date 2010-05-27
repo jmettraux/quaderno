@@ -79,7 +79,7 @@ var Quaderno = function () {
     };
   }
 
-  function children (elt, path, index) {
+  function sc (elt, path, index) {
 
     var i = identify(path);
     var a = [];
@@ -204,8 +204,8 @@ var Quaderno = function () {
 
     var tabs = [];
     var labels = [];
-    //var table = children(elt, 'table', 'first');
-    //var tr = children(table, 'tr', 'first');
+    var table = sc(elt, 'table', 'first');
+    var tr = sc(table, 'tr', 'first');
 
     console.log(elt);
 
@@ -279,7 +279,7 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var t = children(container, '.quad_type', 'first').value;
+    var t = sc(container, '.quad_type', 'first').value;
     var f = eval('serialize_' + t);
 
     return f(container);
@@ -325,7 +325,7 @@ var Quaderno = function () {
       container = document.getElementById(container);
     }
 
-    return serializeElement(children(container, '.quad_element', 'first'));
+    return serializeElement(sc(container, '.quad_element', 'first'));
   }
 
   function extract (container) {
