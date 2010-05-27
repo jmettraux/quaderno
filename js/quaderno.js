@@ -251,14 +251,21 @@ var Quaderno = function () {
     var children = template[2];
 
     for (var i = 0; i < children.length; i++) {
-      var div = create(container, 'div', {});
-      renderElement(div, children[i], data, options);
+      //var div = create(container, 'div', {});
+      renderElement(container, children[i], data, options);
     }
   }
 
   function serialize_group (elt) {
 
-    return [ 'group', {}, [] ];
+    var elts = sc(elt, '.quad_element');
+    var children = [];
+
+    for (var i = 0; i < elts.length; i++) {
+      children.push(serializeElement(elts[i]));
+    }
+
+    return [ 'group', {}, children ];
   }
 
   //
@@ -273,9 +280,16 @@ var Quaderno = function () {
       var input = create(container, 'input', '.quad_text', text);
     }
     else {
+      hide(container, '.quad_text', text);
       text = translate(options, text);
       create(container, 'div', '.quad_text', text);
     }
+  }
+
+  function serialize_text (elt) {
+    console.log(elt);
+    var text = sc(elt, '.quad_text', 'first').value;
+    return [ 'text', { 'label': text }, [] ];
   }
 
   //
@@ -287,6 +301,11 @@ var Quaderno = function () {
 
     var input = create(container, 'input', '.quad_text_input');
     input.setAttribute('type', 'text');
+  }
+
+  function serialize_text_input (elt) {
+    //console.log(elt);
+    return [ 'text_input', {}, [] ];
   }
 
   //
@@ -306,6 +325,12 @@ var Quaderno = function () {
     }
 
     var div = create(container, 'div', '.quad_element');
+
+    if (template[1].title) {
+      hide(div, '.quad_title', template[1].title);
+      div.setAttribute('title', translate(options, template[1].title));
+    }
+
     hide(div, '.quad_type', template[0]);
 
     f(div, template, data, options);
@@ -315,10 +340,14 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var t = sc(container, '.quad_type', 'first').value;
-    var f = eval('serialize_' + t);
+    var type = sc(container, '.quad_type', 'first').value;
+    var f = eval('serialize_' + type);
 
-    return f(container);
+    var s = f(container);
+    var title = sc(container, '.quad_title', 'first');
+    if (title) s[1].title = title.value;
+
+    return s;
   }
 
   //
