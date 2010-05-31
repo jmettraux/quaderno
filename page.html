@@ -19,7 +19,7 @@
   <div id="output"></div>
 
   <div class="buttons">
-    <a href="" onclick="toggleEdition(); return false;">edit</a>
+    <a href="" onclick="toggleEdition(this); return false;">edit</a>
     <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
     <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
     <a href="" onclick="output(); return false;">output</a>
@@ -56,25 +56,25 @@
       }
     };
 
-    function toggleEdition () {
+    function toggleEdition (button) {
 
-      var t = Quaderno.toTemplate('quad');
-      var d = Quaderno.toData('quad');
+      var s = Quaderno.serialize('quad');
+      var d = {};
 
-      if (e.innerHTML == 'edit') {
+      if (button.innerHTML == 'edit') {
         Quaderno.render(
-          'quad', t, d, { 'translations': translations, 'mode': 'edit' });
-        e.innerHTML = 'view';
+          'quad', s, d, { 'translations': translations, 'mode': 'edit' });
+        button.innerHTML = 'view';
       }
-      else if (e.innerHTML == 'view') {
+      else if (button.innerHTML == 'view') {
         Quaderno.render(
-          'quad', t, d, { 'translations': translations, 'mode': 'view' });
-        e.innerHTML = 'use';
+          'quad', s, d, { 'translations': translations, 'mode': 'view' });
+        button.innerHTML = 'use';
       }
       else {
         Quaderno.render(
-          'quad', t, d, { 'translations': translations, 'mode': 'use' });
-        e.innerHTML = 'edit';
+          'quad', s, d, { 'translations': translations, 'mode': 'use' });
+        button.innerHTML = 'edit';
       }
     }
 

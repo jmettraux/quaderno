@@ -4,15 +4,15 @@ dir = file.split('/').slice(0, -1).join('/');
 load(dir + "/base.js");
 
 
-function o (checklist) {
+function o (template, data) {
   document._clear();
-  Quaderno.render('quad', checklist);
+  Quaderno.render('quad', template, data);
   return Quaderno.serialize('quad');
 }
 
 // 0
 
-var template = [ 'tabs', {}, [
+var ta = [ 'tabs', {}, [
   [ 'group', { 'label': 'tab.a' }, [
     [ 'text', { 'label': 'this is a message' }, [] ],
     [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada' }, [] ]
@@ -27,14 +27,23 @@ var template = [ 'tabs', {}, [
   ] ] ]
 ];
 
-assertEqual(template, o(template));
+assertEqual(ta, o(ta));
 
 // 1
 
-var template = [ 'tabs', {}, [
+var tb = [ 'tabs', {}, [
   [ 'group', { 'label': 'tab.a' }, [
     [ 'text', { 'label': 'this is a message' }, [] ],
-    [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada', 'value': 'nada' }, [] ] ] ] ] ];
+    [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada', 'value': 'azure' }, [] ] ] ] ] ];
 
-assertEqual(template, o(template));
+assertEqual(tb, o(tb));
+
+// 2
+
+var tc = [ 'tabs', {}, [
+  [ 'group', { 'label': 'tab.a' }, [
+    [ 'text', { 'label': 'this is a message' }, [] ],
+    [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada' }, [] ] ] ] ] ];
+
+assertEqual(tb, o(tc, { 'colour': 'azure' }));
 

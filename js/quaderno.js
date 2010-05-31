@@ -168,8 +168,12 @@ var Quaderno = function () {
   }
 
   function lookup (hash, key) {
+
+    if (hash == undefined) return undefined
+
     if ( ! isArray(key)) key = key.split('.');
     if (key.length < 1) return hash;
+
     return lookup(hash[key.shift()], key);
   }
 
@@ -178,6 +182,13 @@ var Quaderno = function () {
       return lookup(options.translations, text);
     }
     return text;
+  }
+
+  function getValue (template, data, options) {
+
+    if (template[1].value) return template[1].value;
+    if (template[1].id) return lookup(data, template[1].id);
+    return undefined;
   }
 
   //function root (elt) {
@@ -205,8 +216,6 @@ var Quaderno = function () {
   }
 
   function render_tabs (container, template, data, options) {
-
-    //var mode = options['mode'] || 'view';
 
     var tabs = template[2];
 
@@ -292,7 +301,8 @@ var Quaderno = function () {
     var input = create(container, 'input', '.quad_value');
     input.setAttribute('type', 'text');
 
-    if (template[1].value) input.value = template[1].value;
+    var value = getValue(template, data, options);
+    if (value != undefined) input.value = value;
   }
 
   //
@@ -359,7 +369,7 @@ var Quaderno = function () {
 
     var f = lookupFunction('edit_', template);
 
-    f(div, template, data, options);
+    var div = f(container, template, data, options);
 
     return div;
   }
