@@ -205,7 +205,8 @@ var Quaderno = function () {
       render_tab_label(tr0, tabs[i], data, options);
     }
 
-    addClass(tr0.firstChild.firstChild, 'quad_selected');
+    var tab = spath(tr0, 'td > .quad_tab')[0];
+    addClass(tab, 'quad_selected');
 
     // content
 
@@ -221,21 +222,29 @@ var Quaderno = function () {
   }
 
   function serialize_tabs (elt) {
-    //var tabs = [];
-    //var labels = [];
-    //var tds = spath(elt, 'table > tr > td');
-    //for (var i = 0; i < tds.length; i++) {
-    //  labels.push(sc(tds[i], '.quad_label', 'first').value);
+
+    var tabs = [];
+    var labels = [];
+
+    var tds = spath(elt, 'table > tr > td');
+    for (var i = 0; i < tds.length; i++) {
+      labels.push(sc(tds[i], '.quad_label', 'first').value);
+    }
+
+    var trs = spath(elt, 'table > tr')[1];
+    var tab_body = spath(trs, 'td > .quad_tab_body')[0];
+
+    console.log(tab_body);
+
+    var children = serialize_children(tab_body);
+    //for (var i = 0; i < children.length; i++) {
+    //  children[i][1].label = labels[i];
     //}
-    //var trs = spath(elt, 'table > tr')[1];
-    //var elts = spath(trs, 'td > .quad_tab_body > .quad_element');
-    //for (var i = 0; i < elts.length; i++) {
-    //  var g = serializeElement(elts[i]);
-    //  g[1].label = labels[i];
-    //  tabs.push(g);
-    //}
-    //return [ 'tabs', {}, tabs ];
-    return [ 'nada', {}, [] ];
+    //var children = [];
+
+    console.log(children);
+
+    return [ 'tabs', {}, children ];
   }
 
   //
@@ -310,8 +319,12 @@ var Quaderno = function () {
 
   function serialize_children (elt) {
 
+    console.log(elt);
+
     var children = [];
     var elts = sc(elt, '.quad_element');
+
+    console.log(elts);
 
     for (var i = 0; i < elts.length; i++) {
       children.push(serializeElement(elts[i]));
@@ -395,9 +408,11 @@ var Quaderno = function () {
   function showTab (td) {
 
     for (var i = 0; i < td.parentNode.children.length; i++) {
-      removeClass(td.parentNode.children[i].firstChild, 'quad_selected');
+      var tab = sc(td.parentNode.children[i], '.quad_tab', 'first');
+      removeClass(tab, 'quad_selected');
     }
-    addClass(td.firstChild, 'quad_selected');
+    var tab = sc(td, '.quad_tab', 'first');
+    addClass(tab, 'quad_selected');
 
     for (var i = 0; i < td.tab_body.parentNode.children.length; i++) {
       td.tab_body.parentNode.children[i].style.display = 'none';
