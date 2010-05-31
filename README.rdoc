@@ -1,0 +1,9 @@
+
+= quaderno
+
+a mini form templating system in javascript.
+
+== license
+
+MIT
+
