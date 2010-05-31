@@ -3,6 +3,12 @@
 
 a mini form templating system in javascript.
 
+
+== credits
+
+Jamandru Reynolds - http://geometron.net/ - CSS and general appearance
+
+
 == license
 
 MIT
