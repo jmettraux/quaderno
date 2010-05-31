@@ -80,3 +80,144 @@ function assertEqual (a, b) {
   print(bb);
 }
 
+
+//
+// test DOM
+
+var Element = function () {
+
+  function appendChild (c) {
+    c.parentNode = this;
+    this.children.push(c);
+  }
+  function setAttribute (name, value) {
+    this.attributes[name] = value;
+  }
+  function removeAttribute (name) {
+    delete this.attributes[name];
+  }
+
+  function attsToJson (atts) {
+    var h = {};
+    for (var k in atts) { h[k] = atts[k]; }
+    var kl = h['class'];
+    delete(h['class']);
+    var s = '';
+    if (kl) {
+      s += ('.' + kl.split(' ').join('.') + ' ');
+    }
+    s += JSON.stringify(h).slice(1, -1);
+    return s;
+  }
+
+  function toString (indentation) {
+
+    if ( ! indentation) indentation = 1;
+    var s = '';
+    for (var i = 0; i < indentation; i++) s += '  ';
+
+    s += ('<' + this.tagName + ' ');
+    if (this.id) s += ('#' + this.id + ' ');
+    s += attsToJson(this.attributes) + '\n';
+
+    for (var i = 0; i < this.children.length; i++) {
+      var c = this.children[i];
+      s += c.toString(indentation + 1);
+    }
+
+    if (this.innerHTML != undefined && this.innerHTML != '') {
+      for (var i = 0; i < indentation + 1; i++) s += '  ';
+      s += this.innerHTML;
+      s += '\n';
+    }
+
+    return s;
+  }
+
+  var o = {
+
+    attributes: { 'class': '' },
+    children: [],
+    style: {},
+
+    appendChild: appendChild,
+    setAttribute: setAttribute,
+    removeAttribute: removeAttribute,
+
+    __noSuchMethod__: function (id, args) {
+      print("!!! nsm : " + id);
+    },
+
+    toString: toString
+  }
+
+  o.__defineGetter__('previousSibling', function () {
+    var cs = this.parentNode.children;
+    var prev = null;
+    for (var i = 0; i < cs.length; i++) {
+      var c = cs[i];
+      if (c == this) return prev;
+      prev = c;
+    }
+    return null;
+  });
+  o.__defineGetter__('firstChild', function () {
+    return this.children[0]; });
+
+  o.__defineGetter__('className', function () {
+    return this.attributes['class']; });
+  o.__defineSetter__('className', function (val) {
+    this.attributes['class'] = val; });
+
+  o.__defineSetter__('value', function (val) {
+    this.attributes['value'] = val; });
+  o.__defineGetter__('value', function () {
+    if (this.tagName == 'select') {
+      for (var i = 0; i < this.children.length; i++) {
+        var c = this.children[i];
+        if (c.attributes['selected']) return c.innerHTML;
+      }
+    }
+    return this.attributes['value']; });
+
+  o.__defineGetter__('title', function () {
+    return this.attributes['title']; });
+
+  o.__defineGetter__('checked', function () {
+    return this.attributes['checked'] == 'checked'; });
+
+  //o.__defineGetter__('style', function () { return this.attributes.style; });
+
+  return o;
+};
+
+document = function () {
+
+  var elements = {};
+  elements['quad'] = Element();
+  elements['quad'].tagName = 'div';
+
+  function createElement (tagName) {
+    var e = Element();
+    e.tagName = tagName;
+    return e;
+  }
+
+  function createTextNode (text) {
+    return text;
+  }
+
+  function getElementById (id) {
+    return elements[id];
+  }
+
+  return {
+
+    _testing: true,
+
+    createElement: createElement,
+    createTextNode: createTextNode,
+    getElementById: getElementById,
+  }
+}();
+
