@@ -193,9 +193,15 @@ var Element = function () {
 
 document = function () {
 
-  var elements = {};
-  elements['quad'] = Element();
-  elements['quad'].tagName = 'div';
+  var elements;
+
+  function _clear () {
+    elements = {};
+    elements['quad'] = Element();
+    elements['quad'].tagName = 'div';
+  }
+
+  _clear();
 
   function createElement (tagName) {
     var e = Element();
@@ -214,6 +220,8 @@ document = function () {
   return {
 
     _testing: true,
+
+    _clear: _clear,
 
     createElement: createElement,
     createTextNode: createTextNode,

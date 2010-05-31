@@ -31,7 +31,8 @@ var Quaderno = function () {
       else console.log(arguments);
     }
     catch (e) {
-      print(o.toString());
+      if (o == undefined) print("undefined");
+      else print(o.toString());
     }
   }
 
@@ -288,8 +289,10 @@ var Quaderno = function () {
     hide(container, '.quad_label', template[1].label);
     create(container, 'span', '.quad_label', template[1].label);
 
-    var input = create(container, 'input', '.quad_text_input');
+    var input = create(container, 'input', '.quad_value');
     input.setAttribute('type', 'text');
+
+    if (template[1].value) input.value = template[1].value;
   }
 
   //
@@ -323,12 +326,14 @@ var Quaderno = function () {
     var id = sc(elt, '.quad_id', 'first');
     var label = sc(elt, '.quad_label', 'first');
     var title = sc(elt, '.quad_title', 'first');
+    var value = sc(elt, '.quad_value', 'first');
     var values = sc(elt, '.quad_values', 'first');
 
     var atts = {};
     if (id) atts['id'] = id.value;
     if (label) atts['label'] = label.value;
     if (title) atts['title'] = title.value;
+    if (value && value.value) atts['value'] = value.value;
     if (values) atts['values'] = values.value;
 
     var children;

@@ -5,9 +5,12 @@ load(dir + "/base.js");
 
 
 function o (checklist) {
+  document._clear();
   Quaderno.render('quad', checklist);
   return Quaderno.serialize('quad');
 }
+
+// 0
 
 var template = [ 'tabs', {}, [
   [ 'group', { 'label': 'tab.a' }, [
@@ -23,6 +26,15 @@ var template = [ 'tabs', {}, [
     [ 'text_input', { 'label': 'owner', 'id': 'stuff.owner' }, [] ]
   ] ] ]
 ];
+
+assertEqual(template, o(template));
+
+// 1
+
+var template = [ 'tabs', {}, [
+  [ 'group', { 'label': 'tab.a' }, [
+    [ 'text', { 'label': 'this is a message' }, [] ],
+    [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada', 'value': 'nada' }, [] ] ] ] ] ];
 
 assertEqual(template, o(template));
 
