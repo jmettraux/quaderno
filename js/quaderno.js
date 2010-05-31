@@ -234,15 +234,10 @@ var Quaderno = function () {
     var trs = spath(elt, 'table > tr')[1];
     var tab_body = spath(trs, 'td > .quad_tab_body')[0];
 
-    console.log(tab_body);
-
     var children = serialize_children(tab_body);
-    //for (var i = 0; i < children.length; i++) {
-    //  children[i][1].label = labels[i];
-    //}
-    //var children = [];
-
-    console.log(children);
+    for (var i = 0; i < children.length; i++) {
+      children[i][1].label = labels[i];
+    }
 
     return [ 'tabs', {}, children ];
   }
@@ -255,7 +250,6 @@ var Quaderno = function () {
     var children = template[2];
 
     for (var i = 0; i < children.length; i++) {
-      //var div = create(container, 'div', {});
       renderElement(container, children[i], data, options);
     }
   }
@@ -319,12 +313,8 @@ var Quaderno = function () {
 
   function serialize_children (elt) {
 
-    console.log(elt);
-
     var children = [];
     var elts = sc(elt, '.quad_element');
-
-    console.log(elts);
 
     for (var i = 0; i < elts.length; i++) {
       children.push(serializeElement(elts[i]));
@@ -364,7 +354,10 @@ var Quaderno = function () {
 
   function lookupFunction (funcPrefix, template) {
 
-    try { return eval(funcPrefix + template[0]); }
+    var type = template;
+    if (isArray(template)) type = template[0];
+
+    try { return eval(funcPrefix + type); }
     catch (e) { return eval(funcPrefix); }
   }
 
@@ -397,7 +390,8 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var f = lookupFunction('serialize_', template);
+    var type = sc(container, '.quad_type', 'first').value;
+    var f = lookupFunction('serialize_', type);
 
     return f(container);
   }
