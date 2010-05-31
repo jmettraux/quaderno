@@ -26,11 +26,11 @@ var Quaderno = function () {
   // misc
 
   function clog (o) {
-    if (console) {
+    try {
       if (arguments.length == 1) console.log(arguments[0]);
       else console.log(arguments);
     }
-    else {
+    catch (e) {
       print(o.toString());
     }
   }
@@ -197,17 +197,10 @@ var Quaderno = function () {
 
     var td = create(container, 'td', {});
 
-    if (options.mode == 'edit') {
-      hide(td, '.quad_label', template[1].label);
-      // TODO
-      create(td, 'span', {}, template[1].label);
-    }
-    else {
-      hide(td, '.quad_label', template[1].label);
-      var a = create(td, 'a', '.quad_tab', template[1].label);
-      a.setAttribute('href', '');
-      a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
-    }
+    hide(td, '.quad_label', template[1].label);
+    var a = create(td, 'a', '.quad_tab', template[1].label);
+    a.setAttribute('href', '');
+    a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
   }
 
   function render_tabs (container, template, data, options) {
@@ -275,15 +268,6 @@ var Quaderno = function () {
     }
   }
 
-  //function serialize_group (elt) {
-  //  var elts = sc(elt, '.quad_element');
-  //  var children = [];
-  //  for (var i = 0; i < elts.length; i++) {
-  //    children.push(serializeElement(elts[i]));
-  //  }
-  //  return [ 'group', {}, children ];
-  //}
-
   //
   // 'text'
 
@@ -291,38 +275,22 @@ var Quaderno = function () {
 
     var text = template[1].label;
 
-    if (options.mode == 'edit') {
-      var label = create(container, 'span', '.quad_label', 'label');
-      var input = create(container, 'input', '.quad_text', text);
-    }
-    else {
-      hide(container, '.quad_text', text);
-      text = translate(options, text);
-      create(container, 'div', '.quad_text', text);
-    }
+    hide(container, '.quad_label', text);
+    text = translate(options, text);
+    create(container, 'div', '.quad_label', text);
   }
-
-  //function serialize_text (elt) {
-  //  console.log(elt);
-  //  var text = sc(elt, '.quad_text', 'first').value;
-  //  return [ 'text', { 'label': text }, [] ];
-  //}
 
   //
   // 'text_input'
 
   function render_text_input (container, template, data, options) {
 
-    var label = create(container, 'span', '.quad_label', template[1].label);
+    hide(container, '.quad_label', template[1].label);
+    create(container, 'span', '.quad_label', template[1].label);
 
     var input = create(container, 'input', '.quad_text_input');
     input.setAttribute('type', 'text');
   }
-
-  //function serialize_text_input (elt) {
-  //  //console.log(elt);
-  //  return [ 'text_input', {}, [] ];
-  //}
 
   //
   // *
@@ -397,6 +365,9 @@ var Quaderno = function () {
 
     var div = create(container, 'div', '.quad_element');
 
+    if (template[1].id) {
+      hide(div, '.quad_id', template[1].id);
+    }
     if (template[1].title) {
       hide(div, '.quad_title', template[1].title);
       div.setAttribute('title', translate(options, template[1].title));
