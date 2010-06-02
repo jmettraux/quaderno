@@ -237,6 +237,30 @@ var Quaderno = function () {
         'onclick': onclick });
   }
 
+  function createTextInput (container, key, template, data, options) {
+
+    create(container, 'span', '.quad_key_e', key);
+
+    var input = create(container, 'input', '.quad_' + key);
+    input.type = 'text';
+
+    var v = template[1][key];
+    if (v) input.value = v;
+
+    return input;
+  }
+
+  function fetchAndSet (elt, key, atts) {
+
+    var v = scc(elt, '.quad_' + key);
+    if ( ! v) return;
+
+    v = v.value;
+    if (v === '') return;
+
+    atts[key] = v;
+  }
+
   //function root (elt) {
   //  if ( ! elt) return null;
   //  if (elt.undoStack) return elt;
@@ -396,17 +420,6 @@ var Quaderno = function () {
   //
   // *
 
-  // TODO : better name ? better location ?
-  //
-  function createTextInput (container, key, template, data, options) {
-    create(container, 'span', '.quad_key_e', key);
-    var input = create(container, 'input', '.quad_' + key);
-    input.type = 'text';
-    var v = template[1][key];
-    if (v) input.value = v;
-    return input;
-  }
-
   function edit_ (container, template, data, options) {
 
     // TODO : finish me
@@ -416,6 +429,7 @@ var Quaderno = function () {
     createTextInput(div, 'id', template, data, options);
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);
+    createTextInput(div, 'value', template, data, options);
 
     // TODO : repeatable
 
@@ -442,18 +456,13 @@ var Quaderno = function () {
 
     // TODO : repeatable
 
-    var id = scc(elt, '.quad_id');
-    var label = scc(elt, '.quad_label');
-    var title = scc(elt, '.quad_title');
-    var value = scc(elt, '.quad_value');
-    var values = scc(elt, '.quad_values');
-
     var atts = {};
-    if (id) atts['id'] = id.value;
-    if (label) atts['label'] = label.value;
-    if (title) atts['title'] = title.value;
-    if (value && value.value) atts['value'] = value.value;
-    if (values) atts['values'] = values.value;
+
+    var id = fetchAndSet(elt, 'id', atts);
+    var label = fetchAndSet(elt, 'label', atts);
+    var title = fetchAndSet(elt, 'title', atts);
+    var value = fetchAndSet(elt, 'value', atts);
+    var values = fetchAndSet(elt, 'values', atts);
 
     var children = [];
     if (serializeChildren) children = serialize_children(elt);

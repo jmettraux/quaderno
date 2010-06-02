@@ -15,7 +15,9 @@ load(dir + "/../js/quaderno.js");
 //
 
 function keys (o) {
-  var keys = []; for (var k in o) keys.push(k); return keys.sort();
+  var keys = [];
+  for (var k in o) { if (o[k] !== undefined) keys.push(k); }
+  return keys.sort();
 }
 
 function diff (a, b) {
