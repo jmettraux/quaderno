@@ -263,8 +263,6 @@ var Quaderno = function () {
     }
     else {
 
-      //hide(td, '.quad_label', template[1].label);
-
       var inp = create(div, 'input', '.quad_label');
       inp.setAttribute('type', 'text');
       inp.setAttribute('value', template[1].label);
@@ -368,7 +366,7 @@ var Quaderno = function () {
 
     hide(container, '.quad_label', text);
     text = translate(options, text);
-    create(container, 'div', '.quad_label', text);
+    create(container, 'div', '.quad_key', text);
   }
 
   //
@@ -377,7 +375,7 @@ var Quaderno = function () {
   function render_text_input (container, template, data, options) {
 
     hide(container, '.quad_label', template[1].label);
-    create(container, 'span', '.quad_label', template[1].label);
+    create(container, 'span', '.quad_key', template[1].label);
 
     var input = create(container, 'input', '.quad_value');
     input.setAttribute('type', 'text');
@@ -392,7 +390,7 @@ var Quaderno = function () {
   // TODO : better name ? better location ?
   //
   function createTextInput (container, key, template, data, options) {
-    create(container, 'span', '.quad_label', key);
+    create(container, 'span', '.quad_key_e', key);
     var input = create(container, 'input', '.quad_' + key);
     input.type = 'text';
     var v = template[1][key];
