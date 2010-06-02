@@ -114,13 +114,11 @@ var Quaderno = function () {
       else if (c.tagName && (c.tagName.toLowerCase() == i.tagName)) a.push(c);
     }
 
-    if ( ! index) return a;
-    if (index == 'first') return a[0];
-    if (index == 'last') return a[a.length - 1];
-    return a[index];
+    if (index === -1) return a.slice(-1)[0];
+    return (index !== undefined) ? a[index] : a;
   }
 
-  function spath (elt, path) {
+  function spath (elt, path, index) {
 
     path = path.split(' > ');
     var start = [ elt ];
@@ -133,7 +131,8 @@ var Quaderno = function () {
       start = c;
     }
 
-    return start;
+    if (index === -1) return start.slice(-1)[0];
+    return (index !== undefined) ? start[index] : start;
   }
 
   function create (container, tagName, attributes, innerText) {
@@ -253,9 +252,6 @@ var Quaderno = function () {
 
       //hide(td, '.quad_label', template[1].label);
 
-      //var a = create(td, 'a', '.quad_tab', template[1].label + ' (e)');
-      //a.setAttribute('href', '');
-      //a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
       var inp = create(div, 'input', '.quad_label');
       inp.setAttribute('type', 'text');
       inp.setAttribute('value', template[1].label);
@@ -280,7 +276,7 @@ var Quaderno = function () {
       f(tr0, tabs[i], data, options);
     }
 
-    var tab = spath(tr0, 'td > .quad_tab')[0];
+    var tab = spath(tr0, 'td > .quad_tab', 0);
     addClass(tab, 'quad_selected');
 
     // content
@@ -308,11 +304,14 @@ var Quaderno = function () {
 
     var tds = spath(elt, 'table > tr > td');
     for (var i = 0; i < tds.length; i++) {
-      labels.push(sc(tds[i], '.quad_label', 'first').value);
+      var lab =
+        sc(tds[i], '.quad_label', 0) ||
+        spath(tds[i], '.quad_tab > .quad_label', 0);
+      if (lab) labels.push(lab.value);
     }
 
-    var trs = spath(elt, 'table > tr')[1];
-    var tab_body = spath(trs, 'td > .quad_tab_body')[0];
+    var trs = spath(elt, 'table > tr', 1);
+    var tab_body = spath(trs, 'td > .quad_tab_body', 0);
 
     var children = serialize_children(tab_body);
     for (var i = 0; i < children.length; i++) {
@@ -420,15 +419,15 @@ var Quaderno = function () {
 
     if (serializeChildren == undefined) serializeChildren = true;
 
-    var type = sc(elt, '.quad_type', 'first').value;
+    var type = sc(elt, '.quad_type', 0).value;
 
     // TODO : repeatable
 
-    var id = sc(elt, '.quad_id', 'first');
-    var label = sc(elt, '.quad_label', 'first');
-    var title = sc(elt, '.quad_title', 'first');
-    var value = sc(elt, '.quad_value', 'first');
-    var values = sc(elt, '.quad_values', 'first');
+    var id = sc(elt, '.quad_id', 0);
+    var label = sc(elt, '.quad_label', 0);
+    var title = sc(elt, '.quad_title', 0);
+    var value = sc(elt, '.quad_value', 0);
+    var values = sc(elt, '.quad_values', 0);
 
     var atts = {};
     if (id) atts['id'] = id.value;
@@ -458,9 +457,11 @@ var Quaderno = function () {
 
   function editElement (container, template, data, options) {
 
-    var f = lookupFunction('edit_', template);
+    var div = create(container, 'div', '.quad_element');
+    hide(div, '.quad_type', template[0]);
 
-    var div = f(container, template, data, options);
+    var f = lookupFunction('edit_', template);
+    f(div, template, data, options);
 
     return div;
   }
@@ -488,7 +489,7 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var type = sc(container, '.quad_type', 'first').value;
+    var type = sc(container, '.quad_type', 0).value;
     var f = lookupFunction('serialize_', type);
 
     return f(container);
@@ -500,10 +501,10 @@ var Quaderno = function () {
   function showTab (td) {
 
     for (var i = 0; i < td.parentNode.children.length; i++) {
-      var tab = sc(td.parentNode.children[i], '.quad_tab', 'first');
+      var tab = sc(td.parentNode.children[i], '.quad_tab', 0);
       removeClass(tab, 'quad_selected');
     }
-    var tab = sc(td, '.quad_tab', 'first');
+    var tab = sc(td, '.quad_tab', 0);
     addClass(tab, 'quad_selected');
 
     for (var i = 0; i < td.tab_body.parentNode.children.length; i++) {
@@ -543,7 +544,7 @@ var Quaderno = function () {
       container = document.getElementById(container);
     }
 
-    return serializeElement(sc(container, '.quad_element', 'first'));
+    return serializeElement(sc(container, '.quad_element', 0));
   }
 
   //function extract (container) {

@@ -98,6 +98,9 @@ var Element = function () {
   function setAttribute (name, value) {
     this.attributes[name] = value;
   }
+  function getAttribute (name) {
+    return this.attributes[name];
+  }
   function removeAttribute (name) {
     delete this.attributes[name];
   }
