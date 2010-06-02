@@ -118,6 +118,11 @@ var Quaderno = function () {
     return (index !== undefined) ? a[index] : a;
   }
 
+  function scc (elt, cname) {
+
+    return sc(elt, cname, 0) || sc(sc(elt, 'div', 0), cname, 0);
+  }
+
   function spath (elt, path, index) {
 
     path = path.split(' > ');
@@ -336,15 +341,14 @@ var Quaderno = function () {
   function edit_group (container, template, data, options) {
 
     var children = template[2];
-    var div = create(container, 'div', {});
 
     // TODO : buttons for moving stuff up and down
 
     for (var i = 0; i < children.length; i++) {
-      editElement(div, children[i], data, options);
+      editElement(container, children[i], data, options);
     }
 
-    return div;
+    return container;
   }
 
   //
@@ -423,11 +427,11 @@ var Quaderno = function () {
 
     // TODO : repeatable
 
-    var id = sc(elt, '.quad_id', 0);
-    var label = sc(elt, '.quad_label', 0);
-    var title = sc(elt, '.quad_title', 0);
-    var value = sc(elt, '.quad_value', 0);
-    var values = sc(elt, '.quad_values', 0);
+    var id = scc(elt, '.quad_id');
+    var label = scc(elt, '.quad_label');
+    var title = scc(elt, '.quad_title');
+    var value = scc(elt, '.quad_value');
+    var values = scc(elt, '.quad_values');
 
     var atts = {};
     if (id) atts['id'] = id.value;
@@ -436,9 +440,8 @@ var Quaderno = function () {
     if (value && value.value) atts['value'] = value.value;
     if (values) atts['values'] = values.value;
 
-    var children;
+    var children = [];
     if (serializeChildren) children = serialize_children(elt);
-    else children = [];
 
     return [ type, atts, children ];
   }
