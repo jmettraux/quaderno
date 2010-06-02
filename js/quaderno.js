@@ -191,6 +191,31 @@ var Quaderno = function () {
     return undefined;
   }
 
+  function button (container, className, onclick) {
+
+    if ( ! onclick.match(/return false;$/)) onclick += " return false;";
+    if (className[0] == '.') className = className.slice(1, className.length);
+
+    title = {
+      'quad_plus_button': 'add',
+      'quad_minus_button': 'remove',
+      'quad_up_button': 'move up',
+      'quad_down_button': 'move down',
+      'quad_copy_button': 'copy',
+      'quad_cut_button': 'cut',
+      'quad_paste_button': 'paste',
+      'quad_go_button': 'go',
+    }[className];
+
+    return create(
+      container,
+      'a',
+      { 'href': '',
+        'class': className + ' quad_button',
+        'title': title,
+        'onclick': onclick });
+  }
+
   //function root (elt) {
   //  if ( ! elt) return null;
   //  if (elt.undoStack) return elt;
@@ -215,9 +240,34 @@ var Quaderno = function () {
     a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
   }
 
+  function edit_tab_label (container, template, data, options) {
+
+    var td = create(container, 'td', {});
+    var div = create(td, 'div', '.quad_tab');
+
+    if (template === 'new_tab_tab') {
+
+      button(div, '.quad_plus_button', 'Quaderno.addTab(this);');
+    }
+    else {
+
+      //hide(td, '.quad_label', template[1].label);
+
+      //var a = create(td, 'a', '.quad_tab', template[1].label + ' (e)');
+      //a.setAttribute('href', '');
+      //a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
+      var inp = create(div, 'input', '.quad_label');
+      inp.setAttribute('type', 'text');
+      inp.setAttribute('value', template[1].label);
+      button(div, '.quad_go_button', 'Quaderno.showTab(this.parentNode.parentNode);');
+      button(div, '.quad_minus_button', 'Quaderno.removeTab(this.parentNode.parentNode);');
+    }
+  }
+
   function render_tabs (container, template, data, options) {
 
     var tabs = template[2];
+    if (options.mode === 'edit') tabs.push('new_tab_tab');
 
     var table = create(container, 'table', '.quad_tab_group');
 
@@ -226,7 +276,8 @@ var Quaderno = function () {
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
     for (var i = 0; i < tabs.length; i++) {
-      render_tab_label(tr0, tabs[i], data, options);
+      var f = (options.mode === 'edit') ? edit_tab_label : render_tab_label;
+      f(tr0, tabs[i], data, options);
     }
 
     var tab = spath(tr0, 'td > .quad_tab')[0];
@@ -239,11 +290,16 @@ var Quaderno = function () {
     var qtb = create(td, 'div', '.quad_tab_body');
 
     for (i = 0; i < tabs.length; i++) {
-      var div = renderElement(qtb, tabs[i], data, options);
+      var f = (options.mode === 'edit') ? editElement : renderElement;
+      var div = f(qtb, tabs[i], data, options);
       tr0.children[i].tab_body = div;
       if (i != 0) div.style.display = 'none';
     }
+
+    return table;
   }
+
+  var edit_tabs = render_tabs;
 
   function serialize_tabs (elt) {
 
@@ -278,6 +334,20 @@ var Quaderno = function () {
     }
   }
 
+  function edit_group (container, template, data, options) {
+
+    var children = template[2];
+    var div = create(container, 'div', {});
+
+    // TODO : buttons for moving stuff up and down
+
+    for (var i = 0; i < children.length; i++) {
+      editElement(div, children[i], data, options);
+    }
+
+    return div;
+  }
+
   //
   // 'text'
 
@@ -308,9 +378,30 @@ var Quaderno = function () {
   //
   // *
 
+  // TODO : better name ? better location ?
+  //
+  function createTextInput (container, key, template, data, options) {
+    create(container, 'span', '.quad_label', key);
+    var input = create(container, 'input', '.quad_' + key);
+    input.type = 'text';
+    var v = template[1][key];
+    if (v) input.value = v;
+    return input;
+  }
+
   function edit_ (container, template, data, options) {
 
-    // TODO
+    // TODO : finish me
+
+    var div = create(container, 'div', {});
+
+    createTextInput(div, 'id', template, data, options);
+    createTextInput(div, 'label', template, data, options);
+    createTextInput(div, 'title', template, data, options);
+
+    // TODO : repeatable
+
+    return div;
   }
 
   function serialize_children (elt) {
@@ -432,6 +523,8 @@ var Quaderno = function () {
       container = document.getElementById(container);
     }
 
+    var fc; while (fc = container.firstChild) { container.removeChild(fc); }
+
     container.mode = options.mode;
 
     if (options.mode == 'edit') {
@@ -453,14 +546,11 @@ var Quaderno = function () {
     return serializeElement(sc(container, '.quad_element', 'first'));
   }
 
-  function extract (container) {
-
-    var s = serialize(container);
-
-    // TODO
-
-    return [ "template", "data" ];
-  }
+  //function extract (container) {
+  //  var s = serialize(container);
+  //  // TODO
+  //  return [ "template", "data" ];
+  //}
 
   //
   // that's all folks...
@@ -479,7 +569,7 @@ var Quaderno = function () {
 
     render: render,
     serialize: serialize,
-    extract: extract
+    //extract: extract
   };
 }();
 
