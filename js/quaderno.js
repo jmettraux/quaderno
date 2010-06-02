@@ -41,6 +41,15 @@ var Quaderno = function () {
     return (o.constructor == Array);
   }
 
+  function dup (o) {
+    if (isArray(o)) {
+      var r = [];
+      for (var i = 0; i < o.length; i++) r.push(o[i]);
+      return r;
+    }
+    return o;
+  }
+
   function strip (s) {
     return s.replace(/^\s+|\s+$/g, '');
   }
@@ -273,7 +282,7 @@ var Quaderno = function () {
 
   function render_tabs (container, template, data, options) {
 
-    var tabs = template[2];
+    var tabs = dup(template[2]);
     if (options.mode === 'edit') tabs.push('new_tab_tab');
 
     var table = create(container, 'table', '.quad_tab_group');
@@ -296,7 +305,7 @@ var Quaderno = function () {
     var td = create(tr, 'td', { 'colspan': tabs.length });
     var qtb = create(td, 'div', '.quad_tab_body');
 
-    for (i = 0; i < tabs.length; i++) {
+    for (i = 0; i < template[2].length; i++) {
       var f = (options.mode === 'edit') ? editElement : renderElement;
       var div = f(qtb, tabs[i], data, options);
       tr0.children[i].tab_body = div;
