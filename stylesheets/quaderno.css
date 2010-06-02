@@ -84,9 +84,9 @@ div.quad_label, span.quad_label, .quad_label_e {
 	margin-right: 4px;
 }
 
-/* output */
+/* serialized */
 
-#output {
+#serialized {
 	display: none;
 	color: #e7eef5;
 	background: rgba(0,0,0,.85);

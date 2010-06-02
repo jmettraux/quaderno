@@ -1,14 +1,8 @@
 
 file = arguments[0];
 dir = file.split('/').slice(0, -1).join('/');
-load(dir + "/base.js");
+load(dir + '/base.js');
 
-
-function o (template, data) {
-  document._clear();
-  Quaderno.render('quad', template, data);
-  return Quaderno.serialize('quad');
-}
 
 // 0
 
@@ -27,7 +21,7 @@ var ta = [ 'tabs', {}, [
   ] ] ]
 ];
 
-assertEqual(ta, o(ta));
+assertEqual(ta, render_and_serialize(ta));
 
 // 1
 
@@ -36,7 +30,7 @@ var tb = [ 'tabs', {}, [
     [ 'text', { 'label': 'this is a message' }, [] ],
     [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada', 'value': 'azure' }, [] ] ] ] ] ];
 
-assertEqual(tb, o(tb));
+assertEqual(tb, render_and_serialize(tb));
 
 // 2
 
@@ -45,5 +39,5 @@ var tc = [ 'tabs', {}, [
     [ 'text', { 'label': 'this is a message' }, [] ],
     [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada' }, [] ] ] ] ] ];
 
-assertEqual(tb, o(tc, { 'colour': 'azure' }));
+assertEqual(tb, render_and_serialize(tc, { 'colour': 'azure' }));
 

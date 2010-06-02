@@ -1,7 +1,7 @@
 
 file = arguments[0];
 dir = file.split('/').slice(0, -1).join('/');
-load(dir + "/base.js");
+load(dir + '/base.js');
 
 
 function i (path) {

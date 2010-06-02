@@ -80,6 +80,11 @@ function assertEqual (a, b) {
   print(bb);
 }
 
+function render_and_serialize (template, data, opts) {
+  document._clear();
+  Quaderno.render('quad', template, data, opts);
+  return Quaderno.serialize('quad');
+}
 
 //
 // test DOM

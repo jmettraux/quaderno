@@ -16,13 +16,13 @@
 
   <div id="quad" class="quad_root"></div>
 
-  <div id="output"></div>
+  <div id="serialized"></div>
 
   <div class="buttons">
     <a href="" onclick="toggleEdition(this); return false;">edit</a>
     <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
     <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
-    <a href="" onclick="output(); return false;">output</a>
+    <a href="" onclick="serialize(); return false;">serialize</a>
   </div>
 
   <script>
@@ -83,10 +83,10 @@
         'quad', template, data, { 'translations': translations, 'mode': 'use' });
     }
 
-    function output () {
+    function serialize () {
       var s = Quaderno.serialize('quad');
       s = JSON.stringify(s);
-      var out = document.getElementById('output')
+      var out = document.getElementById('serialized');
       out.style.display = 'block';
       out.innerHTML = s;
     }

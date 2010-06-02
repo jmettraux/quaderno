@@ -11,9 +11,12 @@ if a = ARGV[0]
   files = files.select { |f| f.match(a) }
 end
 
+`rhino -e '1'`
+js = ($?.exitstatus == 0) ? 'rhino -debug' : 'js'
+
 files.each do |t|
   puts '. ' + t
-  o = `js #{t} #{t}`
+  o = `#{js} #{t} #{t}`
   puts o if o.size > 0
 end
 
