@@ -120,7 +120,15 @@ var Quaderno = function () {
 
   function scc (elt, cname) {
 
-    return sc(elt, cname, 0) || sc(sc(elt, 'div', 0), cname, 0);
+    //return sc(elt, cname, 0) || sc(sc(elt, 'div', 0), cname, 0);
+
+    var child = sc(elt, cname, 0);
+    if (child) return child;
+
+    var div = sc(elt, 'div', 0);
+    if ( ! div) return undefined;
+
+    return sc(div, cname, 0);
   }
 
   function spath (elt, path, index) {

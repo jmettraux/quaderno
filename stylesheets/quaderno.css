@@ -66,15 +66,12 @@ a.quad_tab {
 .quad_new_element {
 	margin: 16px 4px 12px 86px;
 }
-div.quad_label, span.quad_label, .quad_label_e {
+div.quad_label, span.quad_label {
 	color: #8b8f91;
 	display: inline-block;
 	width: 80px;
 	margin-right: 4px;
 	text-align: right;
-}
-.quad_label_e {
-	width: auto;
 }
 .quad_link_target {
 	width: 70px;
