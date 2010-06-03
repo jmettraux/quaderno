@@ -129,8 +129,6 @@ var Quaderno = function () {
 
   function scc (elt, cname) {
 
-    //return sc(elt, cname, 0) || sc(sc(elt, 'div', 0), cname, 0);
-
     var child = sc(elt, cname, 0);
     if (child) return child;
 
@@ -272,6 +270,13 @@ var Quaderno = function () {
   //  r.undoStack.push(d);
   //}
 
+  var TYPE_BLANKS = {
+    'text': [ 'text', {}, [] ],
+    'text_input': [ 'text_input', {}, [] ],
+  }
+
+  var TYPES = []; for (var k in TYPE_BLANKS) { TYPES.push(k); }
+
   //
   // 'tabs'
 
@@ -384,8 +389,21 @@ var Quaderno = function () {
     // TODO : buttons for moving stuff up and down
 
     for (var i = 0; i < children.length; i++) {
-      editElement(container, children[i], data, options);
+      var c = editElement(container, children[i], data, options);
+      var cdiv = sc(c, 'div', 0);
+      button(cdiv, '.quad_minus_button', 'Quaderno.removeElement(this.parentNode);');
+      button(cdiv, '.quad_up_button', 'Quaderno.moveElement(this.parentNode, "up");');
+      button(cdiv, '.quad_down_button', 'Quaderno.moveElement(this.parentNode, "down");');
     }
+
+    var div = create(container, 'div', {});
+
+    var sel = create(div, 'select', '.quad_type');
+    for (var i = 0; i < TYPES.length; i++) {
+      var o = create(sel, 'option', {}, TYPES[i]);
+      if (TYPES[i] === template[0]) o.setAttribute('selected', 'selected');
+    }
+    button(div, '.quad_plus_button', 'Quaderno.addElement(this.parentNode);');
 
     return container;
   }
@@ -399,7 +417,7 @@ var Quaderno = function () {
 
     hide(container, '.quad_label', text);
     text = translate(options, text);
-    create(container, 'div', '.quad_key', text);
+    create(container, 'div', '.quad_key.quad_text', text);
   }
 
   //
@@ -425,6 +443,7 @@ var Quaderno = function () {
     // TODO : finish me
 
     var div = create(container, 'div', {});
+
 
     createTextInput(div, 'id', template, data, options);
     createTextInput(div, 'label', template, data, options);
@@ -485,6 +504,7 @@ var Quaderno = function () {
   function editElement (container, template, data, options) {
 
     var div = create(container, 'div', '.quad_element');
+
     hide(div, '.quad_type', template[0]);
 
     var f = lookupFunction('edit_', template);

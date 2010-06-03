@@ -76,6 +76,9 @@ div.quad_key, span.quad_key, .quad_key_e {
 .quad_key_e {
   width: auto;
 }
+div.quad_key.quad_text {
+  width: auto;
+}
 .quad_link_target {
 	width: 70px;
 }
