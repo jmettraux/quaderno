@@ -444,7 +444,7 @@ var Quaderno = function () {
 
     var div = create(container, 'div', {});
 
-
+    create(div, 'span', '.quad_type', template[0]);
     createTextInput(div, 'id', template, data, options);
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);

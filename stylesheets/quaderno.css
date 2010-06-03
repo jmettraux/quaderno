@@ -66,6 +66,10 @@ a.quad_tab {
 .quad_new_element {
 	margin: 16px 4px 12px 86px;
 }
+span.quad_type {
+	width: 84px;
+	display: inline-block;
+}
 div.quad_key, span.quad_key, .quad_key_e {
 	color: #8b8f91;
 	display: inline-block;
