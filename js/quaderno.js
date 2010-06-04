@@ -204,7 +204,6 @@ var Quaderno = function () {
   }
 
   function getValue (template, data, options) {
-
     if (template[1].value) return template[1].value;
     if (template[1].id) return lookup(data, template[1].id);
     return undefined;
@@ -432,6 +431,8 @@ var Quaderno = function () {
     input.setAttribute('type', 'text');
 
     var value = getValue(template, data, options);
+    //var value = options.value;
+    //delete options.value;
     if (value != undefined) input.value = value;
   }
 
@@ -492,6 +493,13 @@ var Quaderno = function () {
   //
   // methods
 
+  function setParent (template, parent) {
+    template.parent = parent;
+    for (var i = 0; i < template[2].length; i++) {
+      setParent(template[2][i], template);
+    }
+  }
+
   function lookupFunction (funcPrefix, template) {
 
     var type = template;
@@ -519,8 +527,10 @@ var Quaderno = function () {
 
     var div = create(container, 'div', '.quad_element');
 
-    if (template[1].id) {
-      hide(div, '.quad_id', template[1].id);
+    var id = template[1].id;
+
+    if (id) {
+      hide(div, '.quad_id', id);
     }
     if (template[1].title) {
       hide(div, '.quad_title', template[1].title);
@@ -529,7 +539,25 @@ var Quaderno = function () {
 
     hide(div, '.quad_type', template[0]);
 
+    //if (id && id.matches(/\.$/)) {
+    //  id = id.slice(0, -1);
+    //  var value = getValue(id, data);
+    //}
+
     f(div, template, data, options);
+
+    //var value = getValue(template, data, options);
+    //if (isArray(value)) {
+    //  for (var i = 0; i < value.length; i++) {
+    //    var v = value[i];
+    //    options.value = v;
+    //    f(div, template, data, options);
+    //  }
+    //}
+    //else {
+    //  options.value = value;
+    //  f(div, template, data, options);
+    //}
 
     return div;
   }
@@ -561,6 +589,8 @@ var Quaderno = function () {
   }
 
   function render (container, template, data, options) {
+
+    setParent(template);
 
     data = data || {};
 
