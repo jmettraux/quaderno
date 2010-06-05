@@ -63,6 +63,7 @@ var Quaderno = function () {
   }
 
   function addClass (elt, cname) {
+    if (cname.match(/^\./)) cname = cname.slice(1);
     var cs = elt.className.split(' ');
     cs.push(cname);
     elt.className = cs.join(' ');
@@ -270,11 +271,15 @@ var Quaderno = function () {
   //}
 
   var TYPE_BLANKS = {
-    'text': [ 'text', {}, [] ],
     'text_input': [ 'text_input', {}, [] ],
+    'text': [ 'text', {}, [] ],
+    'group': [ 'group', {}, [] ]
   }
 
-  var TYPES = []; for (var k in TYPE_BLANKS) { TYPES.push(k); }
+  //var TYPES = []; for (var k in TYPE_BLANKS) { TYPES.push(k); }
+  var TYPES = [
+    'text_input', 'text', 'group'
+  ];
 
   //
   // 'tabs'
@@ -374,6 +379,10 @@ var Quaderno = function () {
 
   function render_group (container, template, data, options) {
 
+    if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
+      addClass(container, '.quad_group');
+    }
+
     var children = template[2];
 
     for (var i = 0; i < children.length; i++) {
@@ -381,18 +390,34 @@ var Quaderno = function () {
     }
   }
 
+  function addMoveButtons (elt) {
+
+    button(
+      elt,
+      '.quad_minus_button',
+      'Quaderno.removeElement(this.parentNode);');
+    button(
+      elt,
+      '.quad_up_button',
+      'Quaderno.moveElement(this.parentNode.parentNode, "up");');
+    button(
+      elt,
+      '.quad_down_button',
+      'Quaderno.moveElement(this.parentNode.parentNode, "down");');
+  }
+
   function edit_group (container, template, data, options) {
 
-    var children = template[2];
+    if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
+      addClass(container, '.quad_group');
+    }
 
-    // TODO : buttons for moving stuff up and down
+    var children = template[2];
 
     for (var i = 0; i < children.length; i++) {
       var c = editElement(container, children[i], data, options);
       var cdiv = sc(c, 'div', 0);
-      button(cdiv, '.quad_minus_button', 'Quaderno.removeElement(this.parentNode);');
-      button(cdiv, '.quad_up_button', 'Quaderno.moveElement(this.parentNode, "up");');
-      button(cdiv, '.quad_down_button', 'Quaderno.moveElement(this.parentNode, "down");');
+      addMoveButtons(cdiv);
     }
 
     var div = create(container, 'div', {});
@@ -441,8 +466,6 @@ var Quaderno = function () {
 
   function edit_ (container, template, data, options) {
 
-    // TODO : finish me
-
     var div = create(container, 'div', {});
 
     create(div, 'span', '.quad_type', template[0]);
@@ -450,8 +473,6 @@ var Quaderno = function () {
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);
     createTextInput(div, 'value', template, data, options);
-
-    // TODO : repeatable
 
     return div;
   }
@@ -473,8 +494,6 @@ var Quaderno = function () {
     if (serializeChildren == undefined) serializeChildren = true;
 
     var type = sc(elt, '.quad_type', 0).value;
-
-    // TODO : repeatable
 
     var atts = {};
 
@@ -539,25 +558,7 @@ var Quaderno = function () {
 
     hide(div, '.quad_type', template[0]);
 
-    //if (id && id.matches(/\.$/)) {
-    //  id = id.slice(0, -1);
-    //  var value = getValue(id, data);
-    //}
-
     f(div, template, data, options);
-
-    //var value = getValue(template, data, options);
-    //if (isArray(value)) {
-    //  for (var i = 0; i < value.length; i++) {
-    //    var v = value[i];
-    //    options.value = v;
-    //    f(div, template, data, options);
-    //  }
-    //}
-    //else {
-    //  options.value = value;
-    //  f(div, template, data, options);
-    //}
 
     return div;
   }
@@ -571,7 +572,7 @@ var Quaderno = function () {
   }
 
   //
-  // public methods
+  // onClick public methods
 
   function showTab (td) {
 
@@ -587,6 +588,31 @@ var Quaderno = function () {
     }
     td.tab_body.style.display = 'block';
   }
+
+  function addElement (elt) {
+
+    var type = sc(elt, '.quad_type', 0).value;
+    var blank = TYPE_BLANKS[type];
+
+    var newElement = editElement(elt.parentNode, blank, {}, {});
+    addMoveButtons(sc(newElement, 'div', 0));
+
+    elt.parentNode.insertBefore(newElement, elt);
+  }
+
+  function moveElement (elt, direction) {
+    if (direction === 'up') {
+      if (elt.previousSibling)
+        elt.parentNode.insertBefore(elt, elt.previousSibling);
+    }
+    else {
+      if (elt.nextSibling && hasClass(elt.nextSibling, 'quad_element'))
+        elt.parentNode.insertBefore(elt.nextSibling, elt);
+    }
+  }
+
+  //
+  // public methods
 
   function render (container, template, data, options) {
 
@@ -642,6 +668,8 @@ var Quaderno = function () {
     // public for onClick or onChange
 
     showTab: showTab,
+    addElement: addElement,
+    moveElement: moveElement,
 
     // public
 
