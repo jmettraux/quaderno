@@ -395,7 +395,7 @@ var Quaderno = function () {
     button(
       elt,
       '.quad_minus_button',
-      'Quaderno.removeElement(this.parentNode);');
+      'Quaderno.removeElement(this.parentNode.parentNode);');
     button(
       elt,
       '.quad_up_button',
@@ -611,6 +611,10 @@ var Quaderno = function () {
     }
   }
 
+  function removeElement (elt) {
+    elt.parentNode.removeChild(elt);
+  }
+
   //
   // public methods
 
@@ -670,6 +674,7 @@ var Quaderno = function () {
     showTab: showTab,
     addElement: addElement,
     moveElement: moveElement,
+    removeElement: removeElement,
 
     // public
 
