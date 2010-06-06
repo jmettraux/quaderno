@@ -78,9 +78,12 @@
       }
     }
 
-    function render () {
+    function render (mode) {
+
+      var mode = mode || 'use';
+
       Quaderno.render(
-        'quad', template, data, { 'translations': translations, 'mode': 'use' });
+        'quad', template, data, { 'translations': translations, 'mode': mode });
     }
 
     function serialize () {
@@ -91,7 +94,10 @@
       out.innerHTML = s;
     }
 
-    render();
+    var m = document.location.search.match(/mode=([^\b]+)/)
+    var mode = m ? m[1] : undefined
+
+    render(mode);
   </script>
 
 </body>
