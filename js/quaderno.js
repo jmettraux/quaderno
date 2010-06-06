@@ -135,6 +135,7 @@ var Quaderno = function () {
 
     var div = sc(elt, 'div', 0);
     if ( ! div) return undefined;
+    if (hasClass(div, '.quad_element')) return undefined;
 
     return sc(div, cname, 0);
   }

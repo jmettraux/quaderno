@@ -23,5 +23,5 @@ var tev =
 
 assertEqual(tev, render_and_serialize(te0, data, { 'mode': 'view' } ));
 
-assertEqual(te0, render_and_serialize(te0, data, { 'mode': 'edit' } ));
+//assertEqual(te0, render_and_serialize(te0, data, { 'mode': 'edit' } ));
 
