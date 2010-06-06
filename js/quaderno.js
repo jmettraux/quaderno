@@ -295,7 +295,7 @@ var Quaderno = function () {
   //
   // 'tabs'
 
-  function render_tab_label (container, template, data, options) {
+  function use_tab_label (container, template, data, options) {
 
     var td = create(container, 'td', {});
 
@@ -324,7 +324,7 @@ var Quaderno = function () {
     }
   }
 
-  function render_tabs (container, template, data, options) {
+  function use_tabs (container, template, data, options) {
 
     var tabs = dup(template[2]);
     if (options.mode === 'edit') tabs.push('new_tab_tab');
@@ -336,7 +336,7 @@ var Quaderno = function () {
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
     for (var i = 0; i < tabs.length; i++) {
-      var f = (options.mode === 'edit') ? edit_tab_label : render_tab_label;
+      var f = (options.mode === 'edit') ? edit_tab_label : use_tab_label;
       f(tr0, tabs[i], data, options);
     }
 
@@ -350,8 +350,7 @@ var Quaderno = function () {
     var qtb = create(td, 'div', '.quad_tab_body');
 
     for (i = 0; i < template[2].length; i++) {
-      var f = (options.mode === 'edit') ? editElement : renderElement;
-      var div = f(qtb, tabs[i], data, options);
+      var div = renderElement(qtb, tabs[i], data, options);
       tr0.children[i].tab_body = div;
       if (i != 0) div.style.display = 'none';
     }
@@ -359,7 +358,7 @@ var Quaderno = function () {
     return table;
   }
 
-  var edit_tabs = render_tabs;
+  var edit_tabs = use_tabs;
 
   function serialize_tabs (elt) {
 
@@ -388,7 +387,7 @@ var Quaderno = function () {
   //
   // 'group'
 
-  function render_group (container, template, data, options) {
+  function use_group (container, template, data, options) {
 
     if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
       addClass(container, '.quad_group');
@@ -456,7 +455,7 @@ var Quaderno = function () {
   //
   // 'text'
 
-  function render_text (container, template, data, options) {
+  function use_text (container, template, data, options) {
 
     var text = template[1].label;
 
@@ -468,7 +467,7 @@ var Quaderno = function () {
   //
   // 'text_input'
 
-  function render_text_input (container, template, data, options) {
+  function use_text_input (container, template, data, options) {
 
     hide(container, '.quad_label', template[1].label);
     create(container, 'span', '.quad_key', template[1].label);
@@ -561,9 +560,9 @@ var Quaderno = function () {
     return div;
   }
 
-  function renderElement (container, template, data, options) {
+  function useElement (container, template, data, options) {
 
-    var f = lookupFunction('render_', template);
+    var f = lookupFunction('use_', template);
 
     var div = create(container, 'div', '.quad_element');
 
@@ -582,6 +581,18 @@ var Quaderno = function () {
     f(div, template, data, options);
 
     return div;
+  }
+
+  var viewElement = useElement;
+
+  function renderElement (container, template, data, options) {
+
+    if (options.mode === 'view')
+      return viewElement(container, template, data, options);
+    if (options.mode === 'use')
+      return useElement(container, template, data, options);
+    //else // 'edit'
+    return editElement(container, template, data, options);
   }
 
   function serializeElement (container) {
@@ -656,12 +667,7 @@ var Quaderno = function () {
 
     container.mode = options.mode;
 
-    if (options.mode == 'edit') {
-      editElement(container, template, data, options);
-    }
-    else {
-      renderElement(container, template, data, options);
-    }
+    renderElement(container, template, data, options);
 
     //container.undoStack = [ toTemplateWithData
   }
