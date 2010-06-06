@@ -1,0 +1,88 @@
+
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>Quaderno</title>
+  <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/datepicker.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/quaderno.css" type="text/css" media="screen" />
+  <script src="js/datepicker.packed.js"></script>
+  <script src="js/quaderno.js"></script>
+</head>
+<body>
+
+  <h1><a href="">Quaderno</a></h1>
+
+  <div id="quad" class="quad_root"></div>
+
+  <div id="serialized"></div>
+
+  <div class="buttons">
+    <a href="" onclick="toggleEdition(this); return false;">edit</a>
+    <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
+    <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
+    <a href="" onclick="serialize(); return false;">serialize</a>
+  </div>
+
+  <script>
+
+    var template =
+      [ 'group', {}, [
+        [ 'text', { 'label': 'this is a message' }, [] ],
+        [ 'group', { 'id': 'colours.' }, [
+          [ 'text_input', { 'label': 'colour', 'title': 'colour' }, [] ]
+        ] ],
+        [ 'group', { 'id': 'customer' }, [
+          [ 'text_input', { 'label': 'name', 'id': '.name' }, [] ],
+          [ 'text_input', { 'label': 'age', 'id': '.age' }, [] ]
+        ] ]
+      ] ];
+    var data = {
+      'colours': [ 'red', 'green', 'blue' ],
+      'customer': { 'name': 'john', 'age': '30' }
+    };
+    var translations = {
+    };
+
+    function toggleEdition (button) {
+
+      var s = Quaderno.serialize('quad');
+      var d = {};
+
+      if (button.innerHTML == 'edit') {
+        Quaderno.render(
+          'quad', s, d, { 'translations': translations, 'mode': 'edit' });
+        button.innerHTML = 'view';
+      }
+      else if (button.innerHTML == 'view') {
+        Quaderno.render(
+          'quad', s, d, { 'translations': translations, 'mode': 'view' });
+        button.innerHTML = 'use';
+      }
+      else {
+        Quaderno.render(
+          'quad', s, d, { 'translations': translations, 'mode': 'use' });
+        button.innerHTML = 'edit';
+      }
+    }
+
+    function render () {
+      Quaderno.render(
+        'quad', template, data, { 'translations': translations, 'mode': 'use' });
+    }
+
+    function serialize () {
+      var s = Quaderno.serialize('quad');
+      s = JSON.stringify(s);
+      var out = document.getElementById('serialized');
+      out.style.display = 'block';
+      out.innerHTML = s;
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
+
