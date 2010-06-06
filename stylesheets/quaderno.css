@@ -136,7 +136,8 @@ input.quad_repeatable {
 	margin: 0 0 0 4px;
 }
 .quad_group {
-	display: inline-block;
+	/*display: inline-block;*/
+        display: block;
 	padding: 8px 12px;
 	background: #fff;
 	border: 1px dashed #ccd0d4;

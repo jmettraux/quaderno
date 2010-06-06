@@ -197,6 +197,12 @@ var Quaderno = function () {
     return lookup(hash[key.shift()], key);
   }
 
+  function getId (template) {
+    var id = template[1].id;
+    if (id.match(/\.$/)) return id.slice(0, -1);
+    return id;
+  }
+
   function translate (options, text) {
     if (text.indexOf('.') > -1 && options.translations) {
       return lookup(options.translations, text);
@@ -205,6 +211,11 @@ var Quaderno = function () {
   }
 
   function getValue (template, data, options) {
+    var v = options.value;
+    if (v !== undefined) {
+      delete options.value;
+      return v;
+    }
     if (template[1].value) return template[1].value;
     if (template[1].id) return lookup(data, template[1].id);
     return undefined;
@@ -384,9 +395,19 @@ var Quaderno = function () {
     }
 
     var children = template[2];
+    var values = [ undefined ];
 
-    for (var i = 0; i < children.length; i++) {
-      renderElement(container, children[i], data, options);
+    if (template[1].id && template[1].id.match(/\.$/)) {
+      values = lookup(data, getId(template));
+    }
+
+    for (var j = 0; j < values.length; j++) {
+
+      options.value = values[j]
+
+      for (var i = 0; i < children.length; i++) {
+        renderElement(container, children[i], data, options);
+      }
     }
   }
 
