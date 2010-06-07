@@ -433,6 +433,9 @@ var Quaderno = function () {
       addClass(container, '.quad_group');
     }
 
+    var gdiv = edit_(container, template, data, options);
+    addClass(gdiv, '.quad_group_head');
+
     var children = template[2];
 
     for (var i = 0; i < children.length; i++) {
@@ -635,7 +638,7 @@ var Quaderno = function () {
 
   function moveElement (elt, direction) {
     if (direction === 'up') {
-      if (elt.previousSibling)
+      if (elt.previousSibling && ( ! hasClass(elt.previousSibling, 'quad_group_head')))
         elt.parentNode.insertBefore(elt, elt.previousSibling);
     }
     else {
