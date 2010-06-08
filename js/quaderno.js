@@ -345,19 +345,6 @@ var Quaderno = function () {
     r.undoStack.push(serialize(r));
   }
 
-  function undo (containerId) {
-
-    var container = document.getElementById(containerId);
-    var stack = container.undoStack;
-    var template = stack.pop();
-
-    render(container, template, container.data, { 'mode': container.mode });
-
-    if (stack.length < 1) stack.push(template);
-
-    container.undoStack = stack;
-  }
-
   var TYPE_BLANKS = {
     'text_input': [ 'text_input', {}, [] ],
     'text': [ 'text', {}, [] ],
@@ -826,6 +813,30 @@ var Quaderno = function () {
     return serializeElement(sc(container, '.quad_element', 0));
   }
 
+  function undo (containerId) {
+
+    var container = document.getElementById(containerId);
+    var stack = container.undoStack;
+    var template = stack.pop();
+
+    render(container, template, container.data, { 'mode': container.mode });
+
+    if (stack.length < 1) stack.push(template);
+
+    container.undoStack = stack;
+  }
+
+  function reset (containerId) {
+
+    var container = document.getElementById(containerId);
+
+    var template = container.undoStack[0];
+
+    render(container, template, container.data, { 'mode': container.mode });
+
+    container.undoStack = [ template ];
+  }
+
   //
   // that's all folks...
 
@@ -850,7 +861,8 @@ var Quaderno = function () {
 
     render: render,
     serialize: serialize,
-    undo: undo
+    undo: undo,
+    reset: reset
   };
 }();
 
