@@ -19,7 +19,7 @@
   <div id="serialized"></div>
 
   <div class="buttons">
-    <a href="" onclick="toggleEdition(this); return false;">edit</a>
+    <a id="edit_button" href="" onclick="toggleEdition(this); return false;">edit</a>
     <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
     <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
     <a href="" onclick="serialize(); return false;">serialize</a>
@@ -61,12 +61,12 @@
       var s = Quaderno.serialize('quad');
       var d = {};
 
-      if (button.innerHTML == 'edit') {
+      if (button.innerHTML === 'edit') {
         Quaderno.render(
           'quad', s, d, { 'translations': translations, 'mode': 'edit' });
         button.innerHTML = 'view';
       }
-      else if (button.innerHTML == 'view') {
+      else if (button.innerHTML === 'view') {
         Quaderno.render(
           'quad', s, d, { 'translations': translations, 'mode': 'view' });
         button.innerHTML = 'use';
@@ -96,6 +96,11 @@
 
     var m = document.location.search.match(/mode=([^\b]+)/)
     var mode = m ? m[1] : undefined
+
+    var eb = document.getElementById('edit_button');
+    if (mode === 'edit') eb.innerHTML = 'view';
+    else if (mode === 'view') eb.innerHTML = 'use';
+    else eb.innerHTML = 'edit';
 
     render(mode);
   </script>
