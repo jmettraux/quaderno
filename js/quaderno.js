@@ -329,6 +329,15 @@ var Quaderno = function () {
     return spath(tr, 'td > .quad_tab_body > .quad_element', index);
   }
 
+  function adjustTabBodyColspan (elt) {
+
+    var table = sparent(elt, 'table');
+    var count = spath(table, 'tr > td').length;
+    var tr1 = sc(table, 'tr', 1);
+    var td = sc(tr1, 'td', 0);
+    td.setAttribute('colspan', '' + count);
+  }
+
   //
   // root, stack, undo
 
@@ -367,6 +376,8 @@ var Quaderno = function () {
     var a = create(td, 'a', '.quad_tab', template[1].label);
     a.setAttribute('href', '');
     a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
+
+    return td;
   }
 
   function edit_tab_label (container, template, data, options) {
@@ -378,10 +389,12 @@ var Quaderno = function () {
 
       button(
         div, '.quad_plus_button', 'Quaderno.addTab(this);', 'add a new tab');
+
+      return td;
     }
     else {
 
-      use_tab_label(container, template, data, options);
+      return use_tab_label(container, template, data, options);
     }
   }
 
@@ -412,7 +425,6 @@ var Quaderno = function () {
 
     for (i = 0; i < template[2].length; i++) {
       var div = renderElement(qtb, tabs[i], data, options);
-      //tr0.children[i].tab_body = div;
       if (i != 0) div.style.display = 'none';
     }
 
@@ -728,6 +740,31 @@ var Quaderno = function () {
     }
   }
 
+  function addTab (elt) {
+
+    var td = sparent(elt, '.new_tab_tab');
+
+    var template = [ 'group', { 'label': 'new' }, [] ];
+
+    var ntd = use_tab_label(td.parentNode, template);
+    td.parentNode.insertBefore(ntd, td);
+
+    adjustTabBodyColspan(elt);
+
+    var table = sparent(td, 'table');
+    var tr1 = sc(table, 'tr', 1);
+    var body = spath(tr1, 'td > .quad_tab_body', 0);
+
+    var r = root(elt);
+
+    clog(tr1);
+    clog(body);
+    clog(r.data);
+
+    var nelt = renderElement(body, template, r.data, { 'mode': 'edit' });
+    nelt.style.display = 'none';
+  }
+
   function addElement (elt) {
 
     stack(elt);
@@ -851,6 +888,7 @@ var Quaderno = function () {
     showTab: showTab,
     removeTab: removeTab,
     moveTab: moveTab,
+    addTab: addTab,
     addElement: addElement,
     moveElement: moveElement,
     removeElement: removeElement,
