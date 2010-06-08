@@ -1,15 +1,17 @@
 
-= quaderno
+# quaderno
 
 a mini form templating system in javascript.
 
 
-== usage
+## usage
 
 TODO
 
+![edition](doc/edition.png)
 
-== testing
+
+## testing
 
 requires spidermonkey or (prerefably, better stack traces) rhino.
 
@@ -26,12 +28,12 @@ where x is the number (integer) of the test. For example
 will run the test test/qt_0_identify.js
 
 
-== credits
+## credits
 
 Jamandru Reynolds - http://geometron.net/ - CSS and general appearance
 
 
-== license
+## license
 
 MIT
 
