@@ -711,9 +711,10 @@ var Quaderno = function () {
     var quadElement = sparent(elt, '.quad_element');
     var td = findTab(elt);
 
-    var next = td.nextSibling || td.previousSibling;
+    var next = td.nextSibling;
+    if (hasClass(next, '.new_tab_tab')) next = td.previousSibling;
 
-    if (hasClass(next, '.new_tab_tab')) return; // can't remove last tab
+    if ( ! next) return; // can't remove last tab
 
     quadElement.parentNode.removeChild(quadElement);
     td.parentNode.removeChild(td);
@@ -742,6 +743,8 @@ var Quaderno = function () {
 
   function addTab (elt) {
 
+    stack(elt);
+
     var td = sparent(elt, '.new_tab_tab');
 
     var template = [ 'group', { 'label': 'new' }, [] ];
@@ -756,10 +759,6 @@ var Quaderno = function () {
     var body = spath(tr1, 'td > .quad_tab_body', 0);
 
     var r = root(elt);
-
-    clog(tr1);
-    clog(body);
-    clog(r.data);
 
     var nelt = renderElement(body, template, r.data, { 'mode': 'edit' });
     nelt.style.display = 'none';
