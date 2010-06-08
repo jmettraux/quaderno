@@ -222,12 +222,12 @@ var Quaderno = function () {
     return undefined;
   }
 
-  function button (container, className, onclick) {
+  function button (container, className, onclick, title) {
 
     if ( ! onclick.match(/return false;$/)) onclick += " return false;";
     if (className[0] == '.') className = className.slice(1, className.length);
 
-    title = {
+    title = title || {
       'quad_plus_button': 'add',
       'quad_minus_button': 'remove',
       'quad_up_button': 'move up',
@@ -271,6 +271,28 @@ var Quaderno = function () {
     atts[key] = v;
   }
 
+  function computeSiblingOffset (elt, count) {
+    count = count || 0;
+    if ( ! elt.previousSibling) return count;
+    return computeSiblingOffset(elt.previousSibling, count + 1);
+  }
+
+  function setParent (template, parent) {
+    template.parent = parent;
+    for (var i = 0; i < template[2].length; i++) {
+      setParent(template[2][i], template);
+    }
+  }
+
+  function lookupFunction (funcPrefix, template) {
+
+    var type = template;
+    if (isArray(template)) type = template[0];
+
+    try { return eval(funcPrefix + type); }
+    catch (e) { return eval(funcPrefix); }
+  }
+
   //function root (elt) {
   //  if ( ! elt) return null;
   //  if (elt.undoStack) return elt;
@@ -312,7 +334,9 @@ var Quaderno = function () {
 
       var td = create(container, 'td', {});
       var div = create(td, 'div', '.quad_tab');
-      button(div, '.quad_plus_button', 'Quaderno.addTab(this);');
+
+      button(
+        div, '.quad_plus_button', 'Quaderno.addTab(this);', 'add a new tab');
     }
     else {
 
@@ -431,9 +455,14 @@ var Quaderno = function () {
     options.novalue = true;
     var gdiv = edit_(container, template, data, options);
     addClass(gdiv, '.quad_group_head');
+
     if (hasClass(container.parentNode, 'quad_tab_body')) {
+
       var label = sc(gdiv, '.quad_label', 0);
       label.setAttribute('onchange', 'Quaderno.tabLabelChanged(this);');
+
+      button(
+        gdiv, '.quad_minus_button', 'Quaderno.removeTab(this);', 'remove this tab');
     }
 
     var children = template[2];
@@ -540,22 +569,6 @@ var Quaderno = function () {
   //
   // methods
 
-  function setParent (template, parent) {
-    template.parent = parent;
-    for (var i = 0; i < template[2].length; i++) {
-      setParent(template[2][i], template);
-    }
-  }
-
-  function lookupFunction (funcPrefix, template) {
-
-    var type = template;
-    if (isArray(template)) type = template[0];
-
-    try { return eval(funcPrefix + type); }
-    catch (e) { return eval(funcPrefix); }
-  }
-
   function editElement (container, template, data, options) {
 
     var div = create(container, 'div', '.quad_element');
@@ -629,6 +642,10 @@ var Quaderno = function () {
     td.tab_body.style.display = 'block';
   }
 
+  function removeTab (elt) {
+    clog(elt);
+  }
+
   function addElement (elt) {
 
     var type = sc(elt, '.quad_type', 0).value;
@@ -653,13 +670,6 @@ var Quaderno = function () {
 
   function removeElement (elt) {
     elt.parentNode.removeChild(elt);
-  }
-
-  // TODO : move me elsewhere
-  function computeSiblingOffset (elt, count) {
-    count = count || 0;
-    if ( ! elt.previousSibling) return count;
-    return computeSiblingOffset(elt.previousSibling, count + 1);
   }
 
   function tabLabelChanged (elt) {
@@ -730,6 +740,7 @@ var Quaderno = function () {
     // public for onClick or onChange
 
     showTab: showTab,
+    removeTab: removeTab,
     addElement: addElement,
     moveElement: moveElement,
     removeElement: removeElement,
