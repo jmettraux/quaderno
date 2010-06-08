@@ -157,6 +157,18 @@ var Quaderno = function () {
     return (index !== undefined) ? start[index] : start;
   }
 
+  function sparent (elt, s) {
+
+    if ( ! elt) return undefined;
+    if (s.constructor.name === 'String') s = identify(s);
+
+    if (s.id && elt.id === s.id) return elt;
+    if (s.accepts(elt)) return elt;
+    if (elt.tagName && (elt.tagName.toLowerCase() === s.tagName)) return elt;
+
+    return sparent(elt.parentNode, s);
+  }
+
   function create (container, tagName, attributes, innerText) {
 
     var e = document.createElement(tagName);
@@ -295,24 +307,52 @@ var Quaderno = function () {
     catch (e) { return eval(funcPrefix); }
   }
 
+  function findTab (elt) {
+
+    var quadElement = sparent(elt, '.quad_element');
+    var index = computeSiblingOffset(quadElement);
+    var table = quadElement.parentNode.parentNode.parentNode.parentNode;
+    var td = spath(table, 'tr > td', index);
+
+    return td;
+  }
+
+  function findTabBody (elt) {
+
+    var td = sparent(elt, 'td');
+    var index = computeSiblingOffset(td);
+    var table = sparent(elt, 'table');
+    var tr = sc(table, 'tr', 1);
+
+    return spath(tr, 'td > .quad_tab_body > .quad_element', index);
+  }
+
+  //
+  // root, stack, undo
+
   function root (elt) {
+
     if ( ! elt) return null;
     if (elt.undoStack) return elt;
     return root(elt.parentNode);
   }
 
   function stack (elt) {
+
     var r = root(elt);
     r.undoStack.push(serialize(r));
-    clog(r.undoStack.length);
   }
 
   function undo (containerId) {
+
     var container = document.getElementById(containerId);
     var stack = container.undoStack;
     var template = stack.pop();
+
     render(container, template, container.data, { 'mode': container.mode });
+
     if (stack.length < 1) stack.push(template);
+
     container.undoStack = stack;
   }
 
@@ -344,7 +384,7 @@ var Quaderno = function () {
 
     if (template === 'new_tab_tab') {
 
-      var td = create(container, 'td', {});
+      var td = create(container, 'td', '.new_tab_tab');
       var div = create(td, 'div', '.quad_tab');
 
       button(
@@ -383,7 +423,7 @@ var Quaderno = function () {
 
     for (i = 0; i < template[2].length; i++) {
       var div = renderElement(qtb, tabs[i], data, options);
-      tr0.children[i].tab_body = div;
+      //tr0.children[i].tab_body = div;
       if (i != 0) div.style.display = 'none';
     }
 
@@ -648,17 +688,29 @@ var Quaderno = function () {
     var tab = sc(td, '.quad_tab', 0);
     addClass(tab, 'quad_selected');
 
-    for (var i = 0; i < td.tab_body.parentNode.children.length; i++) {
-      td.tab_body.parentNode.children[i].style.display = 'none';
+    var tab_body = findTabBody(tab);
+
+    for (var i = 0; i < tab_body.parentNode.children.length; i++) {
+      tab_body.parentNode.children[i].style.display = 'none';
     }
-    td.tab_body.style.display = 'block';
+    tab_body.style.display = 'block';
   }
 
   function removeTab (elt) {
 
-    // TODO : implement me !
+    stack(elt);
 
-    clog(elt);
+    var quadElement = sparent(elt, '.quad_element');
+    var td = findTab(elt);
+
+    var next = td.nextSibling || td.previousSibling;
+
+    if (hasClass(next, '.new_tab_tab')) return; // can't remove last tab
+
+    quadElement.parentNode.removeChild(quadElement);
+    td.parentNode.removeChild(td);
+
+    showTab(next);
   }
 
   function addElement (elt) {
