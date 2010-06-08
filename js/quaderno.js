@@ -248,6 +248,8 @@ var Quaderno = function () {
       'quad_cut_button': 'cut',
       'quad_paste_button': 'paste',
       'quad_go_button': 'go',
+      'quad_left_button': 'left',
+      'quad_right_button': 'right'
     }[className];
 
     return create(
@@ -514,7 +516,14 @@ var Quaderno = function () {
       label.setAttribute('onchange', 'Quaderno.tabLabelChanged(this);');
 
       button(
-        gdiv, '.quad_minus_button', 'Quaderno.removeTab(this);', 'remove this tab');
+        gdiv, '.quad_left_button', 'Quaderno.moveTab(this, "left");',
+        'move this tab one step left');
+      button(
+        gdiv, '.quad_right_button', 'Quaderno.moveTab(this, "right");',
+        'move this tab one step right');
+      button(
+        gdiv, '.quad_minus_button', 'Quaderno.removeTab(this);',
+        'remove this tab');
     }
 
     var children = template[2];
@@ -713,6 +722,25 @@ var Quaderno = function () {
     showTab(next);
   }
 
+  function moveTab (elt, direction) {
+
+    stack(elt);
+
+    var qe = sparent(elt, '.quad_element');
+    var td = findTab(elt);
+
+    if (direction === 'left') {
+      if ( ! td.previousSibling) return;
+      td.parentNode.insertBefore(td, td.previousSibling);
+      qe.parentNode.insertBefore(qe, qe.previousSibling);
+    }
+    else {
+      if (hasClass(td.nextSibling, '.new_tab_tab')) return;
+      td.parentNode.insertBefore(td.nextSibling, td);
+      qe.parentNode.insertBefore(qe.nextSibling, qe);
+    }
+  }
+
   function addElement (elt) {
 
     stack(elt);
@@ -811,6 +839,7 @@ var Quaderno = function () {
 
     showTab: showTab,
     removeTab: removeTab,
+    moveTab: moveTab,
     addElement: addElement,
     moveElement: moveElement,
     removeElement: removeElement,

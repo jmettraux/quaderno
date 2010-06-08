@@ -172,9 +172,6 @@ a.quad_up_button {
 a.quad_down_button {
 	background-position: 0 -60px;
 }
-a.quad_copy_button {
-	background-position: 0 -120px;
-}
 a.quad_cut_button {
 	background-position: 0 -20px;
 }
@@ -183,6 +180,15 @@ a.quad_paste_button {
 }
 a.quad_go_button {
 	background-position: 0 -100px;
+}
+a.quad_copy_button {
+	background-position: 0 -120px;
+}
+a.quad_left_button {
+	background-position: 0 -140px;
+}
+a.quad_right_button {
+	background-position: 0 -160px;
 }
 a.quad_plus_button:hover {
 	background-position: -20px 0;
@@ -196,9 +202,6 @@ a.quad_up_button:hover {
 a.quad_down_button:hover {
 	background-position: -20px -60px;
 }
-a.quad_copy_button:hover {
-	background-position: -20px -120px;
-}
 a.quad_cut_button:hover {
 	background-position: -20px -20px;
 }
@@ -207,5 +210,14 @@ a.quad_paste_button:hover {
 }
 a.quad_go_button:hover {
 	background-position: -20px -100px;
+}
+a.quad_copy_button:hover {
+	background-position: -20px -120px;
+}
+a.quad_left_button:hover {
+	background-position: -20px -140px;
+}
+a.quad_right_button:hover {
+	background-position: -20px -160px;
 }
 
