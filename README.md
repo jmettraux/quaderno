@@ -8,7 +8,7 @@ a mini form templating system in javascript.
 
 TODO
 
-<img src="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png" width="50%" />
+<a href="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png" width="70%" /></a>
 
 
 ## testing
@@ -30,7 +30,7 @@ will run the test test/qt_0_identify.js
 
 ## credits
 
-Jamandru Reynolds - http://geometron.net/ - CSS and general appearance
+Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
 
 
 ## license

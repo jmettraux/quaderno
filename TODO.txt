@@ -2,3 +2,5 @@
 [o] edit_group : id/label/title need to be editable
     (uniformity with other elements)
 
+[ ] type plugin system
+
