@@ -148,6 +148,11 @@ input.quad_repeatable {
 .quad_group:hover {
 	border-style: solid;
 }
+.quad_group_head {
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px dashed #ccd0d4;
+}
 a.quad_button {
   display: inline-block;
   margin-right: 1px;

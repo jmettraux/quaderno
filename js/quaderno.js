@@ -308,20 +308,15 @@ var Quaderno = function () {
 
   function edit_tab_label (container, template, data, options) {
 
-    var td = create(container, 'td', {});
-    var div = create(td, 'div', '.quad_tab');
-
     if (template === 'new_tab_tab') {
 
+      var td = create(container, 'td', {});
+      var div = create(td, 'div', '.quad_tab');
       button(div, '.quad_plus_button', 'Quaderno.addTab(this);');
     }
     else {
 
-      var inp = create(div, 'input', '.quad_label');
-      inp.setAttribute('type', 'text');
-      inp.setAttribute('value', template[1].label);
-      button(div, '.quad_go_button', 'Quaderno.showTab(this.parentNode.parentNode);');
-      button(div, '.quad_minus_button', 'Quaderno.removeTab(this.parentNode.parentNode);');
+      use_tab_label(container, template, data, options);
     }
   }
 
@@ -433,8 +428,13 @@ var Quaderno = function () {
       addClass(container, '.quad_group');
     }
 
+    options.novalue = true;
     var gdiv = edit_(container, template, data, options);
     addClass(gdiv, '.quad_group_head');
+    if (hasClass(container.parentNode, 'quad_tab_body')) {
+      var label = sc(gdiv, '.quad_label', 0);
+      label.setAttribute('onchange', 'Quaderno.tabLabelChanged(this);');
+    }
 
     var children = template[2];
 
@@ -492,11 +492,15 @@ var Quaderno = function () {
 
     var div = create(container, 'div', {});
 
+    var novalue = options.novalue;
+
     create(div, 'span', '.quad_type', template[0]);
     createTextInput(div, 'id', template, data, options);
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);
-    createTextInput(div, 'value', template, data, options);
+    if ( ! novalue) createTextInput(div, 'value', template, data, options);
+
+    delete options.novalue;
 
     return div;
   }
@@ -651,6 +655,29 @@ var Quaderno = function () {
     elt.parentNode.removeChild(elt);
   }
 
+  // TODO : move me elsewhere
+  function computeSiblingOffset (elt, count) {
+    count = count || 0;
+    if ( ! elt.previousSibling) return count;
+    return computeSiblingOffset(elt.previousSibling, count + 1);
+  }
+
+  function tabLabelChanged (elt) {
+
+    var newLabel = strip(elt.value);
+    elt.value = newLabel;
+
+    var quad_element = elt.parentNode.parentNode;
+    var i = computeSiblingOffset(quad_element);
+    var table = quad_element.parentNode.parentNode.parentNode.parentNode;
+    var td = spath(table, 'tr > td', i);
+    var input = sc(td, 'input', 0);
+    var a = sc(td, 'a', 0);
+
+    input.value = newLabel;
+    a.innerHTML = newLabel;
+  }
+
   //
   // public methods
 
@@ -706,6 +733,7 @@ var Quaderno = function () {
     addElement: addElement,
     moveElement: moveElement,
     removeElement: removeElement,
+    tabLabelChanged: tabLabelChanged,
 
     // public
 
