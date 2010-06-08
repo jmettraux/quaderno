@@ -4,3 +4,7 @@
 
 [ ] type plugin system
 
+[ ] page/page1 eventually forget about edit/view/use switching
+    it's only a development case, it's not done in "production"...
+    or is it ?
+

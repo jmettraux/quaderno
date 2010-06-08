@@ -481,7 +481,7 @@ var Quaderno = function () {
     }
   }
 
-  function addMoveButtons (elt) {
+  function addElementButtons (elt) {
 
     button(
       elt,
@@ -536,7 +536,7 @@ var Quaderno = function () {
     for (var i = 0; i < children.length; i++) {
       var c = editElement(container, children[i], data, options);
       var cdiv = sc(c, 'div', 0);
-      addMoveButtons(cdiv);
+      addElementButtons(cdiv);
     }
 
     var div = create(container, 'div', {});
@@ -782,7 +782,7 @@ var Quaderno = function () {
     var blank = TYPE_BLANKS[type];
 
     var newElement = editElement(elt.parentNode, blank, {}, {});
-    addMoveButtons(sc(newElement, 'div', 0));
+    addElementButtons(sc(newElement, 'div', 0));
 
     elt.parentNode.insertBefore(newElement, elt);
   }
