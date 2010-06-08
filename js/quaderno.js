@@ -257,6 +257,8 @@ var Quaderno = function () {
     var v = template[1][key];
     if (v) input.value = v;
 
+    input.setAttribute('onchange', 'Quaderno.stack(this);');
+
     return input;
   }
 
@@ -293,16 +295,26 @@ var Quaderno = function () {
     catch (e) { return eval(funcPrefix); }
   }
 
-  //function root (elt) {
-  //  if ( ! elt) return null;
-  //  if (elt.undoStack) return elt;
-  //  return root(elt.parentNode);
-  //}
-  //function stack (elt) {
-  //  var r = root(elt);
-  //  var d = toData(r.id);
-  //  r.undoStack.push(d);
-  //}
+  function root (elt) {
+    if ( ! elt) return null;
+    if (elt.undoStack) return elt;
+    return root(elt.parentNode);
+  }
+
+  function stack (elt) {
+    var r = root(elt);
+    r.undoStack.push(serialize(r));
+    clog(r.undoStack.length);
+  }
+
+  function undo (containerId) {
+    var container = document.getElementById(containerId);
+    var stack = container.undoStack;
+    var template = stack.pop();
+    render(container, template, container.data, { 'mode': container.mode });
+    if (stack.length < 1) stack.push(template);
+    container.undoStack = stack;
+  }
 
   var TYPE_BLANKS = {
     'text_input': [ 'text_input', {}, [] ],
@@ -643,10 +655,15 @@ var Quaderno = function () {
   }
 
   function removeTab (elt) {
+
+    // TODO : implement me !
+
     clog(elt);
   }
 
   function addElement (elt) {
+
+    stack(elt);
 
     var type = sc(elt, '.quad_type', 0).value;
     var blank = TYPE_BLANKS[type];
@@ -658,6 +675,9 @@ var Quaderno = function () {
   }
 
   function moveElement (elt, direction) {
+
+    stack(elt);
+
     if (direction === 'up') {
       if (elt.previousSibling && ( ! hasClass(elt.previousSibling, 'quad_group_head')))
         elt.parentNode.insertBefore(elt, elt.previousSibling);
@@ -669,6 +689,9 @@ var Quaderno = function () {
   }
 
   function removeElement (elt) {
+
+    stack(elt);
+
     elt.parentNode.removeChild(elt);
   }
 
@@ -710,7 +733,8 @@ var Quaderno = function () {
 
     renderElement(container, template, data, options);
 
-    //container.undoStack = [ toTemplateWithData
+    container.data = data;
+    container.undoStack = [ template ];
   }
 
   function serialize (container) {
@@ -721,12 +745,6 @@ var Quaderno = function () {
 
     return serializeElement(sc(container, '.quad_element', 0));
   }
-
-  //function extract (container) {
-  //  var s = serialize(container);
-  //  // TODO
-  //  return [ "template", "data" ];
-  //}
 
   //
   // that's all folks...
@@ -745,12 +763,13 @@ var Quaderno = function () {
     moveElement: moveElement,
     removeElement: removeElement,
     tabLabelChanged: tabLabelChanged,
+    stack: stack,
 
     // public
 
     render: render,
     serialize: serialize,
-    //extract: extract
+    undo: undo
   };
 }();
 
