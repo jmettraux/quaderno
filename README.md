@@ -8,7 +8,7 @@ a mini form templating system in javascript.
 
 TODO
 
-![edition](doc/edition.png)
+![edition](http://github.com/jmettraux/quaderno/blob/master/doc/edition.png)
 
 
 ## testing
