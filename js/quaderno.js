@@ -20,6 +20,10 @@
 // THE SOFTWARE.
 //
 
+
+// TODO : prevent html/js injection !
+
+
 var Quaderno = function () {
 
   //
@@ -348,12 +352,6 @@ var Quaderno = function () {
     return root(elt.parentNode);
   }
 
-  function stack (elt) {
-
-    var r = root(elt);
-    r.undoStack.push(serialize(r));
-  }
-
   var TYPE_BLANKS = {
     'text_input': [ 'text_input', {}, [] ],
     'text': [ 'text', {}, [] ],
@@ -497,6 +495,14 @@ var Quaderno = function () {
       elt,
       '.quad_down_button',
       'Quaderno.moveElement(this.parentNode.parentNode, "down");');
+    button(
+      elt,
+      '.quad_copy_button',
+      'Quaderno.copyElement(this.parentNode.parentNode);');
+    button(
+      elt,
+      '.quad_paste_button',
+      'Quaderno.pasteElement(this.parentNode.parentNode);');
   }
 
   function edit_group (container, template, data, options) {
@@ -540,7 +546,13 @@ var Quaderno = function () {
       var o = create(sel, 'option', {}, TYPES[i]);
       if (TYPES[i] === template[0]) o.setAttribute('selected', 'selected');
     }
-    button(div, '.quad_plus_button', 'Quaderno.addElement(this.parentNode);');
+
+    button(
+      div, '.quad_plus_button', 'Quaderno.addElement(this.parentNode);',
+      'add a new element of the selected type');
+    button(
+      div, '.quad_paste_button', 'Quaderno.pasteElement(this.parentNode);',
+      'insert copied/cut element as last element here');
 
     return container;
   }
@@ -569,8 +581,6 @@ var Quaderno = function () {
     input.setAttribute('type', 'text');
 
     var value = getValue(template, data, options);
-    //var value = options.value;
-    //delete options.value;
     if (value != undefined) input.value = value;
   }
 
@@ -795,7 +805,22 @@ var Quaderno = function () {
 
     stack(elt);
 
+    root(elt).clipboard = elt;
     elt.parentNode.removeChild(elt);
+  }
+
+  function copyElement (elt) {
+
+    root(elt).clipboard = elt.cloneNode(true);
+  }
+
+  function pasteElement (elt) {
+
+    var clip = root(elt).clipboard;
+    if ( ! clip) return;
+
+    stack(elt);
+    elt.parentNode.insertBefore(clip.cloneNode(true), elt);
   }
 
   function tabLabelChanged (elt) {
@@ -812,6 +837,12 @@ var Quaderno = function () {
 
     input.value = newLabel;
     a.innerHTML = newLabel;
+  }
+
+  function stack (elt) {
+
+    var r = root(elt);
+    r.undoStack.push(serialize(r));
   }
 
   //
@@ -891,6 +922,8 @@ var Quaderno = function () {
     addElement: addElement,
     moveElement: moveElement,
     removeElement: removeElement,
+    copyElement: copyElement,
+    pasteElement: pasteElement,
     tabLabelChanged: tabLabelChanged,
     stack: stack,
 
