@@ -18,7 +18,7 @@
 
   <div id="quad" class="quad_root"></div>
 
-  <div id="serialized"></div>
+  <div id="serialized" onclick="clog(this);"></div>
 
   <div class="buttons">
     <a id="edit_button" href="" onclick="toggleEdition(this); return false;">edit</a>
@@ -28,6 +28,10 @@
   </div>
 
   <script>
+
+    function clog (elt) {
+      console.log(elt.original);
+    }
 
     var template =
       [ 'group', {}, [
@@ -83,6 +87,8 @@
       out.style.display = 'block';
       //s = JSON.stringify(s);
       //out.innerHTML = s;
+      out.innerHTML = '';
+      out.original = s;
       Jagaimo.render(out, s);
     }
 
