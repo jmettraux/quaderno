@@ -52,6 +52,8 @@ var Jagaimo = function () {
     }
 
     create(span, 'span', 'jagaimo_bracket', ']');
+
+    return span;
   }
 
   function renderObject (container, o) {
@@ -63,7 +65,8 @@ var Jagaimo = function () {
     var lastComma;
 
     for (var k in o) {
-      doRender(span, k);
+      var skey = doRender(span, k);
+      skey.className = skey.className + ' jagaimo_key';
       create(span, 'span', 'jagaimo_colon', ':');
       doRender(span, o[k]);
       lastComma = create(span, 'span', 'jagaimo_comma', ',');
@@ -71,6 +74,8 @@ var Jagaimo = function () {
     if (lastComma) lastComma.parentNode.removeChild(lastComma);
 
     create(span, 'span', 'jagaimo_brace', '}');
+
+    return span;
   }
 
   function doRender (container, o) {
@@ -78,19 +83,17 @@ var Jagaimo = function () {
     var type = o.constructor.name;
 
     if (type === 'String') {
-      create(
+      return create(
         container, 'span', 'jagaimo_element jagaimo_string', JSON.stringify(o));
     }
-    else if (type === 'Array') {
-      renderArray(container, o);
+    if (type === 'Array') {
+      return renderArray(container, o);
     }
-    else if (type === 'Object') {
-      renderObject(container, o);
+    if (type === 'Object') {
+      return renderObject(container, o);
     }
-    else {
-      create(
-        container, 'span', 'jagaimo_element jagaimo_other', JSON.stringify(o));
-    }
+    return create(
+      container, 'span', 'jagaimo_element jagaimo_other', JSON.stringify(o));
   }
 
   function render (containerId, obj) {
