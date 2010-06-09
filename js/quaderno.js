@@ -718,18 +718,19 @@ var Quaderno = function () {
     setValue(target, m[2], v);
   }
 
-  function produceElement (element, data, parentId) {
+  function produceElement (element, data, parentId, childIndex) {
 
     var id = element[1].id;
     var value = element[1].value;
 
     if (id && id.match(/^\./) && parentId) id = parentId + id;
+    if (parentId && parentId.match(/\.$/)) id = parentId + childIndex;
 
     setValue(data, id, value);
 
     for (var i = 0; i < element[2].length; i++) {
       var c = element[2][i];
-      produceElement(c, data, id);
+      produceElement(c, data, id, i);
     }
   }
 
