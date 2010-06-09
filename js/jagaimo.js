@@ -64,7 +64,12 @@ var Jagaimo = function () {
 
     var lastComma;
 
-    for (var k in o) {
+    var keys = [];
+    for (var k in o) { keys.push(k) };
+    keys = keys.sort();
+
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
       var skey = doRender(span, k);
       skey.className = skey.className + ' jagaimo_key';
       create(span, 'span', 'jagaimo_colon', ':');
@@ -96,7 +101,7 @@ var Jagaimo = function () {
       container, 'span', 'jagaimo_element jagaimo_other', JSON.stringify(o));
   }
 
-  function render (containerId, obj) {
+  function render (containerId, o) {
 
     var container = containerId;
 
@@ -104,7 +109,7 @@ var Jagaimo = function () {
       container = document.getElementById(containerId);
     }
 
-    doRender(container, obj);
+    doRender(container, o);
   }
 
   return {
