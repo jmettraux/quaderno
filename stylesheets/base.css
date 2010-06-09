@@ -69,3 +69,15 @@ textarea {
 	border-bottom-color: #ddd;
 }
 
+.json_label {
+  color: #8B8F91;
+  padding: 1px;
+  margin: 1px;
+}
+.json_table {
+  width: 100%;
+}
+.json_table td {
+  width: 50%;
+}
+

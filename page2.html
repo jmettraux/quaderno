@@ -16,22 +16,48 @@
 
   <h1><a href="">Quaderno</a></h1>
 
+  <table class="json_table">
+    <tr>
+      <td>
+        <div class="json_label">template</span>
+        <div id="template_in" class="quad_output"></div>
+      </td>
+      <td>
+        <div class="json_label">data</span>
+        <div id="data_in" class="quad_output"></div>
+      </td>
+    </tr>
+  </table>
+
   <div id="quad" class="quad_root"></div>
 
-  <div id="serialized" class="quad_output" onclick="clog(this);"></div>
-
   <div class="buttons">
-    <a id="edit_button" href="" onclick="toggleEdition(this); return false;">edit</a>
+    <a id="use" href="" onclick="fromEditToUse(); return false;">use</a>
     <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
     <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
-    <a href="" onclick="serialize(); return false;">serialize</a>
+    <a href="" onclick="output(); return false;">output</a>
+  </div>
+
+  <table class="json_table">
+    <tr>
+      <td>
+        <div class="json_label">template</span>
+        <div id="template_out" class="quad_output"></div>
+      </td>
+      <td>
+        <div class="json_label">data</span>
+        <div id="data_out" class="quad_output"></div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="links">
+    <a href="?mode=edit">edit</a>
+    <a href="?mode=use">use</a>
+    <a href="?mode=view">view</a>
   </div>
 
   <script>
-
-    function clog (elt) {
-      console.log(elt.original);
-    }
 
     var template =
       [ 'group', {}, [
@@ -51,28 +77,6 @@
     var translations = {
     };
 
-    function toggleEdition (button) {
-
-      var s = Quaderno.serialize('quad');
-      var d = {};
-
-      if (button.innerHTML == 'edit') {
-        Quaderno.render(
-          'quad', s, d, { 'translations': translations, 'mode': 'edit' });
-        button.innerHTML = 'view';
-      }
-      else if (button.innerHTML == 'view') {
-        Quaderno.render(
-          'quad', s, d, { 'translations': translations, 'mode': 'view' });
-        button.innerHTML = 'use';
-      }
-      else {
-        Quaderno.render(
-          'quad', s, d, { 'translations': translations, 'mode': 'use' });
-        button.innerHTML = 'edit';
-      }
-    }
-
     function render (mode) {
 
       var mode = mode || 'use';
@@ -81,25 +85,41 @@
         'quad', template, data, { 'translations': translations, 'mode': mode });
     }
 
-    function serialize () {
+    function output () {
+
       var s = Quaderno.serialize('quad');
-      var out = document.getElementById('serialized');
-      out.style.display = 'block';
+      var out = document.getElementById('template_out');
       out.original = s;
       Jagaimo.render(out, s);
+
+      if (document.getElementById('quad').mode === 'use') {
+        Jagaimo.render('data_out', data);
+      }
+    }
+
+    function fromEditToUse () {
+
+      var s = Quaderno.serialize('quad');
+
+      Quaderno.render(
+        'quad', s, data, { 'translations': translations, 'mode': 'use' });
+
+      var ub = document.getElementById('use');
+      ub.parentNode.removeChild(ub);
     }
 
     var m = document.location.search.match(/mode=([^\b]+)/)
     var mode = m ? m[1] : undefined
 
-    var eb = document.getElementById('edit_button');
-    if (mode === 'edit') eb.innerHTML = 'view';
-    else if (mode === 'view') eb.innerHTML = 'use';
-    else eb.innerHTML = 'edit';
-
-    document.getElementById('serialized').style.display = 'none';
+    if (mode !== 'edit') {
+      var ub = document.getElementById('use');
+      ub.parentNode.removeChild(ub);
+    }
 
     render(mode);
+
+    Jagaimo.render('template_in', template);
+    Jagaimo.render('data_in', data);
   </script>
 
 </body>

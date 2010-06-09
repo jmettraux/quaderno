@@ -109,6 +109,8 @@ var Jagaimo = function () {
       container = document.getElementById(containerId);
     }
 
+    var fc; while (fc = container.firstChild) { container.removeChild(fc); }
+
     doRender(container, o);
   }
 
