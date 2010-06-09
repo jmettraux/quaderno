@@ -62,6 +62,7 @@
     var template =
       [ 'group', {}, [
         [ 'text', { 'label': 'this is a message' }, [] ],
+        [ 'text_input', { 'id': 'brand', 'label': 'brand' }, [] ],
         [ 'group', { 'id': 'colours.' }, [
           [ 'text_input', { 'label': 'colour', 'title': 'colour' }, [] ]
         ] ],
@@ -93,7 +94,7 @@
       Jagaimo.render(out, s);
 
       if (document.getElementById('quad').mode === 'use') {
-        Jagaimo.render('data_out', data);
+        Jagaimo.render('data_out', Quaderno.produce('quad'));
       }
     }
 

@@ -313,6 +313,14 @@ var Quaderno = function () {
     catch (e) { return eval(funcPrefix); }
   }
 
+  function toElement (id_or_element) {
+
+    if ((typeof id_or_element) == 'string') {
+      return document.getElementById(id_or_element);
+    }
+    return id_or_element;
+  }
+
   function findTab (elt) {
 
     var quadElement = sparent(elt, '.quad_element');
@@ -694,6 +702,19 @@ var Quaderno = function () {
     return f(container);
   }
 
+  function produceElement (element, data) {
+
+    var id = element[1].id;
+    var value = element[1].value;
+
+    if (id && (value !== undefined)) data[id] = value;
+
+    for (var i = 0; i < element[2].length; i++) {
+      var c = element[2][i];
+      produceElement(c, data);
+    }
+  }
+
   //
   // onClick public methods
 
@@ -857,9 +878,7 @@ var Quaderno = function () {
     options = options || {};
     options.mode = options.mode || 'view';
 
-    if ((typeof container) == 'string') {
-      container = document.getElementById(container);
-    }
+    container = toElement(container);
 
     var fc; while (fc = container.firstChild) { container.removeChild(fc); }
 
@@ -873,11 +892,20 @@ var Quaderno = function () {
 
   function serialize (container) {
 
-    if ((typeof container) == 'string') {
-      container = document.getElementById(container);
-    }
+    return serializeElement(sc(toElement(container), '.quad_element', 0));
+  }
 
-    return serializeElement(sc(container, '.quad_element', 0));
+  function produce (container) {
+
+    container = toElement(container);
+
+    var template = serialize(container);
+
+    var data = JSON.parse(JSON.stringify(container.data));
+
+    produceElement(template, data);
+
+    return data;
   }
 
   function undo (containerId) {
@@ -931,6 +959,7 @@ var Quaderno = function () {
 
     render: render,
     serialize: serialize,
+    produce: produce,
     undo: undo,
     reset: reset
   };
