@@ -91,9 +91,9 @@ div.quad_key.quad_text {
 	margin-right: 4px;
 }
 
-/* serialized */
+/* output */
 
-#serialized {
+.quad_output {
 	display: none;
 	color: #e7eef5;
 	background: rgba(0,0,0,.85);
