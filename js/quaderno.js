@@ -702,16 +702,34 @@ var Quaderno = function () {
     return f(container);
   }
 
-  function produceElement (element, data) {
+  function setValue (data, k, v) {
+
+    if (k === undefined) return;
+    if (v === undefined) return;
+
+    var m = k.match(/([^\.]+)\.(.+)$/)
+
+    if ( ! m) { data[k] = v; return; }
+
+    var target = data[m[1]];
+
+    if ( ! target) { data[k] = v; return; }
+
+    setValue(target, m[2], v);
+  }
+
+  function produceElement (element, data, parentId) {
 
     var id = element[1].id;
     var value = element[1].value;
 
-    if (id && (value !== undefined)) data[id] = value;
+    if (id && id.match(/^\./) && parentId) id = parentId + id;
+
+    setValue(data, id, value);
 
     for (var i = 0; i < element[2].length; i++) {
       var c = element[2][i];
-      produceElement(c, data);
+      produceElement(c, data, id);
     }
   }
 
