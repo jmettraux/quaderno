@@ -1,0 +1,28 @@
+
+.jagaimo_element {
+}
+.jagaimo_bracket {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.jagaimo_brace {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.jagaimo_colon {
+  margin-right: 3px;
+}
+.jagaimo_comma {
+  margin-right: 3px;
+}
+.jagaimo_array {
+}
+.jagaimo_object {
+}
+.jagaimo_string {
+  color: red;
+}
+.jagaimo_other {
+  color: blue;
+}
+

@@ -1,0 +1,32 @@
+
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>quaderno : jagaimo</title>
+  <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/jagaimo.css" type="text/css" media="screen" />
+  <script src="js/jagaimo.js"></script>
+</head>
+<body>
+
+  <h1><a href="">quaderno : jagaimo</a></h1>
+
+  <div id="jag0" class="jagaimo"></div>
+  <div id="jag1" class="jagaimo"></div>
+
+  <script>
+
+    Jagaimo.render(
+      'jag0',
+      [ 1, 2, 3 ]);
+
+    Jagaimo.render(
+      'jag1',
+      { 'colour': 'blue', 'customers': [ 'a', 'b', 'c', 4, true ] });
+
+  </script>
+
+</body>
+</html>
+
