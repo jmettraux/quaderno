@@ -1,0 +1,14 @@
+
+[o] editMode : change order
+[o] editMode : add / remove
+[o] editMode : repeatable toggler
+[o] editMode : select : values.onchange => update select
+[o] editMode : remove section
+[o] read-only mode
+[ ] groups (vertical, horizontal) ?
+
+[ ] custom validation ?
+[ ] type: link ?
+[ ] title !
+[ ] security h(s) !!
+

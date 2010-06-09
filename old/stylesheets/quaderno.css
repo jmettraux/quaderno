@@ -1,0 +1,198 @@
+/* @override http://localhost:3000/stylesheets/quaderno.css */
+
+/* quad */
+
+.quad_root {
+	margin: 12px 0;
+}
+.quad_tab {
+	display: block;
+	line-height: 1.25em;
+	padding: 8px;
+	border: #ccd0d4 solid 1px;
+	border-left: none;
+	border-bottom: #ccd0d4 solid 1px;
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-topleft: 8px;
+	background: #E9ECED;
+	background: -webkit-gradient(linear, 0% 0%, 0% 33, from(#E9ECED), to(#fff));
+	background: -moz-linear-gradient(top, #E9ECED, #fff 33px);
+}
+.quad_root table td {
+  padding: 0;
+}
+.quad_root tr:first-child td {
+	vertical-align: bottom;
+}
+.quad_root td:first-child .quad_tab {
+	border-left:  #ccd0d4 solid 1px;
+}
+a.quad_tab {
+	color: #9b9ea0;
+	text-align: center;
+	text-decoration: none;
+	font-size: 13px;
+	text-shadow: #fff 0 1px 0;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.quad_tab.quad_selected {
+	color: #86e34b;
+	text-shadow: #989999 0 1px 1px;
+	background: white;
+	border-bottom-color: transparent;
+}
+.quad_tab_body {
+	padding: 18px 24px 12px 12px;
+	border: #ccd0d4 solid 1px;
+	border-top: none;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+}
+.quad_tab_element {
+	display: none;
+}
+.quad_element {
+	margin-bottom: 4px;
+}
+.quad_new_element {
+	margin: 16px 4px 12px 86px;
+}
+div.quad_label, span.quad_label, .quad_label_e {
+	color: #8b8f91;
+	display: inline-block;
+	width: 80px;
+	margin-right: 4px;
+	text-align: right;
+}
+.quad_label_e {
+	width: auto;
+}
+.quad_link_target {
+	width: 70px;
+}
+.quad_circle {
+	cursor: pointer;
+	margin-right: 4px;
+}
+
+/* output */
+
+#output {
+	display: none;
+	color: #e7eef5;
+	background: rgba(0,0,0,.85);
+	font: 12px/20px menlo, monaco, courier, mono;
+	padding: 12px;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	overflow: auto;
+}
+
+/* buttons */
+
+input, select {
+	margin-right: 4px;
+}
+a.quadButton, .quad_rep {
+	margin: 0 1px;
+	padding: 2px 6px 3px 6px;
+	background: #aaaeb0;
+	color: #fcfcfc;
+	font-size: 14px;
+	line-height: 1.25em;
+	font-weight: bold;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	text-decoration: none;
+}
+.quad_rep {
+	margin: 0 3px;
+	background: #b9bcbe;
+	color: #fff;
+	font-size: 11px;
+	border-radius: 12px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+}
+input.quad_repeatable {
+	margin: 0 0 0 4px;
+}
+.quad_group {
+	display: inline-block;
+	padding: 8px 12px;
+	background: #fff;
+	border: 1px dashed #ccd0d4;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+.quad_group:hover {
+	border-style: solid;
+}
+a.quad_button {
+  display: inline-block;
+  margin-right: 1px;
+  width: 12px;
+  height: 12px;
+  background: transparent url(../images/quaderno/quaderno_buttons.png) no-repeat;
+}
+a.quad_plus_button {
+	background-position: 0 0;
+}
+a.quad_minus_button {
+	background-position: 0 -20px;
+}
+a.quad_up_button {
+	background-position: 0 -40px;
+}
+a.quad_down_button {
+	background-position: 0 -60px;
+}
+a.quad_copy_button {
+	background-position: 0 -120px;
+}
+a.quad_cut_button {
+	background-position: 0 -20px;
+}
+a.quad_paste_button {
+	background-position: 0 -80px;
+}
+a.quad_go_button {
+	background-position: 0 -100px;
+}
+a.quad_plus_button:hover {
+	background-position: -20px 0;
+}
+a.quad_minus_button:hover {
+	background-position: -20px -20px;
+}
+a.quad_up_button:hover {
+	background-position: -20px -40px;
+}
+a.quad_down_button:hover {
+	background-position: -20px -60px;
+}
+a.quad_copy_button:hover {
+	background-position: -20px -120px;
+}
+a.quad_cut_button:hover {
+	background-position: -20px -20px;
+}
+a.quad_paste_button:hover {
+	background-position: -20px -80px;
+}
+a.quad_go_button:hover {
+	background-position: -20px -100px;
+}
+
