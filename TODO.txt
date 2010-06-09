@@ -1,11 +1,13 @@
 
 [o] edit_group : id/label/title need to be editable
     (uniformity with other elements)
-
-[ ] type plugin system
-
-[ ] page/page1 eventually forget about edit/view/use switching
+[o] page/page1 eventually forget about edit/view/use switching
     it's only a development case, it's not done in "production"...
     or is it ?
     at least, going from edit to use is helpful
+
+[ ] type plugin system
+[ ] fix undo/stack system for 'use' mode
+[ ] repeatable : (+ - ^ v) for array elements in 'use' mode
+[ ] page2 : customer .name & .age should be auto-filled
 
