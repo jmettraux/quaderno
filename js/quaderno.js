@@ -974,18 +974,14 @@ var Quaderno = function () {
     container.undoStack = [ template ];
   }
 
-  var priv = this;
-
   //
   // that's all folks...
 
   return {
 
-    priv: priv,
-
     // public for the sake of testing
 
-    identify: identify,
+    _identify: identify,
 
     // public for onClick or onChange
 

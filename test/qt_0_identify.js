@@ -5,7 +5,7 @@ load(dir + '/base.js');
 
 
 function i (path) {
-  var i = Quaderno.identify(path);
+  var i = Quaderno._identify(path);
   return [ i.className, i.id, i.tagName ];
 }
 
