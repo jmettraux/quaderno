@@ -214,27 +214,48 @@ var Quaderno = function () {
     return lookup(hash[key.shift()], key);
   }
 
-  function getId (template) {
-    var id = template[1].id;
-    if (id.match(/\.$/)) return id.slice(0, -1);
+  function getParentId (template) {
+
+    if ( ! template.parent) return '';
+
+    var id = template.parent[1].id;
+
+    if ( ! id) return '';
+
+    //if (id.match(/^\./)) return getParentId(template.parent) + id;
+
     return id;
   }
 
   function translate (options, text) {
+
     if (text.indexOf('.') > -1 && options.translations) {
       return lookup(options.translations, text);
     }
+
     return text;
   }
 
   function getValue (template, data, options) {
+    
     var v = options.value;
+
     if (v !== undefined) {
       delete options.value;
       return v;
     }
+
+    var id = template[1].id;
+
+    if (id.match(/^\./)) {
+      id = getParentId(template) + id;
+    }
+
+    clog(id);
+    clog(template.parent[1].id);
+
     if (template[1].value) return template[1].value;
-    if (template[1].id) return lookup(data, template[1].id);
+    if (id) return lookup(data, id);
     return undefined;
   }
 
@@ -475,8 +496,10 @@ var Quaderno = function () {
     var children = template[2];
     var values = [ undefined ];
 
-    if (template[1].id && template[1].id.match(/\.$/)) {
-      values = lookup(data, getId(template));
+    var id = template[1].id;
+
+    if (id && id.match(/\.$/)) { // arrays
+      values = lookup(data, id.slice(0, -1));
     }
 
     for (var j = 0; j < values.length; j++) {
@@ -951,10 +974,14 @@ var Quaderno = function () {
     container.undoStack = [ template ];
   }
 
+  var priv = this;
+
   //
   // that's all folks...
 
   return {
+
+    priv: priv,
 
     // public for the sake of testing
 

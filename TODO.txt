@@ -5,9 +5,9 @@
     it's only a development case, it's not done in "production"...
     or is it ?
     at least, going from edit to use is helpful
+[o] page2 : customer .name & .age should be auto-filled
 
 [ ] type plugin system
 [ ] fix undo/stack system for 'use' mode
 [ ] repeatable : (+ - ^ v) for array elements in 'use' mode
-[ ] page2 : customer .name & .age should be auto-filled
 
