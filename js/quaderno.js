@@ -211,20 +211,9 @@ var Quaderno = function () {
     if ( ! isArray(key)) key = key.split('.');
     if (key.length < 1) return hash;
 
+    // TODO : when key is an array index
+
     return lookup(hash[key.shift()], key);
-  }
-
-  function getParentId (template) {
-
-    if ( ! template.parent) return '';
-
-    var id = template.parent[1].id;
-
-    if ( ! id) return '';
-
-    //if (id.match(/^\./)) return getParentId(template.parent) + id;
-
-    return id;
   }
 
   function translate (options, text) {
@@ -236,26 +225,48 @@ var Quaderno = function () {
     return text;
   }
 
-  function getValue (template, data, options) {
-    
-    var v = options.value;
+  //function getId (template) {
+  //  var id = template[1].id;
+  //  var parentId = undefined;
+  //  if (template.parent) parentId = getId(template.parent);
+  //  if ( ! id && ! parentId) return undefined;
+  //  if (id && parentId) return parentId + id;
+  //  var index = 0;
+  //  // TODO : fix me
+  //  if (parentId && parentId.match(/\.$/)) return parentId + index;
+  //  return id;
+  //}
 
+  //function getValue (template, data, options) {
+  //  var v = options.value;
+  //  if (v !== undefined) {
+  //    delete options.value;
+  //    return v;
+  //  }
+  //  var id = getId(template);
+  //  if (template[1].value) return template[1].value;
+  //  if (id) return lookup(data, id);
+  //  return undefined;
+  //}
+
+  function getId (template);
+
+    return template[1].id;
+  }
+
+  function getValue (template, data, options) {
+
+    var v = options.value;
     if (v !== undefined) {
       delete options.value;
       return v;
     }
 
-    var id = template[1].id;
-
-    if (id.match(/^\./)) {
-      id = getParentId(template) + id;
-    }
-
-    clog(id);
-    clog(template.parent[1].id);
-
     if (template[1].value) return template[1].value;
+
+    var id = getId(template);
     if (id) return lookup(data, id);
+
     return undefined;
   }
 
@@ -319,7 +330,9 @@ var Quaderno = function () {
   }
 
   function setParent (template, parent) {
+
     template.parent = parent;
+
     for (var i = 0; i < template[2].length; i++) {
       setParent(template[2][i], template);
     }
@@ -504,6 +517,7 @@ var Quaderno = function () {
 
     for (var j = 0; j < values.length; j++) {
 
+      options.index = j;
       options.value = values[j]
 
       for (var i = 0; i < children.length; i++) {
@@ -689,10 +703,8 @@ var Quaderno = function () {
     var div = create(container, 'div', '.quad_element');
 
     var id = template[1].id;
+    if (id) hide(div, '.quad_id', id);
 
-    if (id) {
-      hide(div, '.quad_id', id);
-    }
     if (template[1].title) {
       hide(div, '.quad_title', template[1].title);
       div.setAttribute('title', translate(options, template[1].title));
@@ -711,8 +723,10 @@ var Quaderno = function () {
 
     if (options.mode === 'view')
       return viewElement(container, template, data, options);
+
     if (options.mode === 'use')
       return useElement(container, template, data, options);
+
     //else // 'edit'
     return editElement(container, template, data, options);
   }
@@ -731,6 +745,10 @@ var Quaderno = function () {
     if (v === undefined) return;
 
     var m = k.match(/([^\.]+)\.(.+)$/)
+
+    // TODO
+    //if (k.match(/^\d+$/)) ... index
+    //  k = new Number(k);
 
     if ( ! m) { data[k] = v; return; }
 

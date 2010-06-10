@@ -88,6 +88,12 @@ function render_and_serialize (template, data, opts) {
   return Quaderno.serialize('quad');
 }
 
+function render_and_produce (template, data) {
+  document._clear();
+  Quaderno.render('quad', template, data, { 'mode': 'use' });
+  return Quaderno.produce('quad');
+}
+
 //
 // test DOM
 
