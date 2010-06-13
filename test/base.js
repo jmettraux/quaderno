@@ -80,6 +80,9 @@ function assertEqual (a, b) {
   print(aa);
   print("  but was :");
   print(bb);
+
+  //throw { 'name': 'AssertionError', 'message': 'assertion error' };
+  throw 'AssertionError';
 }
 
 function render_and_serialize (template, data, opts) {
