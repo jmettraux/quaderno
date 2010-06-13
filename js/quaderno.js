@@ -41,17 +41,31 @@ var Quaderno = function () {
   }
 
   function isArray (o) {
-    if (o == null) return false;
-    return (o.constructor == Array);
+    if (o === null) return false;
+    return (o.constructor === Array);
   }
 
+  // shallow copy
+  //
   function dup (o) {
     if (isArray(o)) {
       var r = [];
       for (var i = 0; i < o.length; i++) r.push(o[i]);
       return r;
     }
+    if (o && o.constructor === Object) {
+      var r = {};
+      for (var k in o) { r[k] = o[k] };
+      return r;
+    }
     return o;
+  }
+
+  function merge (o, h) {
+    var r = {};
+    for (var k in o) { r[k] = o[k]; }
+    for (var k in h) { r[k] = h[k]; }
+    return r;
   }
 
   function strip (s) {
@@ -206,7 +220,8 @@ var Quaderno = function () {
 
   function lookup (hash, key) {
 
-    if (hash == undefined) return undefined
+    if (hash === undefined) return undefined;
+    if (key === undefined) return undefined;
 
     if ( ! isArray(key)) key = key.split('.');
     if (key.length < 1) return hash;
@@ -231,12 +246,10 @@ var Quaderno = function () {
   //  if (template.parent) parentId = getId(template.parent);
   //  if ( ! id && ! parentId) return undefined;
   //  if (id && parentId) return parentId + id;
-  //  var index = 0;
-  //  // TODO : fix me
+  //  var index = 0; // broken
   //  if (parentId && parentId.match(/\.$/)) return parentId + index;
   //  return id;
   //}
-
   //function getValue (template, data, options) {
   //  var v = options.value;
   //  if (v !== undefined) {
@@ -249,25 +262,19 @@ var Quaderno = function () {
   //  return undefined;
   //}
 
-  function getId (template);
-
-    return template[1].id;
+  function isArrayId (id) {
+    return (id && id.match(/\.[\*\+-]?$/));
+  }
+  function isPropertyId (id) {
+    return (id && id.match(/^\./));
   }
 
   function getValue (template, data, options) {
 
-    var v = options.value;
-    if (v !== undefined) {
-      delete options.value;
-      return v;
-    }
+    if (template[1].value !== undefined) return template[1].value;
+      // since 'false' is an OK value
 
-    if (template[1].value) return template[1].value;
-
-    var id = getId(template);
-    if (id) return lookup(data, id);
-
-    return undefined;
+    return lookup(data, options.id || template[1].id);
   }
 
   function button (container, className, onclick, title) {
@@ -509,19 +516,45 @@ var Quaderno = function () {
     var children = template[2];
     var values = [ undefined ];
 
-    var id = template[1].id;
+    var isArrayGroup = false;
+    var id = options.id || template[1].id;
 
-    if (id && id.match(/\.$/)) { // arrays
+    if (isArrayId(id)) {
+      isArrayGroup = true;
       values = lookup(data, id.slice(0, -1));
     }
 
     for (var j = 0; j < values.length; j++) {
 
-      options.index = j;
-      options.value = values[j]
+      //options.index = j;
+      //options.value = values[j]
+
+      // pushing the values and the index... Or just pushing the indexes ?
+      // option.completeId = x
+
+      // colours. colours._index_ only absolute ids ? easier maybe
+      //
+      // group : colours.* + -
+      // inside : colours.#.name
+      //          colours._.name
+      //
+      // relative ids are too complicated, force absolute
+
+      // pushing the id is the way to go
+
+      var opts = dup(options);
+      if (isArrayGroup) opts.id = id + j;
 
       for (var i = 0; i < children.length; i++) {
-        renderElement(container, children[i], data, options);
+
+        var child = children[i];
+
+        if ( ! isArrayGroup && isPropertyId(child[1].id)) {
+          opts = dup(opts);
+          opts.id = id + child[1].id;
+        }
+
+        renderElement(container, child, data, opts);
       }
     }
   }
@@ -759,18 +792,18 @@ var Quaderno = function () {
     setValue(target, m[2], v);
   }
 
-  function produceElement (element, data, parentId, childIndex) {
+  function produceElement (elt, data, parentId, childIndex) {
 
-    var id = element[1].id;
-    var value = element[1].value;
+    var id = elt[1].id;
+    var value = elt[1].value;
 
-    if (id && id.match(/^\./) && parentId) id = parentId + id;
-    if (parentId && parentId.match(/\.$/)) id = parentId + childIndex;
+    if (isPropertyId(id) && parentId) id = parentId + id;
+    if (isArrayId(parentId)) id = parentId + childIndex;
 
     setValue(data, id, value);
 
-    for (var i = 0; i < element[2].length; i++) {
-      var c = element[2][i];
+    for (var i = 0; i < elt[2].length; i++) {
+      var c = elt[2][i];
       produceElement(c, data, id, i);
     }
   }

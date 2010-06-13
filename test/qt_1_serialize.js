@@ -21,6 +21,8 @@ var ta = [ 'tabs', {}, [
   ] ] ]
 ];
 
+var data = {};
+
 assertEqual(ta, render_and_serialize(ta));
 
 // 1
@@ -31,6 +33,7 @@ var tb = [ 'tabs', {}, [
     [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada', 'value': 'azure' }, [] ] ] ] ] ];
 
 assertEqual(tb, render_and_serialize(tb));
+assertEqual({ 'colour': 'azure' }, render_and_produce(tb, {}));
 
 // 2
 

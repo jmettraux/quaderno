@@ -11,3 +11,8 @@
 [ ] fix undo/stack system for 'use' mode
 [ ] repeatable : (+ - ^ v) for array elements in 'use' mode
 
+[ ] beware of removing an element in a repeatable and forgetting to remove
+    it from the 'data' when producing
+
+[ ] link a tab group to an array ?
+
