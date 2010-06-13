@@ -74,7 +74,7 @@ and
 
 will render as ('use' mode)
 
-<a href="http://github.com/jmettraux/quaderno/raw/master/doc/using.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/using.png" width="70%" /></a>
+<a href="http://github.com/jmettraux/quaderno/raw/master/doc/using.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/using.png" /></a>
 
 
 ## testing
