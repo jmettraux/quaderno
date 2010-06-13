@@ -1,7 +1,16 @@
 
 # quaderno
 
-a mini form templating system in javascript.
+A mini form templating system in javascript.
+
+Quaderno assumes, three modes of operations.
+
+* edit - building, modifiying the form
+* use - filling the form
+* view - read-only mode
+
+
+## samples
 
 
 ## usage
