@@ -14,9 +14,17 @@ Quaderno, for these three modes, takes as input a *template* and some *data* (a 
 
 ## samples
 
-<a href="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png" width="70%" /></a>
+There is are some <a href="http://ruote.rubyforge.org/quaderno/">sample pages</a>. The most complete one is <a href="http://ruote.rubyforge.org/quaderno/page2.html">page 2</a> (though it's overloaded with helper white on black data rendering).
 
-There is are some <a href="http://ruote.rubyforge.org/quaderno/">sample pages</a>. The most complete one is <a href="http://ruote.rubyforge.org/quaderno/page2.html">page 2</a>.
+
+## current limitations
+
+only those 'types' :
+
+* text
+* text_input
+* group
+* tabs
 
 
 ## usage
@@ -51,6 +59,22 @@ Data simply looks like
 Given an HTML div
 
     <div id="quad" class="quad_root"></div>
+
+this javascript invocation
+
+    Quaderno.render('quad', template, data, { 'mode': 'edit' });
+
+will render as ('edit' mode)
+
+<a href="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/edition.png" width="70%" /></a>
+
+and
+
+    Quaderno.render('quad', template, data, { 'mode': 'use' });
+
+will render as ('use' mode)
+
+<a href="http://github.com/jmettraux/quaderno/raw/master/doc/using.png"><img src="http://github.com/jmettraux/quaderno/raw/master/doc/using.png" width="70%" /></a>
 
 
 ## testing
