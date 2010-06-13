@@ -14,7 +14,7 @@ Quaderno, for these three modes, takes as input a *template* and some *data* (a 
 
 ## samples
 
-There is are some <a href="http://ruote.rubyforge.org/quaderno/">sample pages</a>. The most complete one is <a href="http://ruote.rubyforge.org/quaderno/page2.html">page 2</a> (though it's overloaded with helper white on black data rendering).
+There are some <a href="http://ruote.rubyforge.org/quaderno/">sample pages</a>. The most complete one is <a href="http://ruote.rubyforge.org/quaderno/page2.html">page 2</a> (though it's overloaded with helper white on black data rendering).
 
 
 ## current limitations
