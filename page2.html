@@ -69,11 +69,13 @@
         [ 'group', { 'id': 'customer' }, [
           [ 'text_input', { 'label': 'name', 'id': '.name' }, [] ],
           [ 'text_input', { 'label': 'age', 'id': '.age' }, [] ]
-        ] ]
+        ] ],
+        [ 'select', { 'id': 'team', 'label': 'team', 'values': 'teams' }, [] ],
       ] ];
     var data = {
       'colours': [ 'red', 'green', 'blue' ],
-      'customer': { 'name': 'john', 'age': '30' }
+      'customer': { 'name': 'john', 'age': '30' },
+      'teams': [ 'argentina', 'italy', 'japan', 'switzerland', 'usa' ]
     };
     var translations = {
     };

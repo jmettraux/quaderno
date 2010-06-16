@@ -643,6 +643,11 @@ var Quaderno = function () {
   //
   // *
 
+  function use_ (container, template, data, options) {
+
+    create(container, 'span', {}, JSON.stringify(template));
+  }
+
   function edit_ (container, template, data, options) {
 
     var div = create(container, 'div', {});
