@@ -241,10 +241,22 @@ var Quaderno = function () {
   }
 
   function isArrayId (id) {
-    return (id && id.match(/\.[\*\+-]?$/));
+    return (id && id.match(/\.[\*\+-]?\^?$/));
   }
   function isPropertyId (id) {
     return (id && id.match(/^\./));
+  }
+
+  function splitArrayMarker (id) {
+
+    var m = id.match(/(.+)(\.[\*\+-]?\^?)$/);
+
+    return {
+      'id': m[1],
+      'canAdd': m[2].match(/\+/) || m[2].match(/\*/),
+      'canRemove': m[2].match(/\-/) || m[2].match(/\*/),
+      'canReorder': m[2].match(/\^/)
+    };
   }
 
   function getValue (template, data, options) {
@@ -509,47 +521,62 @@ var Quaderno = function () {
     var children = template[2];
     var values = [ undefined ];
 
-    var isArrayGroup = false;
+    var arrayMarker;
     var id = options.id || template[1].id;
 
     if (isArrayId(id)) {
-      isArrayGroup = true;
-      values = lookup(data, id.slice(0, -1));
+      arrayMarker = splitArrayMarker(id);
+      values = lookup(data, arrayMarker.id);
     }
 
     for (var j = 0; j < values.length; j++) {
 
-      //options.index = j;
-      //options.value = values[j]
-
-      // pushing the values and the index... Or just pushing the indexes ?
-      // option.completeId = x
-
-      // colours. colours._index_ only absolute ids ? easier maybe
-      //
-      // group : colours.* + -
-      // inside : colours.#.name
-      //          colours._.name
-      //
-      // relative ids are too complicated, force absolute
-
-      // pushing the id is the way to go
-
       var opts = dup(options);
-      if (isArrayGroup) opts.id = id + j;
+      if (arrayMarker) opts.id = arrayMarker.id + '.' + j;
 
       for (var i = 0; i < children.length; i++) {
 
         var child = children[i];
 
-        if ( ! isArrayGroup && isPropertyId(child[1].id)) {
+        if ( ! arrayMarker && isPropertyId(child[1].id)) {
           opts = dup(opts);
           opts.id = id + child[1].id;
         }
 
-        renderElement(container, child, data, opts);
+        var e = renderElement(container, child, data, opts);
+
+        if ( ! arrayMarker) continue;
+
+        if (arrayMarker.canRemove) {
+          button(
+            e,
+            '.quad_minus_button',
+            'Quaderno.removeElement(this.parentNode);');
+        }
+        if (arrayMarker.canReorder) {
+          button(
+            e,
+            '.quad_up_button',
+            'Quaderno.moveElement(this.parentNode, "up");');
+          button(
+            e,
+            '.quad_down_button',
+            'Quaderno.moveElement(this.parentNode, "down");');
+        }
       }
     }
+
+    if (arrayMarker && arrayMarker.canAdd) {
+      button(
+        container,
+        '.quad_plus_button',
+        'Quaderno.copyLastElement(this.parentNode);');
+    }
+  }
+
+  function addArrayElementButtons (elt) {
+
+    // TODO
   }
 
   function addElementButtons (elt) {
@@ -966,6 +993,14 @@ var Quaderno = function () {
     elt.parentNode.insertBefore(clip.cloneNode(true), elt);
   }
 
+  function copyLastElement (elt) {
+
+    stack(elt);
+
+    var le = sc(elt, '.quad_element', -1);
+    elt.insertBefore(le.cloneNode(true), le);
+  }
+
   function tabLabelChanged (elt) {
 
     var newLabel = strip(elt.value);
@@ -1074,6 +1109,7 @@ var Quaderno = function () {
     removeElement: removeElement,
     copyElement: copyElement,
     pasteElement: pasteElement,
+    copyLastElement: copyLastElement,
     tabLabelChanged: tabLabelChanged,
     stack: stack,
 
