@@ -240,28 +240,6 @@ var Quaderno = function () {
     return text;
   }
 
-  //function getId (template) {
-  //  var id = template[1].id;
-  //  var parentId = undefined;
-  //  if (template.parent) parentId = getId(template.parent);
-  //  if ( ! id && ! parentId) return undefined;
-  //  if (id && parentId) return parentId + id;
-  //  var index = 0; // broken
-  //  if (parentId && parentId.match(/\.$/)) return parentId + index;
-  //  return id;
-  //}
-  //function getValue (template, data, options) {
-  //  var v = options.value;
-  //  if (v !== undefined) {
-  //    delete options.value;
-  //    return v;
-  //  }
-  //  var id = getId(template);
-  //  if (template[1].value) return template[1].value;
-  //  if (id) return lookup(data, id);
-  //  return undefined;
-  //}
-
   function isArrayId (id) {
     return (id && id.match(/\.[\*\+-]?$/));
   }
