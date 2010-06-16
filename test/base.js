@@ -221,6 +221,7 @@ var Element = function () {
 document = function () {
 
   var elements;
+  var firstSeenElement;
 
   function _clear () {
     elements = {};
@@ -233,6 +234,7 @@ document = function () {
   function createElement (tagName) {
     var e = Element();
     e.tagName = tagName;
+    firstSeenElement = firstSeenElement || e;
     return e;
   }
 
@@ -244,15 +246,47 @@ document = function () {
     return elements[id];
   }
 
+  function _root () {
+    var e = firstSeenElement;
+    while (true) {
+      if ( ! e.parentNode) return e;
+      e = e.parentNode;
+    }
+  }
+
+  function _allElements (elt, accumulator) {
+    accumulator = accumulator || [];
+    if (elt.childNodes === undefined) return accumulator;
+    accumulator.push(elt);
+    for (var i = 0; i < elt.childNodes.length; i++) {
+      _allElements(elt.childNodes[i], accumulator);
+    }
+    return accumulator;
+  }
+
+  function getElementsByClass (cname) {
+    var all = _allElements(_root());
+    var r = [];
+    for (var i = 0; i < all.length; i++) {
+      var e = all[i];
+      if (e.className.indexOf(cname) > -1) r.push(e);
+        // lame check, for now
+    }
+    return r;
+  }
+
   return {
 
     _testing: true,
 
     _clear: _clear,
 
+    _root: _root,
+
     createElement: createElement,
     createTextNode: createTextNode,
     getElementById: getElementById,
+    getElementsByClass: getElementsByClass
   }
 }();
 
