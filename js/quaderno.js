@@ -255,6 +255,21 @@ var Quaderno = function () {
     return lookup(data, options.id || template[1].id);
   }
 
+  function getValues (template, data, options) {
+
+    var values = template[1].values;
+
+    if (values === undefined) return [];
+
+    if (values.indexOf(',') < 0) {
+      values = lookup(data, values);
+    }
+
+    if (isArray(values)) return values;
+
+    return values.toString().split(',');
+  }
+
   function button (container, className, onclick, title) {
 
     if ( ! onclick.match(/return false;$/)) onclick += " return false;";
@@ -638,6 +653,37 @@ var Quaderno = function () {
 
     var value = getValue(template, data, options);
     if (value != undefined) input.value = value;
+  }
+
+  //
+  // 'select'
+
+  function use_select (container, template, data, options) {
+
+    hide(container, '.quad_label', template[1].label);
+    create(container, 'span', '.quad_key', template[1].label);
+
+    hide(container, '.quad_values', template[1].values);
+
+    var select = create(container, 'select', '.quad_value');
+
+    var values = getValues(template, data, options);
+    var value = getValue(template, data, options);
+
+    for (var i = 0; i < values.length; i++) {
+      create(select, 'option', {}, values[i]);
+    }
+
+    select.value = value;
+  }
+
+  function edit_select (container, template, data, options) {
+
+    var div = edit_(container, template, data, options);
+
+    createTextInput(div, 'values', template, data, options);
+
+    return div;
   }
 
   //
