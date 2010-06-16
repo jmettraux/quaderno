@@ -28,7 +28,14 @@ var elts = document.getElementsByClass('quad_element');
 for (var i = 0; i < elts.length; i++) {
   var e = elts[i];
   print(e.tagName + '.' + e.className);
+  //print(e);
 }
+
+print("===");
+
+//print(document._root());
+print(document._root()._path('div > div > input'));
+print(document._path('div > div > input'));
 
 //assertEqual(teu, render_and_serialize(te0, data, { 'mode': 'view' } ));
 //assertEqual(te0, render_and_serialize(te0, data, { 'mode': 'edit' } ));

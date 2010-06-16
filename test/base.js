@@ -129,6 +129,22 @@ var Element = function () {
     return s;
   }
 
+  function _path (p) {
+    if (p.constructor.name !== 'Array') {
+      p = p.split('>');
+    }
+    if (p.length < 1) return this;
+    var p0 = p[0].replace(/^\s+|\s+$/g, '');
+    for (var i = 0; i < this.children.length; i++) {
+      var c = this.children[i];
+      if (p0.match(/^\./)) {
+        if (c.className.indexOf(p0.slice(1)) > -1) return c._path(p.slice(1))
+      }
+      if (c.tagName === p0) return c._path(p.slice(1));
+    }
+    return undefined;
+  }
+
   function toString (indentation) {
 
     if ( ! indentation) indentation = 1;
@@ -166,6 +182,8 @@ var Element = function () {
     __noSuchMethod__: function (id, args) {
       print("!!! nsm : " + id);
     },
+
+    _path: _path,
 
     toString: toString
   }
@@ -254,6 +272,10 @@ document = function () {
     }
   }
 
+  function _path (p) {
+    return _root()._path(p);
+  }
+
   function _allElements (elt, accumulator) {
     accumulator = accumulator || [];
     if (elt.childNodes === undefined) return accumulator;
@@ -282,6 +304,7 @@ document = function () {
     _clear: _clear,
 
     _root: _root,
+    _path: _path,
 
     createElement: createElement,
     createTextNode: createTextNode,
