@@ -129,20 +129,36 @@ var Element = function () {
     return s;
   }
 
-  function _path (p) {
-    if (p.constructor.name !== 'Array') {
-      p = p.split('>');
+  function _path (path, index) {
+
+    if (path.constructor.name === 'String') {
+      path = path.split('>');
     }
-    if (p.length < 1) return this;
-    var p0 = p[0].replace(/^\s+|\s+$/g, '');
-    for (var i = 0; i < this.children.length; i++) {
-      var c = this.children[i];
-      if (p0.match(/^\./)) {
-        if (c.className.indexOf(p0.slice(1)) > -1) return c._path(p.slice(1))
+
+    var r = [];
+    var p = path[0].replace(/^\s+|\s+$/g, '');
+    path = path.slice(1);
+
+    if ((p.match(/^\./) && this.className.indexOf(p.slice(1)) > -1) ||
+        this.tagName === p) {
+
+      if (path.length < 1) {
+        r = [ this ];
       }
-      if (c.tagName === p0) return c._path(p.slice(1));
+      else {
+        for (var i = 0; i < this.childNodes.length; i++) {
+          var c = this.childNodes[i];
+          if ( ! c.childNodes) continue;
+
+          var rr = c._path(path); // no index
+          r = r.concat(rr);
+        }
+      }
     }
-    return undefined;
+
+    if (index === -1) return r.slice(-1)[0];
+    if (index !== undefined) return r[index];
+    return r;
   }
 
   function toString (indentation) {
@@ -272,8 +288,8 @@ document = function () {
     }
   }
 
-  function _path (p) {
-    return _root()._path(p);
+  function _path (p, i) {
+    return _root()._path(p, i);
   }
 
   function _allElements (elt, accumulator) {
