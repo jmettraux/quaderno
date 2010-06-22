@@ -409,12 +409,13 @@ var Quaderno = function () {
   var TYPE_BLANKS = {
     'text_input': [ 'text_input', {}, [] ],
     'text': [ 'text', {}, [] ],
+    'select': [ 'select', {}, [] ],
     'group': [ 'group', {}, [] ]
   }
 
   //var TYPES = []; for (var k in TYPE_BLANKS) { TYPES.push(k); }
   var TYPES = [
-    'text_input', 'text', 'group'
+    'text_input', 'select', 'text', 'group'
   ];
 
   //
@@ -642,7 +643,7 @@ var Quaderno = function () {
     var sel = create(div, 'select', '.quad_type');
     for (var i = 0; i < TYPES.length; i++) {
       var o = create(sel, 'option', {}, TYPES[i]);
-      if (TYPES[i] === template[0]) o.setAttribute('selected', 'selected');
+      //if (TYPES[i] === template[0]) o.setAttribute('selected', 'selected');
     }
 
     button(
