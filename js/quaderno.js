@@ -35,9 +35,8 @@ var Quaderno = function () {
       else console.log(arguments);
     }
     catch (e) {
-      //if (o == undefined) print("undefined");
-      //else print(o.toString());
-      print(JSON.stringify(arguments));
+      if (arguments.length == 1) print(arguments[0]);
+      else print(JSON.stringify(arguments));
     }
   }
 
@@ -847,6 +846,11 @@ var Quaderno = function () {
     }
 
     var target = data[m[1]];
+
+    if (target === undefined && isArray(data)) {
+      data[m[1]] = {};
+      target = data[m[1]];
+    }
 
     if ( ! target) { data[k] = v; return; }
 
