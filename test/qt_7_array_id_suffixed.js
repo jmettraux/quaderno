@@ -24,27 +24,23 @@ var teu =
 
 assertEqual(teu, render_and_serialize(te0, data, { 'mode': 'use' } ));
 
-var elts = document.getElementsByClass('quad_element');
-for (var i = 0; i < elts.length; i++) {
-  var e = elts[i];
-  print(e.tagName + '.' + e.className);
-  //print(e);
-}
+//var elts = document.getElementsByClass('quad_element');
+//for (var i = 0; i < elts.length; i++) {
+//  var e = elts[i];
+//  print(e.tagName + '.' + e.className);
+//  //print(e);
+//}
 
-print("===");
-
+//print("===");
 //print(document._root());
-//print(document._root()._path('div > div > input'));
-//print(document._path('div > div > input'));
-print(document._path('div > div', 0));
-print("===");
-print(document._path('div > div > input').length);
-print(document._path('div > div > input').constructor.name);
-print(document._path('div > div > input', 0));
-print(document._path('div > div > input', 1));
-print(document._path('div > div > input', 2));
-print(document._path('div > div > input', -1));
 
-//assertEqual(teu, render_and_serialize(te0, data, { 'mode': 'view' } ));
-//assertEqual(te0, render_and_serialize(te0, data, { 'mode': 'edit' } ));
+//print(document._root()._path('div > div > input'));
+//print(document._path('div > div > input', 0));
+//print(document._path('div > div > div > input', 3));
+
+var red = document._path('div > div > div > input', 3);
+red.value = "RED";
+
+assertEqual(
+  { 'colours': [ 'RED', 'green', 'blue' ] }, Quaderno.produce('quad'));
 

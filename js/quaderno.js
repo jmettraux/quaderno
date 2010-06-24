@@ -240,16 +240,20 @@ var Quaderno = function () {
     return text;
   }
 
-  function isArrayId (id) {
-    return (id && id.match(/\.[\*\+-]?\^?$/));
-  }
   function isPropertyId (id) {
     return (id && id.match(/^\./));
   }
 
+  //function isArrayId (id) {
+  //  return (id && id.match(/\.[\*\+-]?\^?$/));
+  //}
   function splitArrayMarker (id) {
 
+    if ( ! id) return undefined;
+
     var m = id.match(/(.+)(\.[\*\+-]?\^?)$/);
+
+    if ( ! m) return undefined;
 
     return {
       'id': m[1],
@@ -522,13 +526,10 @@ var Quaderno = function () {
     var children = template[2];
     var values = [ undefined ];
 
-    var arrayMarker;
     var id = options.id || template[1].id;
+    var arrayMarker = splitArrayMarker(id);
 
-    if (isArrayId(id)) {
-      arrayMarker = splitArrayMarker(id);
-      values = lookup(data, arrayMarker.id);
-    }
+    if (arrayMarker) values = lookup(data, arrayMarker.id);
 
     for (var j = 0; j < values.length; j++) {
 
@@ -855,7 +856,9 @@ var Quaderno = function () {
     var value = elt[1].value;
 
     if (isPropertyId(id) && parentId) id = parentId + id;
-    if (isArrayId(parentId)) id = parentId + childIndex;
+
+    var arrayMarker = splitArrayMarker(parentId);
+    if (arrayMarker) id = arrayMarker.id + '.' + childIndex;
 
     setValue(data, id, value);
 
