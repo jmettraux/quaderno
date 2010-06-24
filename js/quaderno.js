@@ -665,11 +665,20 @@ var Quaderno = function () {
 
   function use_text (container, template, data, options) {
 
-    var text = template[1].label;
+    var id = template[1].id;
+    var label = template[1].label;
 
-    hide(container, '.quad_label', text);
-    text = translate(options, text);
-    create(container, 'div', '.quad_key.quad_text', text);
+    hide(container, '.quad_label', label);
+
+    label = translate(options, label);
+
+    if (id) {
+      create(container, 'div', '.quad_key', label);
+      create(container, 'div', '.quad_key.quad_text', lookup(data, id));
+    }
+    else {
+      create(container, 'div', '.quad_key.quad_text', label);
+    }
   }
 
   //
