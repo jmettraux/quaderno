@@ -116,6 +116,23 @@ var Element = function () {
     delete this.attributes[name];
   }
 
+  function cloneNode (deep) {
+    if (deep === undefined) deep = false;
+    var clone = Element();
+    clone.tagName = this.tagName;
+    for (var k in this.attributes) {
+      clone.setAttribute(k, this.attributes[k]);
+    }
+    for (var i = 0; i < this.childNodes.length; i++) {
+      var c = this.childNodes[i];
+      if (c.constructor.name === 'String' || ( ! deep))
+        clone.appendChild(c);
+      else
+        clone.appendChild(c.cloneNode(true));
+    }
+    return clone;
+  }
+
   function attsToJson (atts) {
     var h = {};
     for (var k in atts) { h[k] = atts[k]; }
@@ -194,6 +211,8 @@ var Element = function () {
     appendChild: appendChild,
     setAttribute: setAttribute,
     removeAttribute: removeAttribute,
+
+    cloneNode: cloneNode,
 
     __noSuchMethod__: function (id, args) {
       print("!!! nsm : " + id);

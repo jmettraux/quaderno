@@ -837,13 +837,21 @@ var Quaderno = function () {
 
     var m = k.match(/([^\.]+)\.(.+)$/)
 
-    // TODO
-    //if (k.match(/^\d+$/)) ... index
-    //  k = new Number(k);
-
     if ( ! m) { data[k] = v; return; }
 
-    var target = data[m[1]];
+    var target;
+
+    if (isArray(data)) {
+      var i = new Number(m[1]);
+      target = data[i];
+      if ( ! target) {
+        data[i] = {};
+        target = data[i];
+      }
+    }
+    else {
+      target = data[m[1]];
+    }
 
     if ( ! target) { data[k] = v; return; }
 
@@ -861,6 +869,8 @@ var Quaderno = function () {
     if (arrayMarker) id = arrayMarker.id + '.' + childIndex;
 
     setValue(data, id, value);
+
+    // children
 
     for (var i = 0; i < elt[2].length; i++) {
       var c = elt[2][i];

@@ -71,12 +71,23 @@
           [ 'text_input', { 'label': 'age', 'id': '.age' }, [] ]
         ] ],
         [ 'select', { 'id': 'team', 'label': 'team', 'values': 'teams' }, [] ],
+        [ 'group', { 'id': 'opinions.+' }, [
+          [ 'group', {}, [
+            [ 'text', { 'label': 'opinion' }, [] ],
+            [ 'text_input', { 'label': 'financial product', 'id': '.fp' }, [] ],
+            [ 'text_input', { 'label': 'object', 'id': '.object' }, [] ]
+          ] ]
+        ] ],
       ] ];
     var data = {
       'colours': [ 'red', 'green', 'blue' ],
       'customer': { 'name': 'john', 'age': '30' },
       'teams': [ 'argentina', 'italy', 'japan', 'switzerland', 'usa' ],
-      'team': 'japan'
+      'team': 'japan',
+      'opinions': [
+        { 'fp': 'G 405', 'object': 'roof' },
+        { 'fp': 'L 323', 'object': 'walls' }
+      ]
     };
     var translations = {
     };
