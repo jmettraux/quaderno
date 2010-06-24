@@ -529,7 +529,13 @@ var Quaderno = function () {
     var id = options.id || template[1].id;
     var arrayMarker = splitArrayMarker(id);
 
-    if (arrayMarker) values = lookup(data, arrayMarker.id);
+    if (arrayMarker) {
+
+      values = lookup(data, arrayMarker.id);
+
+      hide(
+        container, '.quad_array_children_template', JSON.stringify(children));
+    }
 
     values = values || [];
 
@@ -576,11 +582,6 @@ var Quaderno = function () {
         '.quad_plus_button',
         'Quaderno.copyLastElement(this.parentNode);');
     }
-  }
-
-  function addArrayElementButtons (elt) {
-
-    // TODO
   }
 
   function addElementButtons (elt) {
@@ -1013,6 +1014,26 @@ var Quaderno = function () {
     stack(elt);
 
     var le = sc(elt, '.quad_element', -1);
+
+    if ( ! le) {
+
+      var t = sc(elt, '.quad_array_children_template', 0);
+      var t = JSON.parse(t.value);
+
+      var r = root(elt);
+
+      for (var i = 0; i < t.length; i++) {
+        renderElement(elt, t[i], r.data, { 'mode': 'use' });
+      }
+        //
+        // translations are gone !!!
+
+      var button = sc(elt, '.quad_plus_button', 0);
+      elt.appendChild(button);
+
+      return;
+    }
+
     elt.insertBefore(le.cloneNode(true), le);
   }
 
