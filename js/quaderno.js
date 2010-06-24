@@ -531,6 +531,8 @@ var Quaderno = function () {
 
     if (arrayMarker) values = lookup(data, arrayMarker.id);
 
+    values = values || [];
+
     for (var j = 0; j < values.length; j++) {
 
       var opts = dup(options);
