@@ -106,6 +106,14 @@ var Element = function () {
     c.parentNode = this;
     this.childNodes.push(c);
   }
+  function removeChild (c) {
+    var j;
+    for (var i = 0; i < this.childNodes.length; i++) {
+      if (this.childNodes[i] === c) { j = i; break; }
+    }
+    if (j) this.childNodes.splice(j, 1);
+  }
+
   function setAttribute (name, value) {
     this.attributes[name] = value;
   }
@@ -209,6 +217,8 @@ var Element = function () {
     style: {},
 
     appendChild: appendChild,
+    removeChild: removeChild,
+
     setAttribute: setAttribute,
     removeAttribute: removeAttribute,
 

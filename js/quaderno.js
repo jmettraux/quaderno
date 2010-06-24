@@ -35,8 +35,9 @@ var Quaderno = function () {
       else console.log(arguments);
     }
     catch (e) {
-      if (o == undefined) print("undefined");
-      else print(o.toString());
+      //if (o == undefined) print("undefined");
+      //else print(o.toString());
+      print(JSON.stringify(arguments));
     }
   }
 
@@ -837,21 +838,15 @@ var Quaderno = function () {
 
     var m = k.match(/([^\.]+)\.(.+)$/)
 
-    if ( ! m) { data[k] = v; return; }
+    if ( ! m) {
 
-    var target;
+      if (k === '0' && isArray(data)) data.splice(0, data.length);
 
-    if (isArray(data)) {
-      var i = new Number(m[1]);
-      target = data[i];
-      if ( ! target) {
-        data[i] = {};
-        target = data[i];
-      }
+      data[k] = v;
+      return;
     }
-    else {
-      target = data[m[1]];
-    }
+
+    var target = data[m[1]];
 
     if ( ! target) { data[k] = v; return; }
 
