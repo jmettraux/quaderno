@@ -686,6 +686,10 @@ var Quaderno = function () {
 
     var value = getValue(template, data, options);
     if (value != undefined) input.value = value;
+
+    if (template[1].id) { // for webrat / capybara
+      input.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
+    }
   }
 
   //
@@ -708,6 +712,10 @@ var Quaderno = function () {
     }
 
     select.value = value;
+
+    if (template[1].id) { // for webrat / capybara
+      select.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
+    }
   }
 
   function edit_select (container, template, data, options) {
@@ -762,6 +770,7 @@ var Quaderno = function () {
     // year
 
     if (type.match(/y/)) {
+
       create(container, 'span', '.quad_date_separator', 'y');
       var y = (new Date()).getYear() + 1900;
       var sel = create(container, 'select', '.quad_date_year');
@@ -771,11 +780,16 @@ var Quaderno = function () {
       sel.value = y;
       sel.setAttribute(
         'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+
+      if (template[1].id) { // for webrat / capybara
+        sel.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g') + '__year';
+      }
     }
 
     // month
 
     if (type.match(/m/)) {
+
       create(container, 'span', '.quad_date_separator', 'm');
       var sel = create(container, 'select', '.quad_date_month');
       for (var i = 1; i <= 12; i++) {
@@ -783,15 +797,24 @@ var Quaderno = function () {
       }
       sel.setAttribute(
         'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+
+      if (template[1].id) { // for webrat / capybara
+        sel.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g') + '__month';
+      }
     }
 
     // day
 
     if (type.match(/d/)) {
+
       create(container, 'span', '.quad_date_separator', 'd');
       var sel = create(container, 'select', '.quad_date_day');
       for (var i = 1; i <= 31; i++) {
         create(sel, 'option', { 'value': '' + i }, i);
+      }
+
+      if (template[1].id) { // for webrat / capybara
+        sel.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g') + '__day';
       }
     }
 
