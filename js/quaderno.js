@@ -754,8 +754,10 @@ var Quaderno = function () {
 
   function useDate (container, template, data, options, type) {
 
-    hide(container, '.quad_label', template[1].label);
-    create(container, 'span', '.quad_key', template[1].label);
+    if (template[1].label) {
+      hide(container, '.quad_label', template[1].label);
+      create(container, 'span', '.quad_key', template[1].label);
+    }
 
     // year
 
@@ -826,6 +828,7 @@ var Quaderno = function () {
     atts['value'] = v.join('/');
 
     fetchAndSet(elt, 'id', atts);
+    fetchAndSet(elt, 'label', atts);
 
     var typename = type === 'ymd' ? 'date' : 'date_md';
 
