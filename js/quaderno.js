@@ -410,16 +410,8 @@ var Quaderno = function () {
     return root(elt.parentNode);
   }
 
-  var TYPE_BLANKS = {
-    'text_input': [ 'text_input', {}, [] ],
-    'text': [ 'text', {}, [] ],
-    'select': [ 'select', {}, [] ],
-    'group': [ 'group', {}, [] ]
-  }
-
-  //var TYPES = []; for (var k in TYPE_BLANKS) { TYPES.push(k); }
   var TYPES = [
-    'text_input', 'select', 'text', 'group'
+    'text_input', 'select', 'text', 'group', 'date', 'date_md'
   ];
 
   //
@@ -728,6 +720,133 @@ var Quaderno = function () {
   }
 
   //
+  // date, date_md
+
+  var MD = [ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+  function checkDate (elt, type) {
+
+    // TODO : fix leap year
+
+    elt = elt.parentNode;
+    var a = serializeDate(elt, type, true);
+
+    if (type === 'ymd') {
+      var d = new Date();
+      d.setFullYear(a[0], a[1] - 1, a[2]);
+      sc(elt, '.quad_date_year', 0).value = d.getFullYear();
+      sc(elt, '.quad_date_month', 0).value = d.getMonth() + 1;
+      sc(elt, '.quad_date_day', 0).value = d.getDate();
+    }
+
+    var sday = sc(elt, '.quad_date_day', 0);
+    var smonth = sc(elt, '.quad_date_month', 0);
+    var day = sday.value;
+    var month = smonth.value;
+
+    while (sday.firstChild) { sday.removeChild(sday.firstChild); }
+
+    for (var i = 1; i <= MD[month]; i++) {
+      create(sday, 'option', { 'value': '' + i }, i);
+    }
+    sday.value = day;
+  }
+
+  function useDate (container, template, data, options, type) {
+
+    hide(container, '.quad_label', template[1].label);
+    create(container, 'span', '.quad_key', template[1].label);
+
+    // year
+
+    if (type.match(/y/)) {
+      create(container, 'span', '.quad_date_separator', 'y');
+      var y = (new Date()).getYear() + 1900;
+      var sel = create(container, 'select', '.quad_date_year');
+      for (var i = 2000; i < 2200; i++) {
+        create(sel, 'option', { 'value': '' + i }, i);
+      }
+      sel.value = y;
+      sel.setAttribute(
+        'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+    }
+
+    // month
+
+    if (type.match(/m/)) {
+      create(container, 'span', '.quad_date_separator', 'm');
+      var sel = create(container, 'select', '.quad_date_month');
+      for (var i = 1; i <= 12; i++) {
+        create(sel, 'option', { 'value': '' + i }, i);
+      }
+      sel.setAttribute(
+        'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+    }
+
+    // day
+
+    if (type.match(/d/)) {
+      create(container, 'span', '.quad_date_separator', 'd');
+      var sel = create(container, 'select', '.quad_date_day');
+      for (var i = 1; i <= 31; i++) {
+        create(sel, 'option', { 'value': '' + i }, i);
+      }
+    }
+
+    // setting value
+
+    var value = getValue(template, data, options);
+
+    if (value) {
+
+      value = value.split('/');
+
+      if (type === 'ymd') {
+        sc(container, '.quad_date_year', 0).value = new Number(value.shift());
+      }
+      sc(container, '.quad_date_month', 0).value = new Number(value.shift());
+      sc(container, '.quad_date_day', 0).value = new Number(value.shift());
+    }
+  }
+
+  function serializeDate (elt, type, raw) {
+
+    if ( ! sc(elt, '.quad_date_day', 0)) return serialize_(elt, false);
+
+    var v = [];
+
+    if (type.match(/y/)) v.push(sc(elt, '.quad_date_year', 0).value);
+    if (type.match(/m/)) v.push(sc(elt, '.quad_date_month', 0).value);
+    if (type.match(/d/)) v.push(sc(elt, '.quad_date_day', 0).value);
+
+    if (raw) return v; // ;-)
+
+    var atts = {};
+
+    atts['value'] = v.join('/');
+
+    fetchAndSet(elt, 'id', atts);
+
+    var typename = type === 'ymd' ? 'date' : 'date_md';
+
+    return [ typename, atts, [] ];
+  }
+
+  function use_date (container, template, data, options) {
+    useDate(container, template, data, options, 'ymd');
+  }
+  function use_date_md (container, template, data, options) {
+    useDate(container, template, data, options, 'md');
+  }
+
+  function serialize_date (elt) {
+    return serializeDate(elt, 'ymd');
+  }
+  function serialize_date_md (elt) {
+    return serializeDate(elt, 'md');
+  }
+
+  //
   // *
 
   function use_ (container, template, data, options) {
@@ -772,11 +891,11 @@ var Quaderno = function () {
 
     var atts = {};
 
-    var id = fetchAndSet(elt, 'id', atts);
-    var label = fetchAndSet(elt, 'label', atts);
-    var title = fetchAndSet(elt, 'title', atts);
-    var value = fetchAndSet(elt, 'value', atts);
-    var values = fetchAndSet(elt, 'values', atts);
+    fetchAndSet(elt, 'id', atts);
+    fetchAndSet(elt, 'label', atts);
+    fetchAndSet(elt, 'title', atts);
+    fetchAndSet(elt, 'value', atts);
+    fetchAndSet(elt, 'values', atts);
 
     var children = [];
     if (serializeChildren) children = serialize_children(elt);
@@ -974,7 +1093,7 @@ var Quaderno = function () {
     stack(elt);
 
     var type = sc(elt, '.quad_type', 0).value;
-    var blank = TYPE_BLANKS[type];
+    var blank = [ type, {}, [] ];
 
     var newElement = editElement(elt.parentNode, blank, {}, {});
     addElementButtons(sc(newElement, 'div', 0));
@@ -1156,6 +1275,7 @@ var Quaderno = function () {
     pasteElement: pasteElement,
     copyLastElement: copyLastElement,
     tabLabelChanged: tabLabelChanged,
+    checkDate: checkDate,
     stack: stack,
 
     // public

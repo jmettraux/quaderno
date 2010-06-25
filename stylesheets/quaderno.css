@@ -207,3 +207,13 @@ a.quad_right_button:hover {
 	background-position: -20px -160px;
 }
 
+/* dates */
+
+.quad_date_separator {
+  color: #8b8f91;
+  display: inline-block;
+  width: 1em;
+  margin-right: 3px;
+  text-align: right;
+}
+
