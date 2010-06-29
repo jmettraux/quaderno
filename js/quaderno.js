@@ -909,6 +909,10 @@ var Quaderno = function () {
 
   function serialize_checkbox (elt) {
 
+    var checkbox = sc(elt, '.quad_checkbox', 0);
+
+    if ( ! checkbox) return serialize_(elt, false);
+
     var type = sc(elt, '.quad_type', 0).value;
 
     var atts = {};
@@ -917,7 +921,6 @@ var Quaderno = function () {
     fetchAndSet(elt, 'label', atts);
     fetchAndSet(elt, 'title', atts);
 
-    var checkbox = sc(elt, '.quad_checkbox', 0);
     var text = sc(elt, '.quad_text', 0);
 
     atts['value'] = { 'value': checkbox.value, 'text': text.innerHTML };
