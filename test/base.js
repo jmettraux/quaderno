@@ -26,9 +26,11 @@ function diff (a, b) {
   var tb = (typeof b);
 
   var ja = JSON.stringify(a);
+  //print("===============");
+  //printo(b);
   var jb = JSON.stringify(b);
 
-  if (ta != tb) { return ja + '\n  !=\n' + jb + '\n  type mismatch'; }
+  if (ta !== tb) { return ja + '\n  !=\n' + jb + '\n  type mismatch'; }
 
   if (a instanceof Array) {
     if (a.length != b.length) {
@@ -57,7 +59,7 @@ function diff (a, b) {
     }
   }
   else {
-    if (ja != jb) { return ja + ' != ' + jb; }
+    if (ja !== jb) { return ja + ' !== ' + jb; }
   }
 
   return '';
@@ -67,7 +69,7 @@ function assertEqual (a, b) {
 
   var d = diff(a, b);
 
-  if (d == '') return;
+  if (d === '') return;
 
   print("  diff :"); 
   print(d);
@@ -95,6 +97,61 @@ function render_and_produce (template, data) {
   document._clear();
   Quaderno.render('quad', template, data, { 'mode': 'use' });
   return Quaderno.produce('quad');
+}
+
+// used sometimes when debugging JSON.stringify issues
+//
+function to_s (o) {
+  if (o === undefined) return 'undefined';
+  if (o === null) return 'null';
+  if (o === true) return 'true';
+  if (o === false) return 'false';
+  var c = o.constructor.name;
+  if (c === 'Object') {
+    var a = [];
+    for (var k in o) { a.push(to_s(k) + ':' + to_s(o[k])) }
+    return '{' + a.join(',') + '}';
+  }
+  if (c === 'Array') {
+    var a = [];
+    for (var i = 0; i < o.length; i++) { a.push(to_s(o[i])); }
+    return '[' + a.join(',') + ']';
+  }
+  if (c === 'String') {
+    return '"' + o + '"';
+  }
+  return o.toString();
+}
+
+function printo (o, indentation) {
+
+  if (indentation === undefined) indentation = 0;
+
+  if (o === undefined) { print('' + indentation + ':undefined'); return; }
+  if (o === null) { print('' + indentation + ':null'); return; }
+  if (o === true) { print('' + indentation + ':true'); return; }
+  if (o === false) { print('' + indentation + ':false'); return; }
+
+  var c = o.constructor.name;
+
+  if (c === 'Object') {
+    for (var k in o) {
+      print('' + indentation + ':"' + k + '" =>');
+      printo(o[k], indentation + 1);
+    }
+    return;
+  }
+  if (c === 'Array') {
+    for (var i = 0; i < o.length; i++) {
+      printo(o[i], indentation + 1);
+    }
+    return;
+  }
+  if (c === 'String') {
+    print('' + indentation + ':"' + o + '"');
+    return;
+  }
+  print('' + indentation + ':' + o.toString());
 }
 
 //
