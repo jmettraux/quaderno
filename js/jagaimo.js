@@ -85,7 +85,7 @@ var Jagaimo = function () {
 
   function doRender (container, o) {
 
-    var type = o.constructor.name;
+    var type; try { type = o.constructor.name; } catch (e) {}
 
     if (type === 'String') {
       return create(
