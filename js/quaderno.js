@@ -661,6 +661,7 @@ var Quaderno = function () {
 
     var id = template[1].id;
     var label = template[1].label;
+    var value = getValue(template, data, options);
 
     hide(container, '.quad_label', label);
 
@@ -669,6 +670,10 @@ var Quaderno = function () {
     if (id) {
       create(container, 'div', '.quad_key', label);
       create(container, 'div', '.quad_key.quad_text', lookup(data, id));
+    }
+    else if (value) {
+      create(container, 'div', '.quad_key', label);
+      create(container, 'div', '.quad_key.quad_text', value);
     }
     else {
       create(container, 'div', '.quad_key.quad_text', label);
