@@ -519,7 +519,11 @@ var Quaderno = function () {
   function use_group (container, template, data, options) {
 
     if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
+
       addClass(container, '.quad_group');
+
+      hide(container, '.quad_label', template[1].label);
+      create(container, 'div', '.quad_key.quad_text', template[1].label);
     }
 
     var children = template[2];

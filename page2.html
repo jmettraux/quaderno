@@ -60,18 +60,18 @@
   <script>
 
     var template =
-      [ 'group', {}, [
-        [ 'text', { 'label': 'this is a message' }, [] ],
+      [ 'group', { 'label': 'general info' }, [
+        [ 'text', {}, [] ],
         [ 'text_input', { 'id': 'brand', 'label': 'brand' }, [] ],
         [ 'group', { 'id': 'colours.*^' }, [
           [ 'text_input', { 'label': 'colour', 'title': 'colour' }, [] ]
         ] ],
-        [ 'group', { 'id': 'customer' }, [
+        [ 'group', { 'id': 'customer', 'label': 'customer' }, [
           [ 'text_input', { 'label': 'name', 'id': '.name' }, [] ],
           [ 'text_input', { 'label': 'age', 'id': '.age' }, [] ]
         ] ],
         [ 'select', { 'id': 'team', 'label': 'team', 'values': 'teams' }, [] ],
-        [ 'group', { 'id': 'opinions.+' }, [
+        [ 'group', { 'id': 'opinions.+', 'label': 'opinions' }, [
           [ 'group', {}, [
             [ 'text', { 'label': 'opinion' }, [] ],
             [ 'text_input', { 'label': 'financial product', 'id': '.fp' }, [] ],

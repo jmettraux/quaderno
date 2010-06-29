@@ -31,7 +31,7 @@ assertEqual(teu, render_and_serialize(te0, data, { 'mode': 'use' } ));
 //print(document._path('div > div > input', 0));
 //print(document._path('div > div > div > input', 3));
 
-var red = document._path('div > div > div', 0);
+var red = document._path('div > div > div', 1);
 red.parentNode.removeChild(red);
 
 assertEqual(
