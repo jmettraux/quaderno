@@ -35,7 +35,7 @@ var Quaderno = function () {
       else console.log(arguments);
     }
     catch (e) {
-      if (arguments.length == 1) print(arguments[0]);
+      if (arguments.length == 1) print(JSON.stringify(arguments[0]));
       else print(JSON.stringify(arguments));
     }
   }
@@ -43,6 +43,11 @@ var Quaderno = function () {
   function isArray (o) {
     if (o === null) return false;
     return (o.constructor === Array);
+  }
+  function isComposite (o) {
+    if ( ! o) return false;
+    var cn = o.constructor.name;
+    return cn === 'Object' || cn === 'Array';
   }
 
   // shallow copy
@@ -661,7 +666,9 @@ var Quaderno = function () {
 
     var id = template[1].id;
     var label = template[1].label;
+
     var value = getValue(template, data, options);
+    if (isComposite(value)) value = undefined;
 
     hide(container, '.quad_label', label);
 
@@ -1296,7 +1303,8 @@ var Quaderno = function () {
 
     var template = serialize(container);
 
-    var data = JSON.parse(JSON.stringify(container.data));
+    //var data = JSON.parse(JSON.stringify(container.data));
+    var data = container.data;
 
     produceElement(template, data);
 
