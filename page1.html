@@ -62,6 +62,9 @@
             [ 'text_input', { 'label': 'name', 'id': '.name' }, [] ]
           ] ]
         ] ],
+        [ 'group', { 'id': 'projects.' }, [
+          [ 'checkbox', { 'label': 'project', }, [] ]
+        ] ],
       ] ];
     var data = {
       'colours': [ 'red', 'green', 'blue' ],
@@ -69,6 +72,11 @@
       'cars': [
         { 'brand': 'mercedes', 'name': 'slk' },
         { 'brand': 'audi', 'name': 'quattro' }
+      ],
+      'projects' : [
+        { 'value': 123, 'text': 'mimosa' },
+        { 'value': 456, 'text': 'magnolia', 'checked': true },
+        { 'value': 789, 'text': 'tulip' }
       ]
     };
     var translations = {

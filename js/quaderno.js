@@ -413,7 +413,7 @@ var Quaderno = function () {
   }
 
   var TYPES = [
-    'text_input', 'select', 'text', 'group', 'date', 'date_md'
+    'text_input', 'select', 'text', 'group', 'date', 'date_md', 'checkbox'
   ];
 
   //
@@ -877,6 +877,47 @@ var Quaderno = function () {
   }
   function serialize_date_md (elt) {
     return serializeDate(elt, 'md');
+  }
+
+  //
+  // checkbox
+
+  function use_checkbox (container, template, data, options) {
+
+    var value = getValue(template, data, options);
+    var text = value['text'];
+    var checked = value['checked'];
+    value = value['value'];
+
+    hide(container, '.quad_label', template[1].label);
+    create(container, 'span', '.quad_key', template[1].label);
+
+    var checkbox = create(container, 'input', '.quad_checkbox')
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.setAttribute('value', value);
+    if (checked) checkbox.setAttribute('checked', 'checked');
+
+    create(container, 'span', '.quad_text', text);
+  }
+
+  function serialize_checkbox (elt) {
+
+    var type = sc(elt, '.quad_type', 0).value;
+
+    var atts = {};
+
+    fetchAndSet(elt, 'id', atts);
+    fetchAndSet(elt, 'label', atts);
+    fetchAndSet(elt, 'title', atts);
+
+    var checkbox = sc(elt, '.quad_checkbox', 0);
+    var text = sc(elt, '.quad_text', 0);
+
+    atts['value'] = { 'value': checkbox.value, 'text': text.innerHTML };
+
+    if (checkbox.checked) atts['value']['checked'] = true;
+
+    return [ type, atts, [] ];
   }
 
   //
