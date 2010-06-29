@@ -233,6 +233,8 @@ var Quaderno = function () {
 
   function translate (options, text) {
 
+    if ( ! text) return text;
+
     if (text.indexOf('.') > -1 && options.translations) {
       return lookup(options.translations, text);
     }
