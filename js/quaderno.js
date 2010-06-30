@@ -413,7 +413,8 @@ var Quaderno = function () {
   function root (elt) {
 
     if ( ! elt) return null;
-    if (elt.undoStack) return elt;
+    //if (elt.undoStack) return elt;
+    if (hasClass(elt, '.quad_root')) return elt;
     return root(elt.parentNode);
   }
 
@@ -937,6 +938,33 @@ var Quaderno = function () {
   //
   // *
 
+  function idKeyPress (evt) {
+
+    if (evt.keyCode !== 13) return true;
+
+    var elt = evt.target;
+    var keys = root(elt).keys;
+
+    var iv = keys.indexOf(elt.value);
+
+    if (iv === keys.length - 1) return false;
+
+    if (iv > -1) {
+      elt.value = keys[iv + 1] || '';
+      return false;
+    }
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if ( ! key.match("^" + elt.value)) continue;
+      //if (key === elt.value) continue;
+      elt.value = key;
+      break;
+    }
+
+    return false;
+  }
+
   function use_ (container, template, data, options) {
 
     create(container, 'span', {}, JSON.stringify(template));
@@ -949,7 +977,11 @@ var Quaderno = function () {
     var novalue = options.novalue;
 
     create(div, 'span', '.quad_type', template[0]);
-    createTextInput(div, 'id', template, data, options);
+
+    var tiid = createTextInput(div, 'id', template, data, options);
+    tiid.setAttribute('onkeypress', 'return Quaderno.idKeyPress(event)');
+    tiid.title = "hit 'enter' to jump between ids known via the data set";
+
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);
     if ( ! novalue) createTextInput(div, 'value', template, data, options);
@@ -993,6 +1025,29 @@ var Quaderno = function () {
 
   //
   // methods
+
+  function extractKeys (data, prefix, result) {
+
+    prefix = prefix || '';
+    result = result || [];
+
+    for (var k in data) {
+      var pk = prefix + k;
+      var v = data[k];
+      if (isArray(v)) {
+        result.push(pk + '.');
+      }
+      else if (v && v.constructor === Object) {
+        result.push(pk);
+        extractKeys(v, pk + '.', result);
+      }
+      else {
+        result.push(pk);
+      }
+    }
+
+    return result.sort();
+  }
 
   function editElement (container, template, data, options) {
 
@@ -1292,11 +1347,11 @@ var Quaderno = function () {
     var fc; while (fc = container.firstChild) { container.removeChild(fc); }
 
     container.mode = options.mode;
+    container.data = data;
+    container.keys = extractKeys(data);
+    container.undoStack = [ template ];
 
     renderElement(container, template, data, options);
-
-    container.data = data;
-    container.undoStack = [ template ];
   }
 
   function serialize (container) {
@@ -1365,6 +1420,7 @@ var Quaderno = function () {
     copyLastElement: copyLastElement,
     tabLabelChanged: tabLabelChanged,
     checkDate: checkDate,
+    idKeyPress: idKeyPress,
     stack: stack,
 
     // public
