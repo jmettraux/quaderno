@@ -650,15 +650,14 @@ var Quaderno = function () {
 
     var div = create(container, 'div', {});
 
-    var sel = create(div, 'select', '.quad_type');
-    for (var i = 0; i < TYPES.length; i++) {
-      var o = create(sel, 'option', {}, TYPES[i]);
-      //if (TYPES[i] === template[0]) o.setAttribute('selected', 'selected');
-    }
+    //var sel = create(div, 'select', '.quad_type');
+    //for (var i = 0; i < TYPES.length; i++) {
+    //  var o = create(sel, 'option', {}, TYPES[i]);
+    //}
 
     button(
       div, '.quad_plus_button', 'Quaderno.addElement(this.parentNode);',
-      'add a new element of the selected type');
+      'add a new element');
     button(
       div, '.quad_paste_button', 'Quaderno.pasteElement(this.parentNode);',
       'insert copied/cut element as last element here');
@@ -737,15 +736,6 @@ var Quaderno = function () {
     if (template[1].id) { // for webrat / capybara
       select.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
     }
-  }
-
-  function edit_select (container, template, data, options) {
-
-    var div = edit_(container, template, data, options);
-
-    createTextInput(div, 'values', template, data, options);
-
-    return div;
   }
 
   //
@@ -976,9 +966,20 @@ var Quaderno = function () {
 
     var div = create(container, 'div', {});
 
-    var novalue = options.novalue;
+    //var novalue = options.novalue;
 
-    create(div, 'span', '.quad_type', template[0]);
+    if (template[0] === 'group') {
+      create(div, 'span', '.quad_type', 'group');
+    }
+    else {
+      var sel = create(div, 'select', '.quad_type');
+      for (var i = 0; i < TYPES.length; i++) {
+        var t = TYPES[i];
+        var o = create(sel, 'option', {}, t);
+        if (t === template[0]) o.setAttribute('selected', 'selected');
+      }
+      sel.setAttribute('onchange', 'Quaderno.typeChanged(this)');
+    }
 
     var tiid = createTextInput(div, 'id', template, data, options);
     tiid.setAttribute('onkeypress', 'return Quaderno.idKeyPress(event)');
@@ -986,9 +987,15 @@ var Quaderno = function () {
 
     createTextInput(div, 'label', template, data, options);
     createTextInput(div, 'title', template, data, options);
-    if ( ! novalue) createTextInput(div, 'value', template, data, options);
 
-    delete options.novalue;
+    if (template[0] !== 'group') {
+      createTextInput(div, 'value', template, data, options);
+    }
+    if (template[0] === 'select') {
+      createTextInput(div, 'values', template, data, options);
+    }
+
+    //delete options.novalue;
 
     return div;
   }
@@ -1237,8 +1244,7 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var type = sc(elt, '.quad_type', 0).value;
-    var blank = [ type, {}, [] ];
+    var blank = [ 'text_input', {}, [] ];
 
     var newElement = editElement(elt.parentNode, blank, {}, {});
     addElementButtons(sc(newElement, 'div', 0));
@@ -1324,6 +1330,18 @@ var Quaderno = function () {
 
     input.value = newLabel;
     a.innerHTML = newLabel;
+  }
+
+  function typeChanged (elt) {
+
+    var qe = elt.parentNode.parentNode;
+    var t = serialize_(qe, false);
+
+    t[0] = elt.value;
+    var e = editElement(qe, t, root(qe).data, { 'mode': 'edit' });
+    addElementButtons(sc(e, 'div', 0));
+
+    qe.parentNode.replaceChild(e, qe);
   }
 
   function stack (elt) {
@@ -1421,6 +1439,7 @@ var Quaderno = function () {
     pasteElement: pasteElement,
     copyLastElement: copyLastElement,
     tabLabelChanged: tabLabelChanged,
+    typeChanged: typeChanged,
     checkDate: checkDate,
     idKeyPress: idKeyPress,
     stack: stack,
