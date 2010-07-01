@@ -41,7 +41,7 @@ var Quaderno = function () {
   }
 
   function isArray (o) {
-    if (o === null) return false;
+    if ( ! o) return false;
     return (o.constructor === Array);
   }
   function isComposite (o) {
@@ -287,6 +287,8 @@ var Quaderno = function () {
     if (values.indexOf(',') < 0) {
       values = lookup(data, values);
     }
+
+    if (values === undefined) return [];
 
     if (isArray(values)) return values;
 
