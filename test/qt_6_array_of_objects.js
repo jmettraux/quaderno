@@ -6,7 +6,7 @@ load(dir + '/base.js');
 
 // 0
 
-// array of hashes
+// array of objects
 
 var te0 =
   [ 'group', { 'id': 'customers.' }, [

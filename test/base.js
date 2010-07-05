@@ -171,6 +171,11 @@ var Element = function () {
     if (j) this.childNodes.splice(j, 1);
   }
 
+  function insertBefore (elt, targetElt) {
+    var parent = targetElt.parentNode;
+    parent.childNodes.splice(parent.childNodes.indexOf(targetElt), 0, elt);
+  }
+
   function setAttribute (name, value) {
     this.attributes[name] = value;
   }
@@ -275,6 +280,7 @@ var Element = function () {
 
     appendChild: appendChild,
     removeChild: removeChild,
+    insertBefore: insertBefore,
 
     setAttribute: setAttribute,
     removeAttribute: removeAttribute,
@@ -347,6 +353,7 @@ document = function () {
     elements = {};
     elements['quad'] = Element();
     elements['quad'].tagName = 'div';
+    elements['quad'].className = 'quad_root';
   }
 
   _clear();
