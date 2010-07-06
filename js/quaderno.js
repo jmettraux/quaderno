@@ -519,6 +519,28 @@ var Quaderno = function () {
   //
   // 'group'
 
+  function addArrayElementButtons (arrayMarker, elt) {
+
+    if ( ! arrayMarker) return;
+
+    if (arrayMarker.canRemove) {
+      button(
+        elt,
+        '.quad_minus_button',
+        'Quaderno.removeElement(this.parentNode);');
+    }
+    if (arrayMarker.canReorder) {
+      button(
+        elt,
+        '.quad_up_button',
+        'Quaderno.moveElement(this.parentNode, "up");');
+      button(
+        elt,
+        '.quad_down_button',
+        'Quaderno.moveElement(this.parentNode, "down");');
+    }
+  }
+
   function use_group (container, template, data, options) {
 
     if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
@@ -561,24 +583,7 @@ var Quaderno = function () {
 
         var e = renderElement(container, child, data, opts);
 
-        if ( ! arrayMarker) continue;
-
-        if (arrayMarker.canRemove) {
-          button(
-            e,
-            '.quad_minus_button',
-            'Quaderno.removeElement(this.parentNode);');
-        }
-        if (arrayMarker.canReorder) {
-          button(
-            e,
-            '.quad_up_button',
-            'Quaderno.moveElement(this.parentNode, "up");');
-          button(
-            e,
-            '.quad_down_button',
-            'Quaderno.moveElement(this.parentNode, "down");');
-        }
+        addArrayElementButtons(arrayMarker, e);
       }
     }
 
@@ -586,7 +591,7 @@ var Quaderno = function () {
       button(
         container,
         '.quad_plus_button',
-        'Quaderno.copyLastElement(this.parentNode);');
+        'Quaderno.addToArray(this.parentNode);');
     }
   }
 
@@ -1288,32 +1293,27 @@ var Quaderno = function () {
     elt.parentNode.insertBefore(clip.cloneNode(true), elt);
   }
 
-  function copyLastElement (elt) {
+  function addToArray (elt) {
 
     stack(elt);
 
-    var le = sc(elt, '.quad_element', -1);
+    var t = sc(elt, '.quad_array_children_template', 0);
+    var t = JSON.parse(t.value);
 
-    if ( ! le) {
+    var r = root(elt);
 
-      var t = sc(elt, '.quad_array_children_template', 0);
-      var t = JSON.parse(t.value);
+    var arrayMarker = splitArrayMarker(sc(elt, '.quad_id', 0).value);
 
-      var r = root(elt);
-
-      for (var i = 0; i < t.length; i++) {
-        renderElement(elt, t[i], r.data, { 'mode': 'use' });
-      }
-        //
-        // translations are gone !!!
-
-      var button = sc(elt, '.quad_plus_button', 0);
-      elt.appendChild(button);
-
-      return;
+    for (var i = 0; i < t.length; i++) {
+      var e = renderElement(elt, t[i], r.data, { 'mode': 'use' });
+      addArrayElementButtons(arrayMarker, e);
     }
+      //
+      // translations are gone !!!
 
-    elt.insertBefore(le.cloneNode(true), le);
+    var button = sc(elt, '.quad_plus_button', 0);
+    elt.appendChild(button);
+      // reposition plus button at the end
   }
 
   function tabLabelChanged (elt) {
@@ -1437,7 +1437,7 @@ var Quaderno = function () {
     removeElement: removeElement,
     copyElement: copyElement,
     pasteElement: pasteElement,
-    copyLastElement: copyLastElement,
+    addToArray: addToArray,
     tabLabelChanged: tabLabelChanged,
     typeChanged: typeChanged,
     checkDate: checkDate,

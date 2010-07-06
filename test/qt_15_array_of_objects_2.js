@@ -20,8 +20,8 @@ assertEqual(
   [ 'group', { 'id': 'customers.*', 'label': 'customers' }, [] ],
   render_and_serialize(te0, data, { 'mode': 'use' } ));
 
-Quaderno.copyLastElement(document._path('div > div', 0));
-Quaderno.copyLastElement(document._path('div > div', 0));
+Quaderno.addToArray(document._path('div > div', 0));
+Quaderno.addToArray(document._path('div > div', 0));
 
 var customer0 = document._path('div > div > div', 1);
 var name0 = customer0._path('div > div', 1);
