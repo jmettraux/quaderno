@@ -583,11 +583,11 @@ var Quaderno = function () {
 
         var e = renderElement(container, child, data, opts);
 
-        addArrayElementButtons(arrayMarker, e);
+        if (options.mode !== 'view') addArrayElementButtons(arrayMarker, e);
       }
     }
 
-    if (arrayMarker && arrayMarker.canAdd) {
+    if (options.mode !== 'view' && arrayMarker && arrayMarker.canAdd) {
       button(
         container,
         '.quad_plus_button',
@@ -715,6 +715,8 @@ var Quaderno = function () {
     if (template[1].id) { // for webrat / capybara
       input.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
     }
+
+    if (options.mode === 'view') input.setAttribute('disabled', 'disabled');
   }
 
   //
@@ -741,6 +743,8 @@ var Quaderno = function () {
     if (template[1].id) { // for webrat / capybara
       select.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
     }
+
+    if (options.mode === 'view') select.setAttribute('disabled', 'disabled');
   }
 
   //
@@ -848,6 +852,14 @@ var Quaderno = function () {
       sc(container, '.quad_date_month', 0).value = new Number(value.shift());
       sc(container, '.quad_date_day', 0).value = new Number(value.shift());
     }
+
+    if (options.mode === 'view') {
+
+      if (type === 'ymd')
+        sc(container, '.quad_date_year', 0).setAttribute('disabled', 'disabled');
+      sc(container, '.quad_date_month', 0).setAttribute('disabled', 'disabled');
+      sc(container, '.quad_date_day', 0).setAttribute('disabled', 'disabled');
+    }
   }
 
   function serializeDate (elt, type, raw) {
@@ -905,6 +917,7 @@ var Quaderno = function () {
     checkbox.setAttribute('type', 'checkbox');
     checkbox.setAttribute('value', value);
     if (checked) checkbox.setAttribute('checked', 'checked');
+    if (options.mode === 'view') checkbox.setAttribute('disabled', 'disabled');
 
     create(container, 'span', '.quad_text', text);
   }
@@ -1077,6 +1090,7 @@ var Quaderno = function () {
 
   function useElement (container, template, data, options) {
 
+    //var f = lookupFunction(options.mode + '_', template);
     var f = lookupFunction('use_', template);
 
     var div = create(container, 'div', '.quad_element');
