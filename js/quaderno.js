@@ -337,13 +337,14 @@ var Quaderno = function () {
     return input;
   }
 
-  function fetchAndSet (elt, key, atts) {
+  function fetchAndSet (elt, key, atts, type) {
 
     var v = scc(elt, '.quad_' + key);
     if ( ! v) return;
 
     v = v.value;
-    if (v === '') return;
+    //if (v === '') return;
+    //if (v === '' && type !== 'select') return;
 
     atts[key] = v;
   }
@@ -932,9 +933,9 @@ var Quaderno = function () {
 
     var atts = {};
 
-    fetchAndSet(elt, 'id', atts);
-    fetchAndSet(elt, 'label', atts);
-    fetchAndSet(elt, 'title', atts);
+    fetchAndSet(elt, 'id', atts, 'checkbox');
+    fetchAndSet(elt, 'label', atts, 'checkbox');
+    fetchAndSet(elt, 'title', atts, 'checkbox');
 
     var text = sc(elt, '.quad_text', 0);
 
@@ -1038,11 +1039,11 @@ var Quaderno = function () {
 
     var atts = {};
 
-    fetchAndSet(elt, 'id', atts);
-    fetchAndSet(elt, 'label', atts);
-    fetchAndSet(elt, 'title', atts);
-    fetchAndSet(elt, 'value', atts);
-    fetchAndSet(elt, 'values', atts);
+    fetchAndSet(elt, 'id', atts, type);
+    fetchAndSet(elt, 'label', atts, type);
+    fetchAndSet(elt, 'title', atts, type);
+    fetchAndSet(elt, 'value', atts, type);
+    fetchAndSet(elt, 'values', atts, type);
 
     var children = [];
     if (serializeChildren) children = serialize_children(elt);
