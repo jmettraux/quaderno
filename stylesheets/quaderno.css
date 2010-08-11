@@ -91,6 +91,18 @@ div.quad_key.quad_text {
 	margin-right: 4px;
 }
 
+/* checkbox */
+
+input.quad_checkbox {
+  margin-left: 69px;
+  margin-right: 5px;
+}
+span.quad_checkbox_key {
+  color: #8b8f91;
+  display: inline-block;
+  text-align: left;
+}
+
 /* buttons */
 
 input, select {

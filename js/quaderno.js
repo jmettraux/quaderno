@@ -912,13 +912,15 @@ var Quaderno = function () {
     value = value['value'];
 
     hide(container, '.quad_label', template[1].label);
-    create(container, 'span', '.quad_key', template[1].label);
+    //create(container, 'span', '.quad_key', template[1].label);
 
     var checkbox = create(container, 'input', '.quad_checkbox')
     checkbox.setAttribute('type', 'checkbox');
     checkbox.setAttribute('value', value);
     if (checked) checkbox.setAttribute('checked', 'checked');
     if (options.mode === 'view') checkbox.setAttribute('disabled', 'disabled');
+
+    create(container, 'span', '.quad_checkbox_key', template[1].label);
 
     create(container, 'span', '.quad_text', text);
   }
