@@ -73,7 +73,8 @@ span.quad_type {
 div.quad_key, span.quad_key, .quad_key_e {
 	color: #8b8f91;
 	display: inline-block;
-	width: 80px;
+	/*width: 80px;*/
+	width: 140px;
 	margin-right: 4px;
 	text-align: right;
 }
@@ -94,7 +95,8 @@ div.quad_key.quad_text {
 /* checkbox */
 
 input.quad_checkbox {
-  margin-left: 69px;
+  /*margin-left: 69px;*/
+  margin-left: 129px;
   margin-right: 5px;
 }
 span.quad_checkbox_key {
