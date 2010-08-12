@@ -101,6 +101,7 @@ span.quad_checkbox_key {
   color: #8b8f91;
   display: inline-block;
   text-align: left;
+  margin-right: 4px;
 }
 
 /* buttons */
