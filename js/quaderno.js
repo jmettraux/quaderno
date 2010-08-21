@@ -272,8 +272,12 @@ var Quaderno = function () {
 
   function getValue (template, data, options) {
 
-    if (template[0] !== 'checkbox' && template[1].value !== undefined) {
+    if (template[0] !== 'checkbox' &&
+      template[0] !== 'select' &&
+      template[1].value !== undefined) {
+
       // since 'false' is an OK value
+
       return template[1].value;
     }
 
