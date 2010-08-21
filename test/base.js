@@ -282,6 +282,7 @@ var Element = function () {
     removeChild: removeChild,
     insertBefore: insertBefore,
 
+    getAttribute: getAttribute,
     setAttribute: setAttribute,
     removeAttribute: removeAttribute,
 

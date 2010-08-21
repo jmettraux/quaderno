@@ -272,8 +272,10 @@ var Quaderno = function () {
 
   function getValue (template, data, options) {
 
-    if (template[1].value !== undefined) return template[1].value;
+    if (template[0] !== 'checkbox' && template[1].value !== undefined) {
       // since 'false' is an OK value
+      return template[1].value;
+    }
 
     return lookup(data, options.id || template[1].id);
   }
@@ -907,6 +909,7 @@ var Quaderno = function () {
   function use_checkbox (container, template, data, options) {
 
     var value = getValue(template, data, options);
+    value = value || {};
     var text = value['text'];
     var checked = value['checked'];
     value = value['value'];
