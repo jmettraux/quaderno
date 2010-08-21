@@ -344,7 +344,7 @@ var Element = function () {
   return o;
 };
 
-document = function () {
+function Document () {
 
   var elements;
   var firstSeenElement;
@@ -420,5 +420,7 @@ document = function () {
     getElementById: getElementById,
     getElementsByClass: getElementsByClass
   }
-}();
+};
+
+document = Document();
 

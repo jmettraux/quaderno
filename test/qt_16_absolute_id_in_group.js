@@ -6,31 +6,31 @@ load(dir + '/base.js');
 
 // 0
 
-//var template =
-//  [ 'group', { 'label': 'nada' }, [
-//    [ 'text_input', { 'label': 'balance', 'id': 'balance' }, [] ]
-//  ] ];
-//
-//document._clear();
-//Quaderno.render('quad', template, {}, { 'mode': 'use' });
-//
-//var gbalance = document._path('div > div > div', 1);
-//var balance = gbalance._path('div > input', 3)
-//balance.value = '100';
-////print(balance);
-//
-//assertEqual({ 'balance': '100' }, Quaderno.produce('quad'));
+var template =
+  [ 'group', { 'label': 'nada0' }, [
+    [ 'text_input', { 'label': 'balance', 'id': 'balance' }, [] ]
+  ] ];
+
+Quaderno.render('quad', template, {}, { 'mode': 'use' });
+
+var gbalance = document._path('div > div > div', 1);
+var balance = gbalance._path('div > input', 3)
+balance.value = '100';
+//print(balance);
+
+assertEqual({ 'balance': '100' }, Quaderno.produce('quad'));
 
 // 1
 
+document = Document(); // resetting
+
 var template1 =
   [ 'tabs', {}, [
-    [ 'group', { 'label': 'nada' }, [
+    [ 'group', { 'label': 'nada1' }, [
       [ 'text_input', { 'label': 'balance', 'id': 'balance' }, [] ]
     ] ],
   ] ];
 
-document._clear();
 Quaderno.render('quad', template1, {}, { 'mode': 'use' });
 
 var firsttab = document._path('div > div > table > tr > td', 1);
@@ -40,3 +40,4 @@ var balance = firsttab._path('td > div > div > div > input', 3)
 balance.value = '100';
 
 assertEqual({ 'balance': '100' }, Quaderno.produce('quad'));
+
