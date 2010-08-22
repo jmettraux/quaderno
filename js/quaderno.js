@@ -428,7 +428,8 @@ var Quaderno = function () {
   }
 
   var TYPES = [
-    'text_input', 'select', 'text', 'group', 'date', 'date_md', 'checkbox'
+    'text_input', 'select', 'text', 'group', 'date', 'date_md', 'checkbox',
+    'text_area'
   ];
 
   //
@@ -713,8 +714,15 @@ var Quaderno = function () {
     hide(container, '.quad_label', template[1].label);
     create(container, 'span', '.quad_key', template[1].label);
 
-    var input = create(container, 'input', '.quad_value');
-    input.setAttribute('type', 'text');
+    var input;
+
+    if (template[0] == 'text_input') {
+      input = create(container, 'input', '.quad_value');
+      input.setAttribute('type', 'text');
+    }
+    else {
+      input = create(container, 'textarea', '.quad_value');
+    }
 
     var value = getValue(template, data, options);
     if (value != undefined) input.value = value;
@@ -725,6 +733,11 @@ var Quaderno = function () {
 
     if (options.mode === 'view') input.setAttribute('disabled', 'disabled');
   }
+
+  //
+  // 'text_area'
+
+  var use_text_area = use_text_input;
 
   //
   // 'select'

@@ -25,6 +25,7 @@
     <a href="" onclick="Quaderno.reset('quad'); return false;">reset</a>
     <a href="" onclick="Quaderno.undo('quad'); return false;">undo</a>
     <a href="" onclick="serialize(); return false;">serialize</a>
+    <!--a href="" onclick="produce(); return false;">produce</a-->
   </div>
 
   <script>
@@ -37,7 +38,8 @@
       [ 'group', { 'label': 'tab.a' }, [
         [ 'text', { 'label': 'this is a message' }, [] ],
         [ 'text_input', { 'label': 'colour', 'id': 'colour', 'title': 'title.nada' }, [] ],
-        [ 'checkbox', { 'label': 'retrohaptic syntax handler audit system', 'id': 'rshas', 'title': 'ORLY ?', 'value': 'true' }, [] ]
+        [ 'checkbox', { 'label': 'retrohaptic syntax handler audit system', 'id': 'rshas', 'title': 'ORLY ?', 'value': 'true' }, [] ],
+        [ 'text_area', { 'label': 'description', 'id': 'description', 'value': 'hello' }, [] ]
       ] ],
       [ 'group', { 'label': 'tab.b' }, [
         [ 'text', { 'label': 'this is a message' }, [] ],
@@ -98,6 +100,7 @@
       var out = document.getElementById('serialized');
       out.original = s;
       Jagaimo.render(out, s);
+      out.style.display = 'block';
     }
 
     var m = document.location.search.match(/mode=([^\b]+)/)

@@ -107,6 +107,15 @@ span.quad_checkbox_key {
   margin-right: 4px;
 }
 
+/* textarea */
+
+textarea.quad_value {
+  display: inline-block;
+  width: auto;
+  font: inherit;
+  font-size: 90%;
+}
+
 /* buttons */
 
 input, select {
@@ -133,9 +142,6 @@ a.quadButton, .quad_rep {
 	border-radius: 12px;
 	-webkit-border-radius: 12px;
 	-moz-border-radius: 12px;
-}
-input.quad_repeatable {
-	margin: 0 0 0 4px;
 }
 .quad_group {
 	/*display: inline-block;*/
