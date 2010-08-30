@@ -83,9 +83,20 @@ var Jagaimo = function () {
     return span;
   }
 
+  function determineType (o) {
+    try {
+      var con = o.constructor.toString();
+      var m = con.match(/function ([^\(]+)/)
+      return m[1];
+    }
+    catch (e) {
+      return undefined;
+    }
+  }
+
   function doRender (container, o) {
 
-    var type; try { type = o.constructor.name; } catch (e) {}
+    var type = determineType(o);
 
     if (type === 'String') {
       return create(
@@ -105,7 +116,7 @@ var Jagaimo = function () {
 
     var container = containerId;
 
-    if (containerId.constructor.name === 'String') {
+    if ((typeof containerId) === 'string') {
       container = document.getElementById(containerId);
     }
 

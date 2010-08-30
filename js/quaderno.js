@@ -202,7 +202,7 @@ var Quaderno = function () {
       else if (i.id) e.id = i.id;
     }
     else if (attributes) {
-      for (var k in attributes) e.setAttribute(k, attributes[k]);
+      for (var k in attributes) setAttribute(e, k, attributes[k]);
     }
 
     if (innerText) {
@@ -216,11 +216,21 @@ var Quaderno = function () {
     return e;
   }
 
+  function setAttribute (e, key, value) {
+    try {
+      e.setAttribute(key, value);
+    }
+    catch (e) { // IE...
+      e[key] = value;
+    }
+  }
+
   function hide (container, classSel, value) {
 
-    var i = create(container, 'input', classSel);
-    i.setAttribute('type', 'hidden');
-    i.setAttribute('value', value);
+    return create(
+      container,
+      'input',
+      { 'class': classSel, 'type': 'hidden', 'value': value });
   }
 
   function lookup (hash, key) {
@@ -338,7 +348,7 @@ var Quaderno = function () {
     var v = template[1][key];
     if (v) input.value = v;
 
-    input.setAttribute('onchange', 'Quaderno.stack(this);');
+    setAttribute(input, 'onchange', 'Quaderno.stack(this);');
 
     return input;
   }
@@ -413,7 +423,7 @@ var Quaderno = function () {
     var count = spath(table, 'tr > td').length;
     var tr1 = sc(table, 'tr', 1);
     var td = sc(tr1, 'td', 0);
-    td.setAttribute('colspan', '' + count);
+    setAttribute(td, 'colspan', '' + count);
   }
 
   //
@@ -441,8 +451,8 @@ var Quaderno = function () {
 
     hide(td, '.quad_label', template[1].label);
     var a = create(td, 'a', '.quad_tab', template[1].label);
-    a.setAttribute('href', '');
-    a.setAttribute('onclick', 'Quaderno.showTab(this.parentNode); return false;');
+    setAttribute(a, 'href', '');
+    setAttribute(a, 'onclick', 'Quaderno.showTab(this.parentNode); return false;');
 
     return td;
   }
@@ -640,7 +650,7 @@ var Quaderno = function () {
     if (hasClass(container.parentNode, 'quad_tab_body')) {
 
       var label = sc(gdiv, '.quad_label', 0);
-      label.setAttribute('onchange', 'Quaderno.tabLabelChanged(this);');
+      setAttribute(label, 'onchange', 'Quaderno.tabLabelChanged(this);');
 
       button(
         gdiv, '.quad_left_button', 'Quaderno.moveTab(this, "left");',
@@ -718,7 +728,7 @@ var Quaderno = function () {
 
     if (template[0] == 'text_input') {
       input = create(container, 'input', '.quad_value');
-      input.setAttribute('type', 'text');
+      setAttribute(input, 'type', 'text');
     }
     else {
       input = create(container, 'textarea', '.quad_value');
@@ -731,7 +741,7 @@ var Quaderno = function () {
       input.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
     }
 
-    if (options.mode === 'view') input.setAttribute('disabled', 'disabled');
+    if (options.mode === 'view') setAttribute(input, 'disabled', 'disabled');
   }
 
   //
@@ -764,7 +774,9 @@ var Quaderno = function () {
       select.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
     }
 
-    if (options.mode === 'view') select.setAttribute('disabled', 'disabled');
+    if (options.mode === 'view') {
+      setAttribute(select, 'disabled', 'disabled');
+    }
   }
 
   //
@@ -818,8 +830,8 @@ var Quaderno = function () {
         create(sel, 'option', { 'value': '' + i }, i);
       }
       sel.value = y;
-      sel.setAttribute(
-        'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+      setAttribute(
+        sel, 'onchange', 'Quaderno.checkDate(this, "' + type + '");');
 
       if (template[1].id) { // for webrat / capybara
         sel.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g') + '__year';
@@ -835,8 +847,8 @@ var Quaderno = function () {
       for (var i = 1; i <= 12; i++) {
         create(sel, 'option', { 'value': '' + i }, i);
       }
-      sel.setAttribute(
-        'onchange', 'Quaderno.checkDate(this, "' + type + '");');
+      setAttribute(
+        sel, 'onchange', 'Quaderno.checkDate(this, "' + type + '");');
 
       if (template[1].id) { // for webrat / capybara
         sel.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g') + '__month';
@@ -875,10 +887,16 @@ var Quaderno = function () {
 
     if (options.mode === 'view') {
 
-      if (type === 'ymd')
-        sc(container, '.quad_date_year', 0).setAttribute('disabled', 'disabled');
-      sc(container, '.quad_date_month', 0).setAttribute('disabled', 'disabled');
-      sc(container, '.quad_date_day', 0).setAttribute('disabled', 'disabled');
+      if (type === 'ymd') {
+        var year = sc(container, '.quad_date_year', 0);
+        setAttribute(year, 'disabled', 'disabled');
+      }
+
+      var month = sc(container, '.quad_date_month', 0);
+      setAttribute(month, 'disabled', 'disabled');
+
+      var day = sc(container, '.quad_date_day', 0);
+      setAttribute(day, 'disabled', 'disabled');
     }
   }
 
@@ -935,10 +953,10 @@ var Quaderno = function () {
     //create(container, 'span', '.quad_key', template[1].label);
 
     var checkbox = create(container, 'input', '.quad_checkbox')
-    checkbox.setAttribute('type', 'checkbox');
-    checkbox.setAttribute('value', value);
-    if (checked) checkbox.setAttribute('checked', 'checked');
-    if (options.mode === 'view') checkbox.setAttribute('disabled', 'disabled');
+    setAttribute(checkbox, 'type', 'checkbox');
+    setAttribute(checkbox, 'value', value);
+    if (checked) setAttribute(checkbox, 'checked', 'checked');
+    if (options.mode === 'view') setAttribute(checkbox, 'disabled', 'disabled');
 
     create(container, 'span', '.quad_checkbox_key', template[1].label);
 
@@ -1017,13 +1035,13 @@ var Quaderno = function () {
       for (var i = 0; i < TYPES.length; i++) {
         var t = TYPES[i];
         var o = create(sel, 'option', {}, t);
-        if (t === template[0]) o.setAttribute('selected', 'selected');
+        if (t === template[0]) setAttribute(o, 'selected', 'selected');
       }
-      sel.setAttribute('onchange', 'Quaderno.typeChanged(this)');
+      setAttribute(sel, 'onchange', 'Quaderno.typeChanged(this)');
     }
 
     var tiid = createTextInput(div, 'id', template, data, options);
-    tiid.setAttribute('onkeypress', 'return Quaderno.idKeyPress(event)');
+    setAttribute(tiid, 'onkeypress', 'return Quaderno.idKeyPress(event)');
     tiid.title = "hit 'enter' to jump between ids known via the data set";
 
     createTextInput(div, 'label', template, data, options);
@@ -1123,7 +1141,7 @@ var Quaderno = function () {
 
     if (template[1].title) {
       hide(div, '.quad_title', template[1].title);
-      div.setAttribute('title', translate(options, template[1].title));
+      setAttribute(div, 'title', translate(options, template[1].title));
     }
 
     hide(div, '.quad_type', template[0]);
