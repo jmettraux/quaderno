@@ -98,6 +98,8 @@ will run the test test/qt_0_identify.js
 
 Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
 
+The amazing jQuery ( http://jquery.com/ )
+
 
 ## license
 

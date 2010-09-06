@@ -10,8 +10,6 @@
 //  quit();
 //}
 
-load(dir + "/../js/quaderno.js");
-
 //
 
 function keys (o) {
@@ -186,6 +184,16 @@ var Element = function () {
     delete this.attributes[name];
   }
 
+  function getElementsByTagName (name) {
+    result = [];
+    for (var i = 0; i < this.childNodes.length; i++) {
+      var c = this.childNodes[i];
+      if (c.tagName === name) result.push(c);
+      if (c.getElementByTagName) result.concat(c.getElementByTagName(name));
+    }
+    return result;
+  }
+
   function cloneNode (deep) {
     if (deep === undefined) deep = false;
     var clone = Element();
@@ -274,6 +282,8 @@ var Element = function () {
 
   var o = {
 
+    nodeType: 1,
+
     attributes: { 'class': '' },
     childNodes: [],
     style: {},
@@ -285,6 +295,8 @@ var Element = function () {
     getAttribute: getAttribute,
     setAttribute: setAttribute,
     removeAttribute: removeAttribute,
+
+    getElementsByTagName: getElementsByTagName,
 
     cloneNode: cloneNode,
 
@@ -347,14 +359,15 @@ var Element = function () {
 
 function Document () {
 
+  var root = Element();
   var elements;
-  var firstSeenElement;
 
   function _clear () {
     elements = {};
     elements['quad'] = Element();
     elements['quad'].tagName = 'div';
     elements['quad'].className = 'quad_root';
+    root.appendChild(elements['quad']);
   }
 
   _clear();
@@ -362,7 +375,6 @@ function Document () {
   function createElement (tagName) {
     var e = Element();
     e.tagName = tagName;
-    firstSeenElement = firstSeenElement || e;
     return e;
   }
 
@@ -370,16 +382,16 @@ function Document () {
     return text;
   }
 
+  function createComment (comment) {
+    return comment;
+  }
+
   function getElementById (id) {
     return elements[id];
   }
 
   function _root () {
-    var e = firstSeenElement;
-    while (true) {
-      if ( ! e.parentNode) return e;
-      e = e.parentNode;
-    }
+    return root;
   }
 
   function _path (p, i) {
@@ -407,7 +419,7 @@ function Document () {
     return r;
   }
 
-  return {
+  var o = {
 
     _testing: true,
 
@@ -418,10 +430,24 @@ function Document () {
 
     createElement: createElement,
     createTextNode: createTextNode,
+    createComment: createComment,
     getElementById: getElementById,
     getElementsByClass: getElementsByClass
   }
+
+  o.__defineGetter__('documentElement', function () {
+    return root; });
+
+  return o;
 };
 
 document = Document();
+window = { document: document };
+navigator = { userAgent: '' };
+location = 'dokodemo';
+
+load(dir + "/../js/jquery-1.4.2.js");
+load(dir + "/../js/quaderno.js");
+
+$ = window.jQuery;
 

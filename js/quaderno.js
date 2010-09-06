@@ -22,6 +22,7 @@
 
 
 // TODO : prevent html/js injection !
+// depends on the excellent jquery-1.4.2
 
 
 var Quaderno = function () {
@@ -40,10 +41,19 @@ var Quaderno = function () {
     }
   }
 
-  function isArray (o) {
-    if ( ! o) return false;
-    return (o.constructor === Array);
+  function toString (elt, indent) {
+    if (indent == undefined) indent = 0;
+    s = ''
+    for (var i = 0; i < indent; i++) s += '  ';
+    s += ('<' + elt.tagName + ' ');
+    s += ('.' + elt.className + ' ');
+    s += "\n";
+    for (var i = 0; i < elt.children.length; i++) {
+      s += toString(elt.children[i], indent + 1);
+    }
+    return s;
   }
+
   function isComposite (o) {
     if ( ! o) return false;
     var cn = o.constructor.name;
@@ -53,7 +63,7 @@ var Quaderno = function () {
   // shallow copy
   //
   function dup (o) {
-    if (isArray(o)) {
+    if ($.isArray(o)) {
       var r = [];
       for (var i = 0; i < o.length; i++) r.push(o[i]);
       return r;
@@ -73,147 +83,42 @@ var Quaderno = function () {
     return r;
   }
 
-  function strip (s) {
-    return s.replace(/^\s+|\s+$/g, '');
-  }
-
   function hasClass (elt, cname) {
     if ( ! cname) return false;
-    if (cname[0] == '.') cname = cname.slice(1);
-    var cs = elt.className.split(' ');
-    for (var i = 0; i < cs.length; i++) { if (cs[i] == cname) return true; }
-    return false;
+    if (cname[0] === '.') cname = cname.slice(1);
+    return $(elt).hasClass(cname);
   }
 
   function addClass (elt, cname) {
-    if (cname.match(/^\./)) cname = cname.slice(1);
-    var cs = elt.className.split(' ');
-    cs.push(cname);
-    elt.className = cs.join(' ');
+    if (cname[0] === '.') cname = cname.slice(1);
+    $(elt).addClass(cname);
   }
 
   function removeClass (elt, cname) {
-    var cs = elt.className.split(' ');
-    var ncs = [];
-    for (var i = 0; i < cs.length; i++) {
-      var cn = cs[i];
-      if (cn != cname) ncs.push(cn);
-    }
-    elt.className = ncs.join(' ');
-  }
-
-  function identify (path) {
-
-    var cs = [];
-    var i = null;
-    var t = null;
-
-    var s = path;
-
-    var m;
-
-    if (m = s.match(/^ *([^#\.]+)(.*)$/)) {
-      t = m[1];
-      s = m[2];
-    }
-    while (m = s.match(/^ *([#\.][^#\. ]+)/)) {
-      var m1 = m[1];
-      var ms = m1.slice(1);
-      if (m1[0] == '.') cs.push(ms);
-      else if (m1[0] == '#') i = ms;
-      s = s.slice(m1.length);
-    }
-
-    var cn = null;
-    if (cs.length > 0) cn = cs.join(' ');
-
-    return {
-      'className': cn,
-      'id': i,
-      'tagName': t,
-      'accepts': function (elt) { return hasClass(elt, cn); }
-    };
-  }
-
-  function sc (elt, path, index) {
-
-    var i = identify(path);
-    var a = [];
-
-    for (var j = 0; j < elt.children.length; j++) {
-      var c = elt.children[j];
-      if (i.id && c.id == i.id) return [ c ];
-      if (i.accepts(c)) a.push(c);
-      else if (c.tagName && (c.tagName.toLowerCase() == i.tagName)) a.push(c);
-    }
-
-    if (index === -1) return a.slice(-1)[0];
-    return (index !== undefined) ? a[index] : a;
-  }
-
-  function scc (elt, cname) {
-
-    var child = sc(elt, cname, 0);
-    if (child) return child;
-
-    var div = sc(elt, 'div', 0);
-    if ( ! div) return undefined;
-    if (hasClass(div, '.quad_element')) return undefined;
-
-    return sc(div, cname, 0);
-  }
-
-  function spath (elt, path, index) {
-
-    path = path.split(' > ');
-    var start = [ elt ];
-    var p;
-
-    while (p = path.shift()) {
-      start = start[0];
-      var c = sc(start, p);
-      if (c.length == 0) return [];
-      start = c;
-    }
-
-    if (index === -1) return start.slice(-1)[0];
-    return (index !== undefined) ? start[index] : start;
-  }
-
-  function sparent (elt, s) {
-
-    if ( ! elt) return undefined;
-    if (s.constructor.name === 'String') s = identify(s);
-
-    if (s.id && elt.id === s.id) return elt;
-    if (s.accepts(elt)) return elt;
-    if (elt.tagName && (elt.tagName.toLowerCase() === s.tagName)) return elt;
-
-    return sparent(elt.parentNode, s);
+    if (cname[0] === '.') cname = cname.slice(1);
+    $(elt).removeClass(cname);
   }
 
   function create (container, tagName, attributes, innerText) {
 
-    var e = document.createElement(tagName);
+    var atts = attributes || {};
 
-    if (attributes && ((typeof attributes) == 'string')) {
-      var i = identify(attributes);
-      if (i.className) e.className = i.className;
-      else if (i.id) e.id = i.id;
+    if (attributes && ((typeof attributes) === 'string')) {
+      if (attributes[0] === '.') attributes = attributes.slice(1);
+      atts = { 'class': attributes };
     }
-    else if (attributes) {
-      for (var k in attributes) setAttribute(e, k, attributes[k]);
-    }
+
+    var e = $('<' + tagName + '/>', atts);
 
     if (innerText) {
       //e.innerHTML = innerText; // doesn't work with Safari
-      e.appendChild(document.createTextNode(innerText));
+      e[0].appendChild(document.createTextNode(innerText));
     }
     if (container) {
-      container.appendChild(e);
+      container.appendChild(e[0]);
     }
 
-    return e;
+    return e[0];
   }
 
   function setAttribute (e, key, value) {
@@ -227,6 +132,8 @@ var Quaderno = function () {
 
   function hide (container, classSel, value) {
 
+    if (classSel[0] == '.') classSel = classSel.slice(1);
+
     return create(
       container,
       'input',
@@ -238,7 +145,7 @@ var Quaderno = function () {
     if (hash === undefined) return undefined;
     if (key === undefined) return undefined;
 
-    if ( ! isArray(key)) key = key.split('.');
+    if ( ! $.isArray(key)) key = key.split('.');
     if (key.length < 1) return hash;
 
     // TODO : when key is an array index
@@ -306,7 +213,7 @@ var Quaderno = function () {
 
     if (values === undefined) return [];
 
-    if (isArray(values)) return values;
+    if ($.isArray(values)) return values;
 
     return values.toString().split(',');
   }
@@ -355,12 +262,11 @@ var Quaderno = function () {
 
   function fetchAndSet (elt, key, atts, type) {
 
-    var v = scc(elt, '.quad_' + key);
+    var v = $(elt).find('.quad_' + key)[0];
     if ( ! v) return;
 
-    v = v.value;
-    //if (v === '') return;
-    //if (v === '' && type !== 'select') return;
+    //v = v.value;
+    v = $(v).val();
 
     atts[key] = v;
   }
@@ -383,7 +289,7 @@ var Quaderno = function () {
   function lookupFunction (funcPrefix, template) {
 
     var type = template;
-    if (isArray(template)) type = template[0];
+    if ($.isArray(template)) type = template[0];
 
     try { return eval(funcPrefix + type); }
     catch (e) { return eval(funcPrefix); }
@@ -399,30 +305,30 @@ var Quaderno = function () {
 
   function findTab (elt) {
 
-    var quadElement = sparent(elt, '.quad_element');
+    var quadElement = $(elt).parents('.quad_element');
     var index = computeSiblingOffset(quadElement);
     var table = quadElement.parentNode.parentNode.parentNode.parentNode;
-    var td = spath(table, 'tr > td', index);
+    var td = $(table).find('tr > td')[index];
 
     return td;
   }
 
   function findTabBody (elt) {
 
-    var td = sparent(elt, 'td');
+    var td = $(elt).parents('td')[0];
     var index = computeSiblingOffset(td);
-    var table = sparent(elt, 'table');
-    var tr = sc(table, 'tr', 1);
+    var table = $(elt).parents('table')[0];
+    var tr = $(table).children('tr')[1];
 
-    return spath(tr, 'td > .quad_tab_body > .quad_element', index);
+    return $(tr).find('td > .quad_tab_body > .quad_element')[index];
   }
 
   function adjustTabBodyColspan (elt) {
 
-    var table = sparent(elt, 'table');
-    var count = spath(table, 'tr > td').length;
-    var tr1 = sc(table, 'tr', 1);
-    var td = sc(tr1, 'td', 0);
+    var table = $(elt).parents('table')[0];
+    var count = $(table).find('tr > td').length;
+    var tr1 = $(table).children('tr')[1];
+    var td = $(tr1).children('td')[0];
     setAttribute(td, 'colspan', '' + count);
   }
 
@@ -491,8 +397,8 @@ var Quaderno = function () {
       f(tr0, tabs[i], data, options);
     }
 
-    var tab = spath(tr0, 'td > .quad_tab', 0);
-    addClass(tab, 'quad_selected');
+    var tab = $(tr0).find('td > .quad_tab')[0];
+    addClass(tab, '.quad_selected');
 
     // content
 
@@ -515,16 +421,16 @@ var Quaderno = function () {
     var tabs = [];
     var labels = [];
 
-    var tds = spath(elt, 'table > tr > td');
+    var tds = $(elt).find('table > tr > td');
     for (var i = 0; i < tds.length; i++) {
       var lab =
-        sc(tds[i], '.quad_label', 0) ||
-        spath(tds[i], '.quad_tab > .quad_label', 0);
+        $(tds[i]).children('.quad_label')[0] ||
+        $(tds[i]).find('.quad_tab > .quad_label')[0];
       if (lab) labels.push(lab.value);
     }
 
-    var trs = spath(elt, 'table > tr', 1);
-    var tab_body = spath(trs, 'td > .quad_tab_body', 0);
+    var trs = $(elt).find('table > tr')[1];
+    var tab_body = $(trs).find('td > .quad_tab_body')[0];
 
     var children = serialize_children(tab_body);
     for (var i = 0; i < children.length; i++) {
@@ -639,7 +545,7 @@ var Quaderno = function () {
 
   function edit_group (container, template, data, options) {
 
-    if ( ! hasClass(container.parentNode, 'quad_tab_body')) {
+    if ( ! hasClass(container.parentNode, '.quad_tab_body')) {
       addClass(container, '.quad_group');
     }
 
@@ -647,9 +553,9 @@ var Quaderno = function () {
     var gdiv = edit_(container, template, data, options);
     addClass(gdiv, '.quad_group_head');
 
-    if (hasClass(container.parentNode, 'quad_tab_body')) {
+    if (hasClass(container.parentNode, '.quad_tab_body')) {
 
-      var label = sc(gdiv, '.quad_label', 0);
+      var label = $(gdiv).children('.quad_label')[0];
       setAttribute(label, 'onchange', 'Quaderno.tabLabelChanged(this);');
 
       button(
@@ -667,7 +573,7 @@ var Quaderno = function () {
 
     for (var i = 0; i < children.length; i++) {
       var c = editElement(container, children[i], data, options);
-      var cdiv = sc(c, 'div', 0);
+      var cdiv = $(c).children('div')[0];
       addElementButtons(cdiv);
     }
 
@@ -768,7 +674,8 @@ var Quaderno = function () {
       create(select, 'option', {}, values[i]);
     }
 
-    select.value = value;
+    //select.value = value;
+    $(select).val(value);
 
     if (template[1].id) { // for webrat / capybara
       select.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
@@ -794,13 +701,13 @@ var Quaderno = function () {
     if (type === 'ymd') {
       var d = new Date();
       d.setFullYear(a[0], a[1] - 1, a[2]);
-      sc(elt, '.quad_date_year', 0).value = d.getFullYear();
-      sc(elt, '.quad_date_month', 0).value = d.getMonth() + 1;
-      sc(elt, '.quad_date_day', 0).value = d.getDate();
+      $(elt).children('.quad_date_year')[0].value = d.getFullYear();
+      $(elt).children('.quad_date_month')[0].value = d.getMonth() + 1;
+      $(elt).children('.quad_date_day')[0].value = d.getDate();
     }
 
-    var sday = sc(elt, '.quad_date_day', 0);
-    var smonth = sc(elt, '.quad_date_month', 0);
+    var sday = $(elt).children('.quad_date_day')[0];
+    var smonth = $(elt).children('.quad_date_month')[0];
     var day = sday.value;
     var month = smonth.value;
 
@@ -879,36 +786,36 @@ var Quaderno = function () {
       value = value.split('/');
 
       if (type === 'ymd') {
-        sc(container, '.quad_date_year', 0).value = new Number(value.shift());
+        $(container).children('.quad_date_year')[0].value = new Number(value.shift());
       }
-      sc(container, '.quad_date_month', 0).value = new Number(value.shift());
-      sc(container, '.quad_date_day', 0).value = new Number(value.shift());
+      $(container).children('.quad_date_month')[0].value = new Number(value.shift());
+      $(container).children('.quad_date_day')[0].value = new Number(value.shift());
     }
 
     if (options.mode === 'view') {
 
       if (type === 'ymd') {
-        var year = sc(container, '.quad_date_year', 0);
+        var year = $(container).children('.quad_date_year')[0];
         setAttribute(year, 'disabled', 'disabled');
       }
 
-      var month = sc(container, '.quad_date_month', 0);
+      var month = $(container).children('.quad_date_month')[0];
       setAttribute(month, 'disabled', 'disabled');
 
-      var day = sc(container, '.quad_date_day', 0);
+      var day = $(container).children('.quad_date_day')[0];
       setAttribute(day, 'disabled', 'disabled');
     }
   }
 
   function serializeDate (elt, type, raw) {
 
-    if ( ! sc(elt, '.quad_date_day', 0)) return serialize_(elt, false);
+    if ( ! $(elt).children('.quad_date_day')[0]) return serialize_(elt, false);
 
     var v = [];
 
-    if (type.match(/y/)) v.push(sc(elt, '.quad_date_year', 0).value);
-    if (type.match(/m/)) v.push(sc(elt, '.quad_date_month', 0).value);
-    if (type.match(/d/)) v.push(sc(elt, '.quad_date_day', 0).value);
+    if (type.match(/y/)) v.push($(elt).children('.quad_date_year')[0].value);
+    if (type.match(/m/)) v.push($(elt).children('.quad_date_month')[0].value);
+    if (type.match(/d/)) v.push($(elt).children('.quad_date_day')[0].value);
 
     if (raw) return v; // ;-)
 
@@ -952,9 +859,12 @@ var Quaderno = function () {
     hide(container, '.quad_label', template[1].label);
     //create(container, 'span', '.quad_key', template[1].label);
 
-    var checkbox = create(container, 'input', '.quad_checkbox')
-    setAttribute(checkbox, 'type', 'checkbox');
-    setAttribute(checkbox, 'value', value);
+    var checkbox = create(
+      container,
+      'input',
+      { 'class': 'quad_checkbox',
+        'type': 'checkbox',
+        'value': value });
     if (checked) setAttribute(checkbox, 'checked', 'checked');
     if (options.mode === 'view') setAttribute(checkbox, 'disabled', 'disabled');
 
@@ -965,11 +875,11 @@ var Quaderno = function () {
 
   function serialize_checkbox (elt) {
 
-    var checkbox = sc(elt, '.quad_checkbox', 0);
+    var checkbox = $(elt).children('.quad_checkbox')[0];
 
     if ( ! checkbox) return serialize_(elt, false);
 
-    var type = sc(elt, '.quad_type', 0).value;
+    var type = $(elt).children('.quad_type')[0].value;
 
     var atts = {};
 
@@ -977,7 +887,7 @@ var Quaderno = function () {
     fetchAndSet(elt, 'label', atts, 'checkbox');
     fetchAndSet(elt, 'title', atts, 'checkbox');
 
-    var text = sc(elt, '.quad_text', 0);
+    var text = $(elt).children('.quad_text')[0];
 
     atts['value'] = { 'value': checkbox.value, 'text': text.innerHTML };
 
@@ -1062,7 +972,7 @@ var Quaderno = function () {
   function serialize_children (elt) {
 
     var children = [];
-    var elts = sc(elt, '.quad_element');
+    var elts = $(elt).children('.quad_element');
 
     for (var i = 0; i < elts.length; i++) {
       children.push(serializeElement(elts[i]));
@@ -1075,7 +985,7 @@ var Quaderno = function () {
 
     if (serializeChildren == undefined) serializeChildren = true;
 
-    var type = sc(elt, '.quad_type', 0).value;
+    var type = $(elt).children('.quad_type')[0].value;
 
     var atts = {};
 
@@ -1102,7 +1012,7 @@ var Quaderno = function () {
     for (var k in data) {
       var pk = prefix + k;
       var v = data[k];
-      if (isArray(v)) {
+      if ($.isArray(v)) {
         result.push(pk + '.');
       }
       else if (v && v.constructor === Object) {
@@ -1167,7 +1077,7 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var type = sc(container, '.quad_type', 0).value;
+    var type = $(container).children('.quad_type')[0].value;
     var f = lookupFunction('serialize_', type);
 
     return f(container);
@@ -1182,7 +1092,7 @@ var Quaderno = function () {
 
     if ( ! m) {
 
-      if (k === '0' && isArray(data)) data.splice(0, data.length);
+      if (k === '0' && $.isArray(data)) data.splice(0, data.length);
 
       data[k] = v;
       return;
@@ -1190,7 +1100,7 @@ var Quaderno = function () {
 
     var target = data[m[1]];
 
-    if (target === undefined && isArray(data)) {
+    if (target === undefined && $.isArray(data)) {
       data[m[1]] = {};
       target = data[m[1]];
     }
@@ -1226,11 +1136,11 @@ var Quaderno = function () {
   function showTab (td) {
 
     for (var i = 0; i < td.parentNode.children.length; i++) {
-      var tab = sc(td.parentNode.children[i], '.quad_tab', 0);
+      var tab = $(td.parentNode.children[i]).children('.quad_tab')[0];
       removeClass(tab, 'quad_selected');
     }
-    var tab = sc(td, '.quad_tab', 0);
-    addClass(tab, 'quad_selected');
+    var tab = $(td).children('.quad_tab')[0];
+    addClass(tab, '.quad_selected');
 
     var tab_body = findTabBody(tab);
 
@@ -1244,7 +1154,7 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var quadElement = sparent(elt, '.quad_element');
+    var quadElement = $(elt).parents('.quad_element')[0];
     var td = findTab(elt);
 
     var next = td.nextSibling;
@@ -1262,7 +1172,7 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var qe = sparent(elt, '.quad_element');
+    var qe = $(elt).parents('.quad_element')[0];
     var td = findTab(elt);
 
     if (direction === 'left') {
@@ -1281,7 +1191,7 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var td = sparent(elt, '.new_tab_tab');
+    var td = $(elt).parents('.new_tab_tab')[0];
 
     var template = [ 'group', { 'label': 'new' }, [] ];
 
@@ -1290,9 +1200,9 @@ var Quaderno = function () {
 
     adjustTabBodyColspan(elt);
 
-    var table = sparent(td, 'table');
-    var tr1 = sc(table, 'tr', 1);
-    var body = spath(tr1, 'td > .quad_tab_body', 0);
+    var table = $(td).parents('table')[0];
+    var tr1 = $(table).children('tr')[1];
+    var body = $(tr1).find('td > .quad_tab_body')[0];
 
     var r = root(elt);
 
@@ -1307,7 +1217,7 @@ var Quaderno = function () {
     var blank = [ 'text_input', {}, [] ];
 
     var newElement = editElement(elt.parentNode, blank, {}, {});
-    addElementButtons(sc(newElement, 'div', 0));
+    addElementButtons($(newElement).children('div')[0]);
 
     elt.parentNode.insertBefore(newElement, elt);
   }
@@ -1317,11 +1227,11 @@ var Quaderno = function () {
     stack(elt);
 
     if (direction === 'up') {
-      if (elt.previousSibling && ( ! hasClass(elt.previousSibling, 'quad_group_head')))
+      if (elt.previousSibling && ( ! hasClass(elt.previousSibling, '.quad_group_head')))
         elt.parentNode.insertBefore(elt, elt.previousSibling);
     }
     else {
-      if (elt.nextSibling && hasClass(elt.nextSibling, 'quad_element'))
+      if (elt.nextSibling && hasClass(elt.nextSibling, '.quad_element'))
         elt.parentNode.insertBefore(elt.nextSibling, elt);
     }
   }
@@ -1352,12 +1262,12 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var t = sc(elt, '.quad_array_children_template', 0);
+    var t = $(elt).children('.quad_array_children_template')[0];
     var t = JSON.parse(t.value);
 
     var r = root(elt);
 
-    var arrayMarker = splitArrayMarker(sc(elt, '.quad_id', 0).value);
+    var arrayMarker = splitArrayMarker($(elt).children('.quad_id')[0].value);
 
     for (var i = 0; i < t.length; i++) {
       var e = renderElement(elt, t[i], r.data, { 'mode': 'use' });
@@ -1366,22 +1276,22 @@ var Quaderno = function () {
       //
       // translations are gone !!!
 
-    var button = sc(elt, '.quad_plus_button', 0);
+    var button = $(elt).children('.quad_plus_button')[0];
     elt.appendChild(button);
       // reposition plus button at the end
   }
 
   function tabLabelChanged (elt) {
 
-    var newLabel = strip(elt.value);
+    var newLabel = $.trim(elt.value);
     elt.value = newLabel;
 
     var quad_element = elt.parentNode.parentNode;
     var i = computeSiblingOffset(quad_element);
     var table = quad_element.parentNode.parentNode.parentNode.parentNode;
-    var td = spath(table, 'tr > td', i);
-    var input = sc(td, 'input', 0);
-    var a = sc(td, 'a', 0);
+    var td = $(table).find('tr > td')[i];
+    var input = $(td).children('input')[0];
+    var a = $(td).children('a')[0];
 
     input.value = newLabel;
     a.innerHTML = newLabel;
@@ -1394,7 +1304,7 @@ var Quaderno = function () {
 
     t[0] = elt.value;
     var e = editElement(qe, t, root(qe).data, { 'mode': 'edit' });
-    addElementButtons(sc(e, 'div', 0));
+    addElementButtons($(e).children('div')[0]);
 
     qe.parentNode.replaceChild(e, qe);
   }
@@ -1431,7 +1341,16 @@ var Quaderno = function () {
 
   function serialize (container) {
 
-    return serializeElement(sc(toElement(container), '.quad_element', 0));
+    print(toElement(container));
+    print($(toElement(container)).children().length);
+    print($(toElement(container)).children()[0].className);
+    print($(toElement(container)).children().hasClass('quad_element'));
+    print($(toElement(container)).children('.quad_element').length);
+    print($(toElement(container)).children().length);
+    print("==========");
+
+    return serializeElement(
+      $(toElement(container)).children('.quad_element')[0]);
   }
 
   function produce (container) {
@@ -1476,10 +1395,6 @@ var Quaderno = function () {
   // that's all folks...
 
   return {
-
-    // public for the sake of testing
-
-    _identify: identify,
 
     // public for onClick or onChange
 
