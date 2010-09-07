@@ -318,6 +318,7 @@ var Element = function () {
     return cs; });
 
   o.__defineGetter__('previousSibling', function () {
+    if ( ! this.parentNode) return null;
     var cs = this.parentNode.childNodes;
     var prev = null;
     for (var i = 0; i < cs.length; i++) {
@@ -432,7 +433,9 @@ function Document () {
     createTextNode: createTextNode,
     createComment: createComment,
     getElementById: getElementById,
-    getElementsByClass: getElementsByClass
+    getElementsByClass: getElementsByClass,
+
+    nodeType: 9
   }
 
   o.__defineGetter__('documentElement', function () {

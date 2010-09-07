@@ -99,6 +99,32 @@ var Quaderno = function () {
     $(elt).removeClass(cname);
   }
 
+  function children (elt, cname) {
+    var r = [];
+    for (var i = 0; i < elt.childNodes.length; i++) {
+      var c = elt.childNodes[i];
+      if (c.nodeType !== 1) continue;
+      if (hasClass(c, cname)) r.push(c);
+    }
+    return r;
+  }
+
+  function child (elt, cname) {
+    return children(elt, cname)[0];
+  }
+
+  function find2 (elt, cname) {
+    var c = child(elt, cname);
+    if (c) return c;
+    for (var i = 0; i < elt.childNodes; i++) {
+      c = elt.childNodes[i];
+      if (c.nodeType !== 1) continue;
+      var cc = child(c, cname);
+      if (cc) return cc;
+    }
+    return undefined;
+  }
+
   function create (container, tagName, attributes, innerText) {
 
     var atts = attributes || {};
@@ -262,11 +288,12 @@ var Quaderno = function () {
 
   function fetchAndSet (elt, key, atts, type) {
 
-    var v = $(elt).find('.quad_' + key)[0];
+    //var v = $(elt).find('.quad_' + key)[0];
+    var v = find2(elt, '.quad_' + key);
     if ( ! v) return;
 
-    //v = v.value;
-    v = $(v).val();
+    v = v.value;
+    //v = $(v).val();
 
     atts[key] = v;
   }
@@ -424,7 +451,7 @@ var Quaderno = function () {
     var tds = $(elt).find('table > tr > td');
     for (var i = 0; i < tds.length; i++) {
       var lab =
-        $(tds[i]).children('.quad_label')[0] ||
+        child(tds[i], '.quad_label') ||
         $(tds[i]).find('.quad_tab > .quad_label')[0];
       if (lab) labels.push(lab.value);
     }
@@ -555,7 +582,7 @@ var Quaderno = function () {
 
     if (hasClass(container.parentNode, '.quad_tab_body')) {
 
-      var label = $(gdiv).children('.quad_label')[0];
+      var label = child(gdiv, '.quad_label');
       setAttribute(label, 'onchange', 'Quaderno.tabLabelChanged(this);');
 
       button(
@@ -701,13 +728,13 @@ var Quaderno = function () {
     if (type === 'ymd') {
       var d = new Date();
       d.setFullYear(a[0], a[1] - 1, a[2]);
-      $(elt).children('.quad_date_year')[0].value = d.getFullYear();
-      $(elt).children('.quad_date_month')[0].value = d.getMonth() + 1;
-      $(elt).children('.quad_date_day')[0].value = d.getDate();
+      child(elt, '.quad_date_year').value = d.getFullYear();
+      child(elt, '.quad_date_month').value = d.getMonth() + 1;
+      child(elt, '.quad_date_day').value = d.getDate();
     }
 
-    var sday = $(elt).children('.quad_date_day')[0];
-    var smonth = $(elt).children('.quad_date_month')[0];
+    var sday = child(elt, '.quad_date_day');
+    var smonth = child(elt, '.quad_date_month');
     var day = sday.value;
     var month = smonth.value;
 
@@ -786,36 +813,36 @@ var Quaderno = function () {
       value = value.split('/');
 
       if (type === 'ymd') {
-        $(container).children('.quad_date_year')[0].value = new Number(value.shift());
+        child(container, '.quad_date_year').value = new Number(value.shift());
       }
-      $(container).children('.quad_date_month')[0].value = new Number(value.shift());
-      $(container).children('.quad_date_day')[0].value = new Number(value.shift());
+      child(container, '.quad_date_month').value = new Number(value.shift());
+      child(container, '.quad_date_day').value = new Number(value.shift());
     }
 
     if (options.mode === 'view') {
 
       if (type === 'ymd') {
-        var year = $(container).children('.quad_date_year')[0];
+        var year = child(container, '.quad_date_year');
         setAttribute(year, 'disabled', 'disabled');
       }
 
-      var month = $(container).children('.quad_date_month')[0];
+      var month = child(container, '.quad_date_month');
       setAttribute(month, 'disabled', 'disabled');
 
-      var day = $(container).children('.quad_date_day')[0];
+      var day = child(container, '.quad_date_day');
       setAttribute(day, 'disabled', 'disabled');
     }
   }
 
   function serializeDate (elt, type, raw) {
 
-    if ( ! $(elt).children('.quad_date_day')[0]) return serialize_(elt, false);
+    if ( ! child(elt, '.quad_date_day')) return serialize_(elt, false);
 
     var v = [];
 
-    if (type.match(/y/)) v.push($(elt).children('.quad_date_year')[0].value);
-    if (type.match(/m/)) v.push($(elt).children('.quad_date_month')[0].value);
-    if (type.match(/d/)) v.push($(elt).children('.quad_date_day')[0].value);
+    if (type.match(/y/)) v.push(child(elt, '.quad_date_year').value);
+    if (type.match(/m/)) v.push(child(elt, '.quad_date_month').value);
+    if (type.match(/d/)) v.push(child(elt, '.quad_date_day').value);
 
     if (raw) return v; // ;-)
 
@@ -875,11 +902,11 @@ var Quaderno = function () {
 
   function serialize_checkbox (elt) {
 
-    var checkbox = $(elt).children('.quad_checkbox')[0];
+    var checkbox = child(elt, '.quad_checkbox');
 
     if ( ! checkbox) return serialize_(elt, false);
 
-    var type = $(elt).children('.quad_type')[0].value;
+    var type = child(elt, '.quad_type').value;
 
     var atts = {};
 
@@ -887,7 +914,7 @@ var Quaderno = function () {
     fetchAndSet(elt, 'label', atts, 'checkbox');
     fetchAndSet(elt, 'title', atts, 'checkbox');
 
-    var text = $(elt).children('.quad_text')[0];
+    var text = child(elt, '.quad_text');
 
     atts['value'] = { 'value': checkbox.value, 'text': text.innerHTML };
 
@@ -971,21 +998,21 @@ var Quaderno = function () {
 
   function serialize_children (elt) {
 
-    var children = [];
-    var elts = $(elt).children('.quad_element');
+    var r = [];
+    var elts = children(elt, '.quad_element');
 
     for (var i = 0; i < elts.length; i++) {
-      children.push(serializeElement(elts[i]));
+      r.push(serializeElement(elts[i]));
     }
 
-    return children;
+    return r;
   }
 
   function serialize_ (elt, serializeChildren) {
 
     if (serializeChildren == undefined) serializeChildren = true;
 
-    var type = $(elt).children('.quad_type')[0].value;
+    var type = child(elt, '.quad_type').value;
 
     var atts = {};
 
@@ -995,10 +1022,10 @@ var Quaderno = function () {
     fetchAndSet(elt, 'value', atts, type);
     fetchAndSet(elt, 'values', atts, type);
 
-    var children = [];
-    if (serializeChildren) children = serialize_children(elt);
+    var cs = [];
+    if (serializeChildren) cs = serialize_children(elt);
 
-    return [ type, atts, children ];
+    return [ type, atts, cs ];
   }
 
   //
@@ -1077,7 +1104,7 @@ var Quaderno = function () {
 
   function serializeElement (container) {
 
-    var type = $(container).children('.quad_type')[0].value;
+    var type = child(container, '.quad_type').value;
     var f = lookupFunction('serialize_', type);
 
     return f(container);
@@ -1136,10 +1163,10 @@ var Quaderno = function () {
   function showTab (td) {
 
     for (var i = 0; i < td.parentNode.children.length; i++) {
-      var tab = $(td.parentNode.children[i]).children('.quad_tab')[0];
+      var tab = child(td.parentNode.children[i], '.quad_tab');
       removeClass(tab, 'quad_selected');
     }
-    var tab = $(td).children('.quad_tab')[0];
+    var tab = child(td, '.quad_tab');
     addClass(tab, '.quad_selected');
 
     var tab_body = findTabBody(tab);
@@ -1262,12 +1289,12 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var t = $(elt).children('.quad_array_children_template')[0];
+    var t = child(elt, '.quad_array_children_template');
     var t = JSON.parse(t.value);
 
     var r = root(elt);
 
-    var arrayMarker = splitArrayMarker($(elt).children('.quad_id')[0].value);
+    var arrayMarker = splitArrayMarker(child(elt, '.quad_id').value);
 
     for (var i = 0; i < t.length; i++) {
       var e = renderElement(elt, t[i], r.data, { 'mode': 'use' });
@@ -1276,7 +1303,7 @@ var Quaderno = function () {
       //
       // translations are gone !!!
 
-    var button = $(elt).children('.quad_plus_button')[0];
+    var button = child(elt, '.quad_plus_button');
     elt.appendChild(button);
       // reposition plus button at the end
   }
@@ -1341,16 +1368,7 @@ var Quaderno = function () {
 
   function serialize (container) {
 
-    print(toElement(container));
-    print($(toElement(container)).children().length);
-    print($(toElement(container)).children()[0].className);
-    print($(toElement(container)).children().hasClass('quad_element'));
-    print($(toElement(container)).children('.quad_element').length);
-    print($(toElement(container)).children().length);
-    print("==========");
-
-    return serializeElement(
-      $(toElement(container)).children('.quad_element')[0]);
+    return serializeElement(child(toElement(container), '.quad_element'));
   }
 
   function produce (container) {
