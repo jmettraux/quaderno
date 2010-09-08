@@ -152,6 +152,40 @@ function printo (o, indentation) {
   print('' + indentation + ':' + o.toString());
 }
 
+function childrenWith (e, pathelt) {
+  var r = [];
+  pathelt = pathelt.toLowerCase();
+  var tagname = null;
+  var cname = null;
+  if (pathelt[0] === '.') cname = pathelt.slice(1);
+  else tagname = pathelt;
+  for (var i = 0; i < e.childNodes.length; i++) {
+    var c = e.childNodes[i];
+    if (c.nodeType !== 1) continue;
+    if (tagname && c.nodeName.toLowerCase() === tagname) r.push(c);
+    else if (cname && $(c).hasClass(cname)) r.push(c);
+  }
+  return r;
+}
+
+function path (s, index) {
+  var es = [ document._root() ];
+  var ss = s.split('>');
+  for (var i = 0; i < ss.length; i++) {
+    var pathelt = $.trim(ss[i]);
+    for (var j = 0; j < es.length; j++) {
+      var e = es[j];
+      var ee = childrenWith(e, pathelt);
+      if (ee.length > 0) {
+        es = ee;
+        break;
+      }
+    }
+  }
+  if (index === undefined) return es;
+  return es[index];
+}
+
 //
 // test DOM
 
@@ -188,8 +222,9 @@ var Element = function () {
     result = [];
     for (var i = 0; i < this.childNodes.length; i++) {
       var c = this.childNodes[i];
-      if (c.tagName === name) result.push(c);
-      if (c.getElementByTagName) result.concat(c.getElementByTagName(name));
+      if (c.nodeType !== 1) continue;
+      if (name === '*' || c.tagName === name) result.push(c);
+      result = result.concat(c.getElementsByTagName(name));
     }
     return result;
   }
@@ -264,18 +299,22 @@ var Element = function () {
 
     s += ('<' + this.tagName + ' ');
     if (this.id) s += ('#' + this.id + ' ');
-    s += attsToJson(this.attributes) + '\n';
+    s += attsToJson(this.attributes) + "\n";
 
     for (var i = 0; i < this.childNodes.length; i++) {
       var c = this.childNodes[i];
-      s += c.toString(indentation + 1);
+      if ((typeof c) === 'string') {
+        s += (c + "\n");
+      }
+      else {
+        s += c.toString(indentation + 1);
+      }
     }
 
-    if (this.innerHTML != undefined && this.innerHTML != '') {
-      for (var i = 0; i < indentation + 1; i++) s += '  ';
-      s += this.innerHTML;
-      s += '\n';
-    }
+    //if (this.innerHTML && this.innerHTML !== '') {
+    //  for (var i = 0; i < indentation + 1; i++) s += '  ';
+    //  s += (this.innerHTML + "\n");
+    //}
 
     return s;
   }
@@ -330,6 +369,9 @@ var Element = function () {
   });
   o.__defineGetter__('firstChild', function () {
     return this.childNodes[0]; });
+
+  o.__defineGetter__('nodeName', function () {
+    return this.tagName; });
 
   o.__defineGetter__('className', function () {
     return this.attributes['class']; });
@@ -420,6 +462,10 @@ function Document () {
     return r;
   }
 
+  function getElementsByTagName (tname) {
+    return root.getElementsByTagName(tname);
+  }
+
   var o = {
 
     _testing: true,
@@ -434,6 +480,7 @@ function Document () {
     createComment: createComment,
     getElementById: getElementById,
     getElementsByClass: getElementsByClass,
+    getElementsByTagName: getElementsByTagName,
 
     nodeType: 9
   }

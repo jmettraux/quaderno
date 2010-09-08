@@ -20,10 +20,10 @@ assertEqual(
   [ 'group', { 'id': 'customers.*', 'label': 'customers' }, [] ],
   render_and_serialize(te0, data, { 'mode': 'use' } ));
 
-Quaderno.addToArray(document._path('div > div', 0));
-Quaderno.addToArray(document._path('div > div', 0));
+Quaderno.addToArray(path('div > div', 0));
+Quaderno.addToArray(path('div > div', 0));
 
-var customer0 = document._path('div > div > div', 1);
+var customer0 = path('div > div > div', 1);
 var name0 = customer0._path('div > div', 1);
 var nameIn0 = name0._path('div > input', 3);
 nameIn0.value = 'toto';

@@ -50,9 +50,17 @@ var data2 = { 'annual_audit': { 'more': { 'private': { 'checked': true } } } };
 document = Document();
 Quaderno.render('quad', te2, data2, { 'mode': 'use' });
 
-var e = document._path('div > div > div', 1);
-var checkbox = e._path('div > input', 4);
-//print(checkbox);
+//print(document._root());
+
+//var e = document._path('div > div > div', 1);
+//var checkbox = e._path('div > input', 4);
+var checkboxes = $('input.quad_checkbox');
+var checkbox = null;
+for (var i = 0 ; i < checkboxes.length; i++) {
+  if (checkboxes[i].getAttribute("checked") === "checked") {
+    checkbox = checkboxes[i];
+  }
+}
 
 assertEqual('checked', checkbox.getAttribute('checked'));
 
@@ -60,6 +68,7 @@ assertEqual(
   { 'annual_audit': { 'more': { 'private': { 'checked': true } } } },
   Quaderno.produce('quad'));
 
+//print(checkbox);
 checkbox.removeAttribute('checked')
 //print(checkbox);
 

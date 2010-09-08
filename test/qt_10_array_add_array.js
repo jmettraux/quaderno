@@ -36,7 +36,8 @@ assertEqual(
   { 'opinions': [ { 'fp': 'cornflakes', 'object': 'price' } ] },
   Quaderno.produce('quad'));
 
-var opinion = document._path('div > div > div', 1);
+//var opinion = document._root()._path('div > div > div', 1)
+var opinion = path('div > div > div', 1)
 var copinion = opinion.cloneNode(true);
 opinion.parentNode.appendChild(copinion);
 

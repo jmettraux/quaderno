@@ -24,7 +24,7 @@ assertEqual(
   teu,
   render_and_serialize(te0, data, { 'mode': 'use' } ));
 
-var h = document._path('div > div > input', 3);
+var h = path('div > div > input', 3);
 
 assertEqual(
   [ [ 'group', {}, [

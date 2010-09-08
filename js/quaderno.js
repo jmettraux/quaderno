@@ -113,14 +113,14 @@ var Quaderno = function () {
     return children(elt, cname)[0];
   }
 
-  function find2 (elt, cname) {
-    var c = child(elt, cname);
-    if (c) return c;
-    for (var i = 0; i < elt.childNodes; i++) {
-      c = elt.childNodes[i];
-      if (c.nodeType !== 1) continue;
-      var cc = child(c, cname);
-      if (cc) return cc;
+  function find3 (elt, cname, depth) {
+    if (depth === undefined) depth = 0;
+    if (elt.nodeType !== 1) return undefined;
+    if (depth > 0 && hasClass(elt, '.quad_element')) return undefined;
+    if (hasClass(elt, cname)) return elt;
+    for (var i = 0; i < elt.childNodes.length; i++) {
+      var r = find3(elt.childNodes[i], cname, depth + 1);
+      if (r) return r;
     }
     return undefined;
   }
@@ -130,7 +130,7 @@ var Quaderno = function () {
     var atts = attributes || {};
 
     if (attributes && ((typeof attributes) === 'string')) {
-      if (attributes[0] === '.') attributes = attributes.slice(1);
+      attributes = $.trim(attributes.split('.').join(' '));
       atts = { 'class': attributes };
     }
 
@@ -289,7 +289,7 @@ var Quaderno = function () {
   function fetchAndSet (elt, key, atts, type) {
 
     //var v = $(elt).find('.quad_' + key)[0];
-    var v = find2(elt, '.quad_' + key);
+    var v = find3(elt, '.quad_' + key);
     if ( ! v) return;
 
     v = v.value;

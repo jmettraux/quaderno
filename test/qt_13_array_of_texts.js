@@ -23,9 +23,10 @@ var teu =
 
 render_and_serialize(te0, data, { 'mode': 'use' } );
 
-var texts = document._path('div > div > div > .quad_text');
+//var texts = path('div > div > div > .quad_text');
+var texts = $('.quad_text');
 
-assertEqual('red', texts[0].childNodes[0]);
-assertEqual('green', texts[1].childNodes[0]);
-assertEqual('blue', texts[2].childNodes[0]);
+assertEqual('red', texts[1].childNodes[0]);
+assertEqual('green', texts[2].childNodes[0]);
+assertEqual('blue', texts[3].childNodes[0]);
 
