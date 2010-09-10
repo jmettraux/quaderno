@@ -1,4 +1,16 @@
 
+.jagaimo {
+  color: #e7eef5;
+  background: rgba(0,0,0,.85);
+  font: 12px/20px menlo, monaco, courier, mono;
+  padding: 12px;
+  margin: 1px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
 .jagaimo_element {
 }
 .jagaimo_key {

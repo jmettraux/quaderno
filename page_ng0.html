@@ -1,0 +1,43 @@
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>Quaderno</title>
+  <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/jagaimo.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/quaderno.css" type="text/css" media="screen" />
+  <script src="js/jquery-1.4.2.js"></script>
+  <script src="js/quaderno2.js"></script>
+  <script src="js/jagaimo.js"></script>
+</head>
+<body>
+
+  <h1><a href="">Quaderno (take2)</a></h1>
+
+  <textarea id="x" style="width:400px; height:300px">
+// quaderno, take 2
+tabs
+  tab .opinions
+    group
+      text .type_of_auditor
+      checkbox #private
+      checkbox #government
+      checkbox #private_for_government
+    group
+      text .opinions
+      group repeatable
+        selection #financial_product
+        selection #object
+  </textarea>
+
+  <div id="jag" class="jagaimo"></div>
+
+  <script>
+    var output = Quaderno.parse($('#x').text());
+    console.log(output);
+    Jagaimo.render('jag', output);
+  </script>
+
+</body>
+</html>
+
