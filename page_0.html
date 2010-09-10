@@ -14,30 +14,47 @@
 
   <h1><a href="">Quaderno (take2)</a></h1>
 
-  <textarea id="x" style="width:400px; height:300px">
+  <table>
+    <tr>
+      <td>
+    <textarea id="x" style="width:500px; height:300px">
 // quaderno, take 2
 tabs
   tab .opinions
     group
-      text .type_of_auditor
+      text .type_of_auditor ".type_of_auditor"
       checkbox #private
       checkbox #government
-      checkbox #private_for_government
+      checkbox #private_for_government "text" "that title"
     group
       text .opinions
       group repeatable
-        selection #financial_product
+        selection #financial_product "nada" [ "a", "b", "c" ]
         selection #object
-  </textarea>
+  tab .general
+    </textarea>
+      </td>
+      <td>
+        <div id="quad" class="quad_root"></div>
+      </td>
+    </tr>
+  </table>
+
 
   <div id="jag" class="jagaimo"></div>
 
   <script>
-    var output = Quaderno.parse($('#x').text());
-    console.log(output);
-    Jagaimo.render('jag', output);
-  </script>
 
+    var template = Quaderno.parse($('#x').text());
+    Jagaimo.render('jag', template);
+
+    var data = {};
+    var translations = {};
+    var mode = 'use';
+
+    Quaderno.render(
+      '#quad', template, data, { 'translations': translations, 'mode': mode });
+  </script>
 </body>
 </html>
 
