@@ -107,7 +107,7 @@ var Quaderno = function () {
 
     var lines = s.split('\n');
 
-    var current = null;
+    var current;
     var clevel = -1;
 
     for (var i = 0; i < lines.length; i++) {
@@ -130,7 +130,9 @@ var Quaderno = function () {
         elt.parent = current.parent;
       }
       else /* nlevel < clevel */ {
-        for (var j = 0; j < clevel - nlevel; j++) {
+        //clog("===");
+        //clog("delta : " + (clevel - nlevel));
+        for (var j = 0; j <= clevel - nlevel; j++) {
           current = current.parent;
         }
         elt.parent = current;
