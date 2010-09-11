@@ -17,22 +17,7 @@
   <div>
     <div style="float: left; width: 49%;">
       template :
-      <pre id="x">
-// quaderno, take 2
-tabs
-  tab .opinions
-    group
-      text .type_of_auditor ".type_of_auditor"
-      checkbox #private
-      checkbox #government
-      checkbox #private_for_government "text" "that title"
-    group
-      text .opinions
-      group repeatable
-        selection #financial_product "nada" [ "a", "b", "c" ]
-        selection #object
-  tab .general
-      </pre>
+      <pre id="template"></pre>
     </div>
     <div style="float: right; width: 50%">
       data :
@@ -63,10 +48,41 @@ tabs
   </div>
 
   <script>
-    var template = Quaderno.parse($('#x').text());
+
+    var qs = function () {
+      var h = {};
+      var s = window.location.search;
+      if (s === '') return h;
+      s = s.slice(1);
+      var ss = s.split('&');
+      for (var i = 0; i < ss.length; i++) {
+        var kv = ss[i].split("=");
+        h[kv[0]] = kv[1];
+      }
+      return h;
+    }();
+
+    var sample = qs['sample'] || '0';
+    var t = 'template_' + sample + '.txt';
+    var d = 'data_' + sample + '.txt';
+
+    var template;
+    var data = '{}';
+
+    $.ajax({ url: t, async: false, success: function (s) {
+      template = s;
+    } });
+    $.ajax({ url: d, async: false, success: function (s) {
+      data = s;
+    } });
+
+    $('#template').text(template);
+
+    template = Quaderno.parse(template);
+    data = JSON.parse(data);
+
     Jagaimo.render('parsed', template);
 
-    var data = {};
     Jagaimo.render('data', data);
 
     var translations = {};
