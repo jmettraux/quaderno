@@ -175,14 +175,74 @@ var Quaderno = function () {
   // rendering
 
   function use_ (container, template, data, options) {
-    return create(container, 'span', {}, JSON.stringify(template));
+    create(container, 'span', {}, JSON.stringify(template));
+  }
+
+  function renderChildren (container, template, data, options) {
+    for (var i = 0; i < template[2].length; i++) {
+      renderElement(container, template[2][i], data, options);
+    }
+  }
+
+  //
+  // selection
+
+  //
+  // checkbox
+
+  function use_checkbox (container, template, data, options) {
+
+    //var value = getValue(template, data, options);
+    //value = value || {};
+    var value = {};
+    var text = value['text'];
+    var checked = value['checked'];
+    value = value['value'];
+
+    var label = template[1].text || template[1].id;
+
+    var checkbox = create(
+      container,
+      'input',
+      { 'class': 'quad_checkbox',
+        'type': 'checkbox',
+        'value': value });
+    if (checked) checkbox.attr('checked', 'checked');
+    if (options.mode === 'view') setAttribute(checkbox, 'disabled', 'disabled');
+
+    create(container, 'span', '.quad_checkbox_key', label);
+
+    create(container, 'span', '.quad_text', text);
+  }
+
+  //
+  // text
+
+  function use_text (container, template, data, options) {
+
+    var text = template[1].text || template[1].id;
+
+    create(container, 'div', '.quad_key.quad_text', text);
+  }
+
+  //
+  // group
+
+  function use_group (container, template, data, options) {
+
+    // TODO repeatable
+    // TODO reorderable
+
+    $(container).addClass('quad_group');
+
+    renderChildren(container, template, data, options);
   }
 
   //
   // tabs
 
   function use_tab (container, template, data, options) {
-    return create(container, 'div', {}, JSON.stringify(template));
+    renderChildren(container, template, data, options);
   }
 
   function use_tab_label (container, template, data, options) {
@@ -286,7 +346,7 @@ var Quaderno = function () {
     //hide(div, '.quad_template', JSON.stringify(template));
       // maybe a bit heavy
 
-    var elt = func(div, template, data, options);
+    func(div, template, data, options);
 
     return div;
   }

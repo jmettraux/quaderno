@@ -14,10 +14,10 @@
 
   <h1><a href="">Quaderno (take2)</a></h1>
 
-  <table>
-    <tr>
-      <td>
-    <textarea id="x" style="width:500px; height:300px">
+  <div>
+    <div style="float: left; width: 49%;">
+      template:
+      <textarea id="x" style="width:600px; height:300px">
 // quaderno, take 2
 tabs
   tab .opinions
@@ -32,23 +32,32 @@ tabs
         selection #financial_product "nada" [ "a", "b", "c" ]
         selection #object
   tab .general
-    </textarea>
-      </td>
-      <td>
-        <div id="quad" class="quad_root"></div>
-      </td>
-    </tr>
-  </table>
+      </textarea>
+    </div>
+    <div style="float: right; width: 50%">
+      data:
+      <div id="data" class="jagaimo"></div>
+    </div>
+  </div>
 
-
-  <div id="jag" class="jagaimo"></div>
+  <div style="clear: both;">
+    <div style="float: left; width: 49%;">
+      template, parsed :
+      <div id="parsed" class="jagaimo"></div>
+    </div>
+    <div style="float: right; width: 50%;">
+      quaderno :
+      <div id="quad" class="quad_root"></div>
+    </div>
+  </div>
 
   <script>
-
     var template = Quaderno.parse($('#x').text());
-    Jagaimo.render('jag', template);
+    Jagaimo.render('parsed', template);
 
     var data = {};
+    Jagaimo.render('data', data);
+
     var translations = {};
     var mode = 'use';
 
