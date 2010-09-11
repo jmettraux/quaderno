@@ -155,8 +155,6 @@ var Quaderno = function () {
         elt.parent = current.parent;
       }
       else /* nlevel < clevel */ {
-        //clog("===");
-        //clog("delta : " + (clevel - nlevel));
         for (var j = 0; j <= clevel - nlevel; j++) {
           current = current.parent;
         }
@@ -283,7 +281,6 @@ var Quaderno = function () {
     var qtb = create(td, 'div', '.quad_tab_body');
 
     for (i = 0; i < tabs.length; i++) {
-      clog(tabs[i]);
       var div = renderElement(qtb, tabs[i], data, options);
       if (i != 0) div.style.display = 'none';
     }
@@ -291,18 +288,18 @@ var Quaderno = function () {
     return table;
   }
 
-  //function computeSiblingOffset (elt, count) {
-  //  count = count || 0;
-  //  if ( ! elt.previousSibling) return count;
-  //  return computeSiblingOffset(elt.previousSibling, count + 1);
-  //}
-  //function findTabBody (elt) {
-  //  var td = $(elt).parents('td')[0];
-  //  var index = computeSiblingOffset(td);
-  //  var table = $(elt).parents('table')[0];
-  //  var tr = $(table).children('tr')[1];
-  //  return $(tr).find('td > .quad_tab_body > .quad_element')[index];
-  //}
+  function computeSiblingOffset (elt, count) {
+    count = count || 0;
+    if ( ! elt.previousSibling) return count;
+    return computeSiblingOffset(elt.previousSibling, count + 1);
+  }
+  function findTabBody (elt) {
+    var td = $(elt).parents('td')[0];
+    var index = computeSiblingOffset(td);
+    var table = $(elt).parents('table')[0];
+    var tr = $(table).children('tr')[1];
+    return $(tr).find('td > .quad_tab_body > .quad_element')[index];
+  }
 
   function showTab (td) {
 

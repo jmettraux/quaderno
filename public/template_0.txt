@@ -12,3 +12,4 @@ tabs
         selection #financial_product "nada" [ "a", "b", "c" ]
         selection #object
   tab .general
+    text nada
