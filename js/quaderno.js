@@ -1,9 +1,36 @@
+//
+// Copyright (c) 2010, John Mettraux, jmettraux@gmail.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+
+// TODO : prevent html/js injection !
+// depends on the excellent jquery-1.4.2
 
 var Quaderno = function () {
 
   //
   // misc
 
+  // TODO : replace me with $.trim() as soon as the fake DOM is ready
+  //
   function trim (s) { return s.replace(/^\s+|\s+$/g, ''); }
 
   function clog (o) {
@@ -17,14 +44,10 @@ var Quaderno = function () {
     }
   }
 
-  function hide (container, classSel, value) {
-
-    if (classSel[0] == '.') classSel = classSel.slice(1);
-
+  function hide (container, cname, value) {
+    if (cname[0] == '.') cname = cname.slice(1);
     return create(
-      container,
-      'input',
-      { 'class': classSel, 'type': 'hidden', 'value': value });
+      container, 'input', { 'class': cname, 'type': 'hidden', 'value': value });
   }
 
   function create (container, tagName, attributes, innerText) {
@@ -152,19 +175,23 @@ var Quaderno = function () {
   // rendering
 
   function use_ (container, template, data, options) {
-    clog(container);
-    create(container, 'span', {}, JSON.stringify(template));
+    return create(container, 'span', {}, JSON.stringify(template));
   }
 
   //
   // tabs
 
+  function use_tab (container, template, data, options) {
+    return create(container, 'div', {}, JSON.stringify(template));
+  }
+
   function use_tab_label (container, template, data, options) {
 
     var td = create(container, 'td', {});
 
-    hide(td, '.quad_label', template[1].label);
-    var a = $(create(td, 'a', '.quad_tab', template[1].label));
+    var label = template[1].text || template[1].id;
+
+    var a = $(create(td, 'a', '.quad_tab', label));
     a.attr('href', '');
     a.attr('onclick', 'Quaderno.showTab(this.parentNode); return false;');
 
@@ -202,6 +229,36 @@ var Quaderno = function () {
     return table;
   }
 
+  //function computeSiblingOffset (elt, count) {
+  //  count = count || 0;
+  //  if ( ! elt.previousSibling) return count;
+  //  return computeSiblingOffset(elt.previousSibling, count + 1);
+  //}
+  //function findTabBody (elt) {
+  //  var td = $(elt).parents('td')[0];
+  //  var index = computeSiblingOffset(td);
+  //  var table = $(elt).parents('table')[0];
+  //  var tr = $(table).children('tr')[1];
+  //  return $(tr).find('td > .quad_tab_body > .quad_element')[index];
+  //}
+
+  function showTab (td) {
+
+    for (var i = 0; i < td.parentNode.children.length; i++) {
+      var tab = $(td.parentNode.children[i]).children('.quad_tab');
+      tab.removeClass('quad_selected');
+    }
+    var tab = $(td).children('.quad_tab');
+    tab.addClass('quad_selected');
+
+    var tab_body = findTabBody(tab);
+
+    for (var i = 0; i < tab_body.parentNode.children.length; i++) {
+      tab_body.parentNode.children[i].style.display = 'none';
+    }
+    tab_body.style.display = 'block';
+  }
+
   //
   // rendering
 
@@ -219,7 +276,19 @@ var Quaderno = function () {
     try { func = eval(prefix + template[0]); }
     catch (ex) {}
 
-    func(container, template, data, options);
+    var div = create(container, 'div', '.quad_element');
+
+    var id = template[1].id;
+    if (id) hide(div, '.quad_id', id);
+    if (template[1].title) $(div).attr('title', template[1].title);
+    hide(div, '.quad_type', template[0]);
+
+    //hide(div, '.quad_template', JSON.stringify(template));
+      // maybe a bit heavy
+
+    var elt = func(div, template, data, options);
+
+    return div;
   }
 
   function render (container, template, data, options) {
@@ -228,6 +297,9 @@ var Quaderno = function () {
   }
 
   return {
+
+    showTab: showTab,
+
     parse: parse,
     render: render
   }
