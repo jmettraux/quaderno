@@ -5,7 +5,10 @@
 // Wed Apr  7 17:29:57 JST 2010
 //
 
-//load(dir + "/../public/js/jquery-1.4.2.js");
+load(dir + "/domock.js");
+load(dir + "/../public/js/jquery-1.4.2.js");
+$ = window.jQuery;
+
 load(dir + "/../public/js/quaderno.js");
 
 //

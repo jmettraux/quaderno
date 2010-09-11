@@ -29,10 +29,6 @@ var Quaderno = function () {
   //
   // misc
 
-  // TODO : replace me with $.trim() as soon as the fake DOM is ready
-  //
-  function trim (s) { return s.replace(/^\s+|\s+$/g, ''); }
-
   // TODO : print() is a ffox function !!!! :-(
   //
   function clog (o) {
@@ -153,7 +149,7 @@ var Quaderno = function () {
     for (var i = 0; i < lines.length; i++) {
 
       var line = lines[i];
-      var tline = trim(line);
+      var tline = $.trim(line);
 
       if (tline == '') continue;
       if (tline.match(/^\/\//)) continue;

@@ -1,9 +1,10 @@
 tabs
-  tab customer "this"
+  tab "orders"
+    text orders.
+  tab customer "customer"
     text "hello"
     text season
     text .name
     text .age
-    text orders.
-  tab "that"
+  tab "other"
     text "oh well..."
