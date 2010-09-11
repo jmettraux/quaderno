@@ -69,29 +69,17 @@ textarea {
 	border-bottom-color: #ddd;
 }
 
-/* output */
-
-.json_output {
-	color: #e7eef5;
-	background: rgba(0,0,0,.85);
-	font: 12px/20px menlo, monaco, courier, mono;
-	padding: 12px;
-        margin: 1px;
-	border-radius: 8px;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	overflow: auto;
-}
-
-.json_label {
-  color: #8B8F91;
-  padding: 1px;
-  margin: 1px;
-}
-.json_table {
-  width: 100%;
-}
-.json_table td {
-  width: 50%;
+pre {
+  font-family: "Menlo Regular", monaco, monospaced;
+  font-size: 11px;
+  line-height: 11px;
+  /*display: inline-block;*/
+  display: block;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px dashed #ccd0d4;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 

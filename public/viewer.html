@@ -17,7 +17,7 @@
   <div>
     <div style="float: left; width: 49%;">
       template :
-      <textarea id="x" style="width: 100%; height:200px">
+      <pre id="x">
 // quaderno, take 2
 tabs
   tab .opinions
@@ -32,7 +32,7 @@ tabs
         selection #financial_product "nada" [ "a", "b", "c" ]
         selection #object
   tab .general
-      </textarea>
+      </pre>
     </div>
     <div style="float: right; width: 50%">
       data :
@@ -52,7 +52,14 @@ tabs
   </div>
 
   <div style="clear: both;">
-    nada :
+    <div style="float: left; width: 49%;">
+    </div>
+    <div style="float: right; width: 50%;">
+      <div class="buttons">
+        <a href="">produce</a>
+      </div>
+      <div id="product" class="jagaimo"></div>
+    </div>
   </div>
 
   <script>
@@ -67,6 +74,8 @@ tabs
 
     Quaderno.render(
       '#quad', template, data, { 'translations': translations, 'mode': mode });
+
+    Jagaimo.render('product', {});
   </script>
 </body>
 </html>
