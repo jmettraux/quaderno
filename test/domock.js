@@ -179,37 +179,37 @@ var Element = function () {
     return s;
   }
 
-  function _path (path, index) {
-
-    if (path.constructor.name === 'String') {
-      path = path.split('>');
-    }
-
-    var r = [];
-    var p = path[0].replace(/^\s+|\s+$/g, '');
-    path = path.slice(1);
-
-    if ((p.match(/^\./) && this.className.indexOf(p.slice(1)) > -1) ||
-        this.tagName === p) {
-
-      if (path.length < 1) {
-        r = [ this ];
-      }
-      else {
-        for (var i = 0; i < this.childNodes.length; i++) {
-          var c = this.childNodes[i];
-          if ( ! c.childNodes) continue;
-
-          var rr = c._path(path); // no index
-          r = r.concat(rr);
-        }
-      }
-    }
-
-    if (index === -1) return r.slice(-1)[0];
-    if (index !== undefined) return r[index];
-    return r;
-  }
+//  function _path (path, index) {
+//
+//    if (path.constructor.name === 'String') {
+//      path = path.split('>');
+//    }
+//
+//    var r = [];
+//    var p = path[0].replace(/^\s+|\s+$/g, '');
+//    path = path.slice(1);
+//
+//    if ((p.match(/^\./) && this.className.indexOf(p.slice(1)) > -1) ||
+//        this.tagName === p) {
+//
+//      if (path.length < 1) {
+//        r = [ this ];
+//      }
+//      else {
+//        for (var i = 0; i < this.childNodes.length; i++) {
+//          var c = this.childNodes[i];
+//          if ( ! c.childNodes) continue;
+//
+//          var rr = c._path(path); // no index
+//          r = r.concat(rr);
+//        }
+//      }
+//    }
+//
+//    if (index === -1) return r.slice(-1)[0];
+//    if (index !== undefined) return r[index];
+//    return r;
+//  }
 
   function toString (indentation) {
 
@@ -239,6 +239,16 @@ var Element = function () {
     return s;
   }
 
+  function toArray () {
+    var a = [ this.tagName, this.attributes, [] ];
+    for (var i = 0; i < this.childNodes.length; i++) {
+      var c = this.childNodes[i];
+      if ((typeof c) === 'string') a[2].push(c);
+      else a[2].push(c.toArray());
+    }
+    return a;
+  }
+
   var o = {
 
     nodeType: 1,
@@ -263,9 +273,10 @@ var Element = function () {
       print("!!! nsm : " + id);
     },
 
-    _path: _path,
+    //_path: _path,
 
-    toString: toString
+    toString: toString,
+    toArray: toArray
   }
 
   o.__defineGetter__('children', function () {
@@ -323,17 +334,18 @@ var Element = function () {
 function Document () {
 
   var root = Element();
-  var elements;
+  root.tagName = 'html';
+  var body = Element();
+  body.tagName = 'body';
+  root.appendChild(body);
 
-  function _clear () {
-    elements = {};
-    elements['quad'] = Element();
-    elements['quad'].tagName = 'div';
-    elements['quad'].className = 'quad_root';
-    root.appendChild(elements['quad']);
-  }
+  var elements = {};
 
-  _clear();
+  var quad = Element();
+  quad.tagName = 'div';
+  quad.className = 'quad_root';
+  body.appendChild(quad);
+  elements['quad'] = quad;
 
   function createElement (tagName) {
     var e = Element();
@@ -390,10 +402,8 @@ function Document () {
 
     _testing: true,
 
-    _clear: _clear,
-
-    _root: _root,
-    _path: _path,
+    //_root: _root,
+    //_path: _path,
 
     createElement: createElement,
     createTextNode: createTextNode,
@@ -412,7 +422,7 @@ function Document () {
 };
 
 document = Document();
-window = { document: document };
+window = { 'document': document };
 navigator = { userAgent: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.9) Gecko/20100824 Firefox/3.6.9' };
 location = 'dokodemo';
 

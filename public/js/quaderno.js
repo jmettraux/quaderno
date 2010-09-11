@@ -73,7 +73,7 @@ var Quaderno = function () {
 
   function lookup (hash, key) {
 
-    clog([ "lu", key, hash ]);
+    //clog([ "lu", key, hash ]);
 
     if (hash === undefined) return undefined;
     if (key === undefined) return undefined;
@@ -185,7 +185,7 @@ var Quaderno = function () {
   //
   // rendering
 
-  function use_ (container, template, data, options) {
+  function render_ (container, template, data, options) {
     create(container, 'span', {}, JSON.stringify(template));
   }
 
@@ -201,7 +201,7 @@ var Quaderno = function () {
   //
   // checkbox
 
-  function use_checkbox (container, template, data, options) {
+  function render_checkbox (container, template, data, options) {
 
     //var value = getValue(template, data, options);
     //value = value || {};
@@ -229,7 +229,7 @@ var Quaderno = function () {
   //
   // text
 
-  function use_text (container, template, data, options) {
+  function render_text (container, template, data, options) {
 
     var text = template[1].text || '';
 
@@ -244,7 +244,7 @@ var Quaderno = function () {
   //
   // group
 
-  function use_group (container, template, data, options) {
+  function render_group (container, template, data, options) {
 
     $(container).addClass('quad_group');
 
@@ -254,11 +254,11 @@ var Quaderno = function () {
   //
   // tabs
 
-  function use_tab (container, template, data, options) {
+  function render_tab (container, template, data, options) {
     renderChildren(container, template, data, options);
   }
 
-  function use_tab_label (container, template, data, options) {
+  function render_tab_label (container, template, data, options) {
 
     var td = create(container, 'td', {});
 
@@ -271,7 +271,7 @@ var Quaderno = function () {
     return td;
   }
 
-  function use_tabs (container, template, data, options) {
+  function render_tabs (container, template, data, options) {
 
     var tabs = template[2];
     var table = create(container, 'table', '.quad_tab_group');
@@ -281,7 +281,7 @@ var Quaderno = function () {
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
     for (var i = 0; i < tabs.length; i++) {
-      use_tab_label(tr0, tabs[i], data, options);
+      render_tab_label(tr0, tabs[i], data, options);
     }
 
     var tab = $(tr0).find('td > .quad_tab')[0];
@@ -360,14 +360,14 @@ var Quaderno = function () {
 
   function toElement (x) {
     if ((typeof x) !== 'string') return x;
-    if ( ! (x.match(/^#/))) x = '#' + x;
-    return $(x)[0];
+    if (x.match(/^#/)) x = x.slice(1);
+    return document.getElementById(x);
   }
 
   function renderElement (container, template, data, options) {
 
-    var func = eval('use_');
-    try { func = eval('use_' + template[0]); }
+    var func = eval('render_');
+    try { func = eval('render_' + template[0]); }
     catch (ex) {}
 
     var id = template[1].id;
@@ -404,6 +404,7 @@ var Quaderno = function () {
 
   function render (container, template, data, options) {
     container = toElement(container);
+    if ((typeof template) === 'string') template = parse(template);
     renderElement(container, template, data, options);
   }
 

@@ -15,8 +15,10 @@ load(dir + "/../public/js/quaderno.js");
 // assertEqual
 
 function keys (o) {
+
   var keys = [];
   for (var k in o) { if (o[k] !== undefined) keys.push(k); }
+
   return keys.sort();
 }
 

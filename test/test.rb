@@ -8,7 +8,7 @@
 files = Dir[File.join(File.dirname(__FILE__), 'qt_*.js')]
 
 if a = ARGV[0]
-  files = files.select { |f| f.match(a) }
+  files = files.select { |f| f.match('qt_' + a + '_.+\.js$') }
 end
 
 `rhino -e '1'`
