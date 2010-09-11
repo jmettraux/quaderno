@@ -21,4 +21,5 @@
 ===
 
 [ ] jagaimo : undefined
+[ ] template : define x {
 

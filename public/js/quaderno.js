@@ -75,6 +75,21 @@ var Quaderno = function () {
     return e;
   }
 
+  function lookup (hash, key) {
+
+    clog([ "lu", key, hash ]);
+
+    if (hash === undefined) return undefined;
+    if (key === undefined) return undefined;
+
+    if ( ! $.isArray(key)) key = key.split('.');
+    if (key.length < 1) return hash;
+
+    // TODO : when key is an array index
+
+    return lookup(hash[key.shift()], key);
+  }
+
   //
   // parsing
 
@@ -220,7 +235,12 @@ var Quaderno = function () {
 
   function use_text (container, template, data, options) {
 
-    var text = template[1].text || template[1].id;
+    var text = template[1].text || '';
+
+    if (template[1].id) {
+      var id = currentId(container);
+      text = lookup(data, id);
+    }
 
     create(container, 'div', '.quad_key.quad_text', text);
   }
@@ -229,9 +249,6 @@ var Quaderno = function () {
   // group
 
   function use_group (container, template, data, options) {
-
-    // TODO repeatable
-    // TODO reorderable
 
     $(container).addClass('quad_group');
 
@@ -321,6 +338,30 @@ var Quaderno = function () {
   //
   // rendering
 
+  function localId (elt) {
+    var e = $(elt).children('.quad_id')[0];
+    if ( ! e) return undefined;
+    return $(e).attr('value');
+  }
+
+  function parentId (elt) {
+    return elt.parentNode ? localId(elt.parentNode) : undefined;
+  }
+
+  function currentId (elt) {
+
+    var id = localId(elt);
+
+    if ( ! id) {
+      if (elt.parentNode) return currentId(elt.parentNode);
+      return undefined;
+    }
+
+    if (id[0] === '.' && elt.parentNode) return currentId(elt.parentNode) + id;
+
+    return id;
+  }
+
   function toElement (x) {
     if ((typeof x) !== 'string') return x;
     if ( ! (x.match(/^#/))) x = '#' + x;
@@ -329,21 +370,36 @@ var Quaderno = function () {
 
   function renderElement (container, template, data, options) {
 
-    var prefix = options.mode === 'view' ? 'view_' : 'use_';
-
-    var func = eval(prefix);
-    try { func = eval(prefix + template[0]); }
+    var func = eval('use_');
+    try { func = eval('use_' + template[0]); }
     catch (ex) {}
+
+    var id = template[1].id;
 
     var div = create(container, 'div', '.quad_element');
 
-    var id = template[1].id;
+    if (id && id.match(/\.$/)) {
+      //
+      // array
+
+      hide(div, '.quad_id', id.slice(0, -1));
+
+      var a = lookup(data, currentId(div));
+
+      if (a) {
+        for (var i = 0; i < a.length; i++) {
+          template[1].id = '.' + i;
+          renderElement(div, template, data, options);
+        }
+      }
+
+      return div;
+    }
+
     if (id) hide(div, '.quad_id', id);
+
     if (template[1].title) $(div).attr('title', template[1].title);
     hide(div, '.quad_type', template[0]);
-
-    //hide(div, '.quad_template', JSON.stringify(template));
-      // maybe a bit heavy
 
     func(div, template, data, options);
 
