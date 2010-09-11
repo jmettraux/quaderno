@@ -5,8 +5,8 @@
 // Wed Apr  7 17:29:57 JST 2010
 //
 
-//load(dir + "/../js/jquery-1.4.2.js");
-load(dir + "/../js/quaderno.js");
+//load(dir + "/../public/js/jquery-1.4.2.js");
+load(dir + "/../public/js/quaderno.js");
 
 //
 // assertEqual

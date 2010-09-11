@@ -33,6 +33,8 @@ var Quaderno = function () {
   //
   function trim (s) { return s.replace(/^\s+|\s+$/g, ''); }
 
+  // TODO : print() is a ffox function !!!! :-(
+  //
   function clog (o) {
     try {
       if (arguments.length == 1) console.log(arguments[0]);
