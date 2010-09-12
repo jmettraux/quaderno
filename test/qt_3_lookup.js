@@ -35,3 +35,9 @@ var dd;
 dd = s(d, 'destination', 'Mumbai');
 assertEqual('Mumbai', l(dd, 'destination'));
 
+dd = s(d, 'items.0', 'notes');
+assertEqual([ 'notes', 'watch' ], l(dd, 'items'));
+
+dd = s(d, 'items.2', 'keys');
+assertEqual([ 'wallet', 'watch', 'keys' ], l(dd, 'items'));
+

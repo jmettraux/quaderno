@@ -25,6 +25,8 @@ assertEqual(
   ["div",{"class":"quad_root"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customers"},[]],
+      ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
+      ["input",{"class":"quad_array_template","type":"hidden","value":"[\"text\",{\"id\":\"customers.\"},[]]"},[]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],

@@ -118,15 +118,14 @@ var Quaderno = function () {
 
   function set (hash, key, value) {
 
+    //clog([ "set", hash, key, value ]);
+
     var m = key.match(/(.+)\.([^\.]+)$/)
 
     if (m) {
       hash = lookup(hash, m[1]);
       key = m[2];
     }
-
-    clog([ 'set', key, value ]);
-    clog(hash);
 
     hash[key] = value;
   }
@@ -524,7 +523,7 @@ var Quaderno = function () {
     var id = template[1].id;
     if ( ! id) return undefined;
 
-    var m = id.match(/(.+\.)([*+-])(\^)?$/);
+    var m = id.match(/(.+\.)([*+-])?(\^)?$/);
     if ( ! m) return undefined;
 
     var h = {};
@@ -604,7 +603,6 @@ var Quaderno = function () {
 
     container.data = data;
     container.options = options;
-    clog(options);
   }
 
   function produce (container, data) {
