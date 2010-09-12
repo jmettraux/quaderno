@@ -9,6 +9,11 @@ A mini form templating system in javascript.
 TODO
 
 
+## extending
+
+TODO : Quaderno.renderers and Quaderno.hooks
+
+
 ## testing
 
 requires spidermonkey or (prerefably, better stack traces) rhino.

@@ -185,9 +185,13 @@ var Quaderno = function () {
   //
   // rendering
 
+  var renderers = {};
+  var hooks = {};
+
   function render_ (container, template, data, options) {
     create(container, 'span', {}, JSON.stringify(template));
   }
+  renderers.render_ = render_;
 
   function renderChildren (container, template, data, options) {
     for (var i = 0; i < template[2].length; i++) {
@@ -203,8 +207,6 @@ var Quaderno = function () {
 
   function render_checkbox (container, template, data, options) {
 
-    //var value = getValue(template, data, options);
-    //value = value || {};
     var value = {};
     var text = value['text'];
     var checked = value['checked'];
@@ -225,6 +227,7 @@ var Quaderno = function () {
 
     create(container, 'span', '.quad_text', text);
   }
+  renderers.render_checkbox = render_checkbox;
 
   //
   // text
@@ -240,6 +243,7 @@ var Quaderno = function () {
 
     create(container, 'div', '.quad_key.quad_text', text);
   }
+  renderers.render_text = render_text;
 
   //
   // group
@@ -250,6 +254,7 @@ var Quaderno = function () {
 
     renderChildren(container, template, data, options);
   }
+  renderers.render_group = render_group;
 
   //
   // tabs
@@ -257,6 +262,7 @@ var Quaderno = function () {
   function render_tab (container, template, data, options) {
     renderChildren(container, template, data, options);
   }
+  renderers.render_tab = render_tab;
 
   function render_tab_label (container, template, data, options) {
 
@@ -266,10 +272,11 @@ var Quaderno = function () {
 
     var a = $(create(td, 'a', '.quad_tab', label));
     a.attr('href', '');
-    a.attr('onclick', 'Quaderno.showTab(this.parentNode); return false;');
+    a.attr('onclick', 'return Quaderno.hooks.showTab(this.parentNode);');
 
     return td;
   }
+  renderers.render_tab_label = render_tab_label;
 
   function render_tabs (container, template, data, options) {
 
@@ -300,6 +307,7 @@ var Quaderno = function () {
 
     return table;
   }
+  renderers.render_tabs = render_tabs;
 
   function computeSiblingOffset (elt, count) {
     count = count || 0;
@@ -329,7 +337,10 @@ var Quaderno = function () {
       tab_body.parentNode.children[i].style.display = 'none';
     }
     tab_body.style.display = 'block';
+
+    return false; // no further HTTP request...
   }
+  hooks.showTab = showTab;
 
   //
   // rendering
@@ -366,9 +377,10 @@ var Quaderno = function () {
 
   function renderElement (container, template, data, options) {
 
-    var func = eval('render_');
-    try { func = eval('render_' + template[0]); }
-    catch (ex) {}
+    //var func = eval('render_');
+    //try { func = eval('render_' + template[0]); }
+    //catch (ex) {}
+    var func = renderers['render_' + template[0]] || renderers['render_'];
 
     var id = template[1].id;
 
@@ -410,7 +422,14 @@ var Quaderno = function () {
 
   return {
 
-    showTab: showTab,
+    // The hash of all the rendering functions, ready for insertion of new
+    // render_x functions or for overriding existing render_y functions
+    //
+    renderers: renderers,
+
+    // A hash for 'hooks', like for example, the showTab function.
+    //
+    hooks: hooks,
 
     parse: parse,
     render: render
