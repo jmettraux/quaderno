@@ -112,6 +112,7 @@ function printo (o, indentation) {
 var Element = function () {
 
   function appendChild (c) {
+    if ( ! c) throw('appendChild : undefined');
     c.parentNode = this;
     this.childNodes.push(c);
   }
@@ -224,7 +225,10 @@ var Element = function () {
     for (var i = 0; i < this.childNodes.length; i++) {
       var c = this.childNodes[i];
       if ((typeof c) === 'string') {
-        s += (c + "\n");
+        s += (c + '\n');
+      }
+      else if (c === undefined) {
+        s += '--- undefined ---\n';
       }
       else {
         s += c.toString(indentation + 1);

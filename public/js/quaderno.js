@@ -484,6 +484,7 @@ var Quaderno = function () {
     var j = 0;
     for (var i = 0; i < elt.childNodes.length; i++) {
       var c = elt.childNodes[i];
+      if ( ! c) print(elt);
       if (c.nodeType !== 1) continue;
       if ($(c).hasClass(cname)) {
         if ( ! func) return c;
@@ -491,6 +492,7 @@ var Quaderno = function () {
         j = j + 1;
       }
     }
+    return undefined;
   }
 
   function root (elt) {
