@@ -59,21 +59,31 @@ input[type=password] {
 	padding: 3px;
 }
 textarea {
-	display: block;
-	margin: 0;
-	width: 100%;
-	padding: 3px;
-	height: 80px;
-	border: 1px solid #c1c1c1;
-	border-top-color: #848484;
-	border-bottom-color: #ddd;
+  display: block;
+  font-family: "Menlo Regular", monaco, monospaced;
+  font-size: 11px;
+  line-height: 11px;
+  margin: 0;
+  width: 100%;
+  padding: 3px;
+  height: 280;
+  border: 1px solid #c1c1c1;
+  border-top-color: #848484;
+  border-bottom-color: #ddd;
+}
+.template_buttons {
+  text-align: right;
+}
+.produce_buttons {
+  text-align: right;
+  margin-bottom: 7px;
 }
 
+/*
 pre {
   font-family: "Menlo Regular", monaco, monospaced;
   font-size: 11px;
   line-height: 11px;
-  /*display: inline-block;*/
   display: block;
   padding: 8px 12px;
   background: #fff;
@@ -82,4 +92,5 @@ pre {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
+*/
 

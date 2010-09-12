@@ -424,7 +424,11 @@ var Quaderno = function () {
   }
 
   function render (container, template, data, options) {
+
     container = toElement(container);
+
+    while (container.firstChild) container.removeChild(container.firstChild);
+
     if ((typeof template) === 'string') template = parse(template);
     renderElement(container, template, data, options);
   }

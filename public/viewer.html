@@ -17,7 +17,10 @@
   <div>
     <div style="float: left; width: 49%;">
       template :
-      <pre id="template"></pre>
+      <textarea id="template"></textarea>
+      <div class="buttons template_buttons">
+        <a href="" onclick="return render();">render</a>
+      </div>
     </div>
     <div style="float: right; width: 50%">
       data :
@@ -40,7 +43,7 @@
     <div style="float: left; width: 49%;">
     </div>
     <div style="float: right; width: 50%;">
-      <div class="buttons">
+      <div class="buttons produce_buttons">
         <a href="">produce</a>
       </div>
       <div id="product" class="jagaimo"></div>
@@ -76,22 +79,32 @@
       data = s;
     } });
 
-    $('#template').text(template);
+    $('#template')[0].value = template;
 
-    template = Quaderno.parse(template);
     data = JSON.parse(data);
 
-    Jagaimo.render('parsed', template);
+    //template = Quaderno.parse(template);
+    //Jagaimo.render('#parsed', template);
 
-    Jagaimo.render('data', data);
+    Jagaimo.render('#data', data);
 
     var translations = {};
     var mode = 'use';
 
-    Quaderno.render(
-      '#quad', template, data, { 'translations': translations, 'mode': mode });
+    //Quaderno.render(
+    //  '#quad', template, data, { 'translations': translations, 'mode': mode });
 
-    Jagaimo.render('product', {});
+    Jagaimo.render('#product', {});
+
+    function render () {
+      var template = Quaderno.parse($('#template')[0].value);
+      Jagaimo.render('#parsed', template);
+      Quaderno.render(
+        '#quad', template, data, { 'translations': translations, 'mode': mode });
+      return false;
+    }
+
+    render();
   </script>
 </body>
 </html>
