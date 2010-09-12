@@ -71,6 +71,36 @@ var Quaderno = function () {
     return e;
   }
 
+  function button (container, className, onclick, title) {
+
+    if ( ! onclick.match(/return false;$/)) onclick += " return false;";
+    if (className[0] == '.') className = className.slice(1, className.length);
+
+    title = title || {
+      'quad_plus_button': 'add',
+      'quad_minus_button': 'remove',
+      'quad_up_button': 'move up',
+      'quad_down_button': 'move down',
+      'quad_copy_button': 'copy',
+      'quad_cut_button': 'cut',
+      'quad_paste_button': 'paste',
+      'quad_go_button': 'go',
+      'quad_left_button': 'left',
+      'quad_right_button': 'right'
+    }[className];
+
+    return create(
+      container,
+      'a',
+      { 'href': '',
+        'class': className + ' quad_button',
+        'title': title,
+        'onclick': onclick });
+  }
+
+  //
+  // lookup and set
+
   function lookup (hash, key) {
 
     //clog([ "lu", key, hash ]);
@@ -87,12 +117,17 @@ var Quaderno = function () {
   }
 
   function set (hash, key, value) {
+
     var m = key.match(/(.+)\.([^\.]+)$/)
+
     if (m) {
       hash = lookup(hash, m[1]);
       key = m[2];
     }
-    //clog([ key, value ]);
+
+    clog([ 'set', key, value ]);
+    clog(hash);
+
     hash[key] = value;
   }
 
@@ -209,7 +244,7 @@ var Quaderno = function () {
   }
 
   renderers.produce_ = function (container, data, index) {
-    var type = eltType(container);
+    var type = eltHidden(container, '.quad_type');
     if ( ! data._quad_produce_failures) data._quad_produce_failures = [];
     data._quad_produce_failures.push("can't deal with '" + type + "'");
   }
@@ -281,7 +316,7 @@ var Quaderno = function () {
 
   renderers.produce_text_input = function (container, data, index) {
     var id = currentId(container);
-    var value = eltValue(container);
+    var value = eltHidden(container, '.quad_value');
     set(data, id, value);
   }
 
@@ -422,13 +457,31 @@ var Quaderno = function () {
   }
 
   //
+  // array hooks
+
+  hooks.addToArray = function (elt) {
+
+    //stack(elt);
+      // TODO implement me !!
+
+    var t = JSON.parse(eltHidden(elt.parentNode, '.quad_array_template'));
+    t[1].id = '0';
+
+    var r = root(elt);
+
+    renderElement(elt.parentNode, t, r.data, r.options);
+    elt.parentNode.insertBefore(elt.nextSibling, elt);
+  }
+
+  //
   // render and produce, surface methods
 
-  function eltType (elt) {
-    return $(elt).children('.quad_type')[0].value;
+  function root (elt) {
+    return $(elt).parents('.quad_root')[0];
   }
-  function eltValue (elt) {
-    return $(elt).children('.quad_value')[0].value;
+
+  function eltHidden (elt, cname) {
+    return $(elt).children(cname)[0].value;
   }
 
   function localId (elt) {
@@ -459,25 +512,46 @@ var Quaderno = function () {
   }
 
   function toElement (x) {
+
     if ((typeof x) !== 'string') return x;
+
     if (x.match(/^#/)) x = x.slice(1);
     return document.getElementById(x);
+  }
+
+  function extractArrayId (div, template) {
+
+    var id = template[1].id;
+    if ( ! id) return undefined;
+
+    var m = id.match(/(.+\.)([*+-])(\^)?$/);
+    if ( ! m) return undefined;
+
+    var h = {};
+    h.id = m[1];
+    h.slicedId = m[1].slice(0, -1);
+    h.canAdd = (m[2] == '*' || m[2] == '+');
+    h.canRemove = (m[2] == '*' || m[2] == '-');
+    h.canReorder = (m[3] != undefined);
+
+    return h;
   }
 
   function renderElement (container, template, data, options) {
 
     var func = renderers['render_' + template[0]] || renderers['render_'];
 
-    var id = template[1].id;
-
     var div = create(container, 'div', '.quad_element');
 
-    if (id && id.match(/\.$/)) {
+    var arrayId = extractArrayId(container, template);
+
+    if (arrayId) {
       //
       // array
 
-      hide(div, '.quad_id', id.slice(0, -1));
+      hide(div, '.quad_id', arrayId.slicedId);
       hide(div, '.quad_type', '_array');
+      hide(div, '.quad_array_template', JSON.stringify(template));
 
       var a = lookup(data, currentId(div));
 
@@ -487,9 +561,19 @@ var Quaderno = function () {
           renderElement(div, template, data, options);
         }
       }
+      if (arrayId.canAdd) {
+        button(
+          div,
+          '.quad_plus_button',
+          'Quaderno.hooks.addToArray(this);');
+      }
 
       return div;
     }
+
+    // vanilla stuff, no repetition
+
+    var id = template[1].id;
 
     if (id) hide(div, '.quad_id', id);
 
@@ -503,7 +587,7 @@ var Quaderno = function () {
 
   function produceElement (container, data, index) {
 
-    var type = eltType(container);
+    var type = eltHidden(container, '.quad_type');
     var func = renderers['produce_' + type] || renderers['produce_'];
 
     func(container, data, index);
@@ -519,6 +603,8 @@ var Quaderno = function () {
     renderElement(container, template, data, options);
 
     container.data = data;
+    container.options = options;
+    clog(options);
   }
 
   function produce (container, data) {
@@ -534,6 +620,11 @@ var Quaderno = function () {
   }
 
   return {
+
+    // only for testing
+    //
+    _lookup: lookup,
+    _set: set,
 
     // The hash of all the rendering functions, ready for insertion of new
     // render_x functions or for overriding existing render_y functions

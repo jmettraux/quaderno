@@ -1,6 +1,7 @@
 {
-  "season": "year end",
-  "customer": { "name": "Kanazawa", "age": 202 },
-  "orders": [ "gifts", "champaign", "oysters" ],
-  "destination": "Cipangu"
+  "customers": [
+    { "name": "alice", "city": "aleph" },
+    { "name": "bob", "city": "boston" },
+    { "name": "charly", "city": "cartage" }
+  ]
 }

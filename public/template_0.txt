@@ -1,13 +1,8 @@
 tabs
-  tab "orders"
-    box
-      text orders.
-    box
-      text_input orders.
-  tab "input"
-    text_input destination "destination" 
-  tab customer "customer"
-    text "hello"
-    text season
-    text .name
-    text .age
+  tab "a"
+    box customers.*
+      text "customer"
+      text_input .name
+      text_input .city
+  tab "b"
+    text "nada"

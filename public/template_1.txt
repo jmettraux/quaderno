@@ -1,14 +1,13 @@
 tabs
-  tab .opinions
-    group
-      text .type_of_auditor ".type_of_auditor"
-      checkbox #private
-      checkbox #government
-      checkbox #private_for_government "text" "that title"
-    group
-      text .opinions
-      group repeatable
-        selection #financial_product "nada" [ "a", "b", "c" ]
-        selection #object
-  tab .general
-    text nada
+  tab "orders"
+    box
+      text orders.
+    box
+      text_input orders.
+  tab "input"
+    text_input destination "destination"
+  tab customer "customer"
+    text "hello"
+    text season
+    text .name
+    text .age
