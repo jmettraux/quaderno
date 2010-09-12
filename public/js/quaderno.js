@@ -257,6 +257,15 @@ var Quaderno = function () {
   renderers.render_group = render_group;
 
   //
+  // sequence
+
+  function render_sequence (container, template, data, options) {
+
+    renderChildren(container, template, data, options);
+  }
+  renderers.render_sequence = render_sequence;
+
+  //
   // tabs
 
   function render_tab (container, template, data, options) {

@@ -1,10 +1,21 @@
-tabs
-  tab "orders"
-    text orders.
-  tab customer "customer"
-    text "hello"
-    text season
-    text .name
-    text .age
-  tab "other"
-    text "oh well..."
+sequence
+  tabs
+    tab "orders"
+      text orders.
+    tab customer "customer"
+      text "hello"
+      text season
+      text .name
+      text .age
+    tab "other"
+      text "oh well..."
+  tabs
+    tab "orders"
+      text orders.
+    tab customer "customer"
+      text "hello"
+      text season
+      text .name
+      text .age
+    tab "other"
+      text "oh well..."

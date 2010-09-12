@@ -14,6 +14,18 @@ TODO
 TODO : Quaderno.renderers and Quaderno.hooks
 
 
+## the elements
+
+element-name id "text" value [ values ] "title"
+
+* sequence
+* group
+* tabs
+* tab
+* text
+* checkbox
+
+
 ## testing
 
 requires spidermonkey or (prerefably, better stack traces) rhino.
