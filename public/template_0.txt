@@ -1,8 +1,11 @@
 tabs
+  tab "orders"
+    box
+      text orders.
+    box
+      text_input orders.
   tab "input"
     text_input destination "destination" 
-  tab "orders"
-    text orders.
   tab customer "customer"
     text "hello"
     text season

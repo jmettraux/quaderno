@@ -92,6 +92,7 @@ var Quaderno = function () {
       hash = lookup(hash, m[1]);
       key = m[2];
     }
+    //clog([ key, value ]);
     hash[key] = value;
   }
 
@@ -279,7 +280,6 @@ var Quaderno = function () {
   }
 
   renderers.produce_text_input = function (container, data, index) {
-    console.log(container);
     var id = currentId(container);
     var value = eltValue(container);
     set(data, id, value);
@@ -300,7 +300,7 @@ var Quaderno = function () {
     create(container, 'div', '.quad_key.quad_text', text);
   }
 
-  renderers.produce_text = function (container, data) {
+  renderers.produce_text = function (container, data, index) {
     // nothing to do
   }
 
@@ -314,12 +314,20 @@ var Quaderno = function () {
     renderChildren(container, template, data, options);
   }
 
+  renderers.produce_box = function (container, data, index) {
+    produceChildren(container, data);
+  }
+
   //
   // group
 
   renderers.render_group = function (container, template, data, options) {
 
     renderChildren(container, template, data, options);
+  }
+
+  renderers.produce_group = function (container, data, index) {
+    produceChildren(container, data);
   }
 
   //
