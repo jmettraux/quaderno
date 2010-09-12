@@ -142,9 +142,9 @@ a.quadButton, .quad_rep {
 	-webkit-border-radius: 12px;
 	-moz-border-radius: 12px;
 }
-.quad_group {
+.quad_box {
 	/*display: inline-block;*/
-        display: block;
+	display: block;
 	padding: 8px 12px;
 	background: #fff;
 	border: 1px dashed #ccd0d4;
@@ -152,10 +152,10 @@ a.quadButton, .quad_rep {
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 }
-.quad_group:hover {
+.quad_box:hover {
 	border-style: solid;
 }
-.quad_group_head {
+.quad_box_head {
   padding-bottom: 4px;
   margin-bottom: 4px;
   border-bottom: 1px dashed #ccd0d4;

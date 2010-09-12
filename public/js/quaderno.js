@@ -246,24 +246,24 @@ var Quaderno = function () {
   renderers.render_text = render_text;
 
   //
+  // box
+
+  function render_box (container, template, data, options) {
+
+    $(container).addClass('quad_box');
+
+    renderChildren(container, template, data, options);
+  }
+  renderers.render_box = render_box;
+
+  //
   // group
 
   function render_group (container, template, data, options) {
 
-    $(container).addClass('quad_group');
-
     renderChildren(container, template, data, options);
   }
   renderers.render_group = render_group;
-
-  //
-  // sequence
-
-  function render_sequence (container, template, data, options) {
-
-    renderChildren(container, template, data, options);
-  }
-  renderers.render_sequence = render_sequence;
 
   //
   // tabs

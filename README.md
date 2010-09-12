@@ -18,8 +18,8 @@ TODO : Quaderno.renderers and Quaderno.hooks
 
 element-name id "text" value [ values ] "title"
 
-* sequence
 * group
+* box
 * tabs
 * tab
 * text
