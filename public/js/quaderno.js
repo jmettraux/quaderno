@@ -249,7 +249,8 @@ var Quaderno = function () {
   }
 
   function produceChildren (container, data) {
-    $(container).children('.quad_element').each(function (i, e) {
+    //$(container).children('.quad_element').each(function (i, e) {
+    eachChild(container, '.quad_element', function (i, e) {
       produceElement(e, data, i);
     });
   }
@@ -475,12 +476,30 @@ var Quaderno = function () {
   //
   // render and produce, surface methods
 
+  // can't get $(e).children('.x') to work with test/domock.js
+  // so working around...
+  //
+  function eachChild (elt, cname, func) {
+    if (cname.match(/^\./)) cname = cname.slice(1);
+    var j = 0;
+    for (var i = 0; i < elt.childNodes.length; i++) {
+      var c = elt.childNodes[i];
+      if (c.nodeType !== 1) continue;
+      if ($(c).hasClass(cname)) {
+        if ( ! func) return c;
+        func(j, c);
+        j = j + 1;
+      }
+    }
+  }
+
   function root (elt) {
     return $(elt).parents('.quad_root')[0];
   }
 
   function eltHidden (elt, cname) {
-    return $(elt).children(cname)[0].value;
+    //return $(elt).children(cname)[0].value;
+    return eachChild(elt, cname).value;
   }
 
   function localId (elt) {
