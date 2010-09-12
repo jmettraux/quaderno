@@ -230,6 +230,31 @@ var Quaderno = function () {
   renderers.render_checkbox = render_checkbox;
 
   //
+  // text_input
+
+  function render_text_input (container, template, data, options) {
+
+    var id = template[1].id;
+    var text = template[1].text || id;
+
+    create(container, 'span', '.quad_key', text);
+
+    var input = create(
+      container, 'input', { 'class': '.quad_value', 'type': 'text' });
+
+    if (id) {
+
+      input.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
+        // for webrat / capybara
+
+      input.value = lookup(data, currentId(container)) || '';
+    }
+
+    if (options.mode === 'view') input.attr('disabled', 'disabled');
+  }
+  renderers.render_text_input = render_text_input;
+
+  //
   // text
 
   function render_text (container, template, data, options) {

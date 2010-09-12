@@ -23,7 +23,9 @@ element-name id "text" value [ values ] "title"
 * tabs
 * tab
 * text
+
 * checkbox
+* text_input
 
 
 ## testing
