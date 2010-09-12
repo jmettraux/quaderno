@@ -86,6 +86,15 @@ var Quaderno = function () {
     return lookup(hash[key.shift()], key);
   }
 
+  function set (hash, key, value) {
+    var m = key.match(/(.+)\.([^\.]+)$/)
+    if (m) {
+      hash = lookup(hash, m[1]);
+      key = m[2];
+    }
+    hash[key] = value;
+  }
+
   //
   // parsing
 
@@ -183,15 +192,14 @@ var Quaderno = function () {
   }
 
   //
-  // rendering
+  // rendering and producing
 
   var renderers = {};
   var hooks = {};
 
-  function render_ (container, template, data, options) {
+  renderers.render_ = function (container, template, data, options) {
     create(container, 'span', {}, JSON.stringify(template));
   }
-  renderers.render_ = render_;
 
   function renderChildren (container, template, data, options) {
     for (var i = 0; i < template[2].length; i++) {
@@ -199,13 +207,31 @@ var Quaderno = function () {
     }
   }
 
+  renderers.produce_ = function (container, data, index) {
+    var type = eltType(container);
+    if ( ! data._quad_produce_failures) data._quad_produce_failures = [];
+    data._quad_produce_failures.push("can't deal with '" + type + "'");
+  }
+
+  function produceChildren (container, data) {
+    $(container).children('.quad_element').each(function (i, e) {
+      produceElement(e, data, i);
+    });
+  }
+
+  renderers.produce__array = function (container, data, index) {
+    produceChildren(container, data);
+  }
+
   //
   // selection
+
+  // .. TODO
 
   //
   // checkbox
 
-  function render_checkbox (container, template, data, options) {
+  renderers.render_checkbox = function (container, template, data, options) {
 
     var value = {};
     var text = value['text'];
@@ -227,12 +253,11 @@ var Quaderno = function () {
 
     create(container, 'span', '.quad_text', text);
   }
-  renderers.render_checkbox = render_checkbox;
 
   //
   // text_input
 
-  function render_text_input (container, template, data, options) {
+  renderers.render_text_input = function (container, template, data, options) {
 
     var id = template[1].id;
     var text = template[1].text || id;
@@ -240,7 +265,7 @@ var Quaderno = function () {
     create(container, 'span', '.quad_key', text);
 
     var input = create(
-      container, 'input', { 'class': '.quad_value', 'type': 'text' });
+      container, 'input', { 'class': 'quad_value', 'type': 'text' });
 
     if (id) {
 
@@ -252,12 +277,18 @@ var Quaderno = function () {
 
     if (options.mode === 'view') input.attr('disabled', 'disabled');
   }
-  renderers.render_text_input = render_text_input;
+
+  renderers.produce_text_input = function (container, data, index) {
+    console.log(container);
+    var id = currentId(container);
+    var value = eltValue(container);
+    set(data, id, value);
+  }
 
   //
   // text
 
-  function render_text (container, template, data, options) {
+  renderers.render_text = function (container, template, data, options) {
 
     var text = template[1].text || '';
 
@@ -268,37 +299,37 @@ var Quaderno = function () {
 
     create(container, 'div', '.quad_key.quad_text', text);
   }
-  renderers.render_text = render_text;
+
+  renderers.produce_text = function (container, data) {
+    // nothing to do
+  }
 
   //
   // box
 
-  function render_box (container, template, data, options) {
+  renderers.render_box = function (container, template, data, options) {
 
     $(container).addClass('quad_box');
 
     renderChildren(container, template, data, options);
   }
-  renderers.render_box = render_box;
 
   //
   // group
 
-  function render_group (container, template, data, options) {
+  renderers.render_group = function (container, template, data, options) {
 
     renderChildren(container, template, data, options);
   }
-  renderers.render_group = render_group;
 
   //
   // tabs
 
-  function render_tab (container, template, data, options) {
+  renderers.render_tab = function (container, template, data, options) {
     renderChildren(container, template, data, options);
   }
-  renderers.render_tab = render_tab;
 
-  function render_tab_label (container, template, data, options) {
+  renderers.render_tab_label = function (container, template, data, options) {
 
     var td = create(container, 'td', {});
 
@@ -310,9 +341,8 @@ var Quaderno = function () {
 
     return td;
   }
-  renderers.render_tab_label = render_tab_label;
 
-  function render_tabs (container, template, data, options) {
+  renderers.render_tabs = function (container, template, data, options) {
 
     var tabs = template[2];
     var table = create(container, 'table', '.quad_tab_group');
@@ -322,7 +352,7 @@ var Quaderno = function () {
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
     for (var i = 0; i < tabs.length; i++) {
-      render_tab_label(tr0, tabs[i], data, options);
+      renderers.render_tab_label(tr0, tabs[i], data, options);
     }
 
     var tab = $(tr0).find('td > .quad_tab')[0];
@@ -341,7 +371,6 @@ var Quaderno = function () {
 
     return table;
   }
-  renderers.render_tabs = render_tabs;
 
   function computeSiblingOffset (elt, count) {
     count = count || 0;
@@ -376,8 +405,23 @@ var Quaderno = function () {
   }
   hooks.showTab = showTab;
 
+  renderers.produce_tabs = function (elt, data, index) {
+    var body = $(elt).find('.quad_tab_body')[0];
+    produceChildren(body, data);
+  }
+  renderers.produce_tab = function (elt, data, index) {
+    produceChildren(elt, data);
+  }
+
   //
-  // rendering
+  // render and produce, surface methods
+
+  function eltType (elt) {
+    return $(elt).children('.quad_type')[0].value;
+  }
+  function eltValue (elt) {
+    return $(elt).children('.quad_value')[0].value;
+  }
 
   function localId (elt) {
     var e = $(elt).children('.quad_id')[0];
@@ -390,6 +434,9 @@ var Quaderno = function () {
   }
 
   function currentId (elt) {
+
+    // TODO : recompute numerical ids, so that currentId may be used
+    //        when rendering AND when producing
 
     var id = localId(elt);
 
@@ -411,9 +458,6 @@ var Quaderno = function () {
 
   function renderElement (container, template, data, options) {
 
-    //var func = eval('render_');
-    //try { func = eval('render_' + template[0]); }
-    //catch (ex) {}
     var func = renderers['render_' + template[0]] || renderers['render_'];
 
     var id = template[1].id;
@@ -425,6 +469,7 @@ var Quaderno = function () {
       // array
 
       hide(div, '.quad_id', id.slice(0, -1));
+      hide(div, '.quad_type', '_array');
 
       var a = lookup(data, currentId(div));
 
@@ -448,6 +493,14 @@ var Quaderno = function () {
     return div;
   }
 
+  function produceElement (container, data, index) {
+
+    var type = eltType(container);
+    var func = renderers['produce_' + type] || renderers['produce_'];
+
+    func(container, data, index);
+  }
+
   function render (container, template, data, options) {
 
     container = toElement(container);
@@ -456,6 +509,20 @@ var Quaderno = function () {
 
     if ((typeof template) === 'string') template = parse(template);
     renderElement(container, template, data, options);
+
+    container.data = data;
+  }
+
+  function produce (container, data) {
+
+    container = toElement(container);
+
+    data = data || container.data;
+
+    var root = $(container).children('.quad_element')[0]
+    produceElement(root, data, 0);
+
+    return data;
   }
 
   return {
@@ -470,7 +537,8 @@ var Quaderno = function () {
     hooks: hooks,
 
     parse: parse,
-    render: render
+    render: render,
+    produce: produce
   }
 }();
 

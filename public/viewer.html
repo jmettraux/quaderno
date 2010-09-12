@@ -44,7 +44,7 @@
     </div>
     <div style="float: right; width: 50%;">
       <div class="buttons produce_buttons">
-        <a href="">produce</a>
+        <a href="" onclick="return produce();">produce</a>
       </div>
       <div id="product" class="jagaimo"></div>
     </div>
@@ -105,6 +105,15 @@
     }
 
     render();
+
+    function produce () {
+
+      var product = Quaderno.produce('#quad');
+
+      Jagaimo.render('#product', product);
+
+      return false;
+    }
   </script>
 </body>
 </html>
