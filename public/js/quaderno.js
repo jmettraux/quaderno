@@ -106,33 +106,51 @@ var Quaderno = function () {
   //
   // lookup and set
 
-  function lookup (hash, key) {
+  function lookup (coll, key) {
 
-    //clog([ "lu", key, hash ]);
+    //clog([ "lu", key, coll ]);
 
-    if (hash === undefined) return undefined;
+    if (coll === undefined) return undefined;
     if (key === undefined) return undefined;
 
     if ( ! $.isArray(key)) key = key.split('.');
-    if (key.length < 1) return hash;
+    if (key.length < 1) return coll;
 
-    // TODO : when key is an array index
-
-    return lookup(hash[key.shift()], key);
+    return lookup(coll[key.shift()], key);
   }
 
-  function set (hash, key, value) {
+  function set (coll, key, value) {
 
     //clog([ "set", hash, key, value ]);
 
-    var m = key.match(/(.+)\.([^\.]+)$/)
+    //var m = key.match(/(.+)\.([^\.]+)$/)
+    //if (m) {
+    //  hash = lookup(hash, m[1], true);
+    //  key = m[2];
+    //}
+    //hash[key] = value;
 
-    if (m) {
-      hash = lookup(hash, m[1]);
-      key = m[2];
+    if ( ! $.isArray(key)) key = key.split('.');
+
+    var k = key.shift();
+
+    if (key.length === 0) {
+      coll[k] = value;
+      return;
     }
 
-    hash[key] = value;
+    var scoll = coll[k];
+
+    if (
+      scoll === undefined &&
+      ($.isArray(coll) || ((typeof coll) === 'object'))
+    ) {
+      var o = (key[0] && key[0].match(/^\d+$/)) ? [] : {};
+      coll[k] = o;
+      scoll = coll[k];
+    }
+
+    set(scoll, key, value);
   }
 
   //
@@ -310,7 +328,6 @@ var Quaderno = function () {
     if (id) {
 
       var cid = currentId(container);
-      clog(cid);
 
       input.id = 'quad__' + cid.replace(/[\.]/, '_', 'g');
         // for webrat / capybara

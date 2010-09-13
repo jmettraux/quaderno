@@ -62,6 +62,6 @@ var button = $('a')[0];
 Quaderno.hooks.addToArray(button);
 
 assertEqual(
-  {},
+  {"customers":[{"name":"alfred"},{"name":"bob"},{"name":""}]},
   Quaderno.produce('quad'));
 

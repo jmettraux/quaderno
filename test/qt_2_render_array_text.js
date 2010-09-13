@@ -32,11 +32,11 @@ assertEqual(
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
         ["div",{"class":"quad_key quad_text"},["alice"]]]],
       ["div",{"class":"quad_element"},[
-        ["input",{"class":"quad_id","type":"hidden","value":".1"},[]],
+        ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
         ["div",{"class":"quad_key quad_text"},["bob"]]]],
       ["div",{"class":"quad_element"},[
-        ["input",{"class":"quad_id","type":"hidden","value":".2"},[]],
+        ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
         ["div",{"class":"quad_key quad_text"},["charly"]]]]]]]],
   $('.quad_root')[0].toArray());
