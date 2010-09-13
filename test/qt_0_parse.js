@@ -31,19 +31,17 @@ assertEqual('tab', t[2][1][0]);
 
 // 2
 
-//var s = " \n\
-//tabs \n\
-//  tab .opinions \n\
-//    group \n\
-//      text .type_of_auditor \".type_of_auditor\" \n\
-//      checkbox #private \n\
-//      checkbox #government \n\
-//      checkbox #private_for_government \"text\" \"that title\" \n\
-//    group \n\
-//      text .opinions \n\
-//      group repeatable \n\
-//        selection #financial_product \"nada\" [ \"a\", \"b\" ] \n\
-//        selection #object \n\
-//  tab .general \n\
-//";
+assertEqual(
+  ["select",{"id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
+  Quaderno.parse("select d \"t\" [a,b,c] \"title\""));
+assertEqual(
+  ["select",{"id":"d","text":"t","title":"title","values":"targets"},[]],
+  Quaderno.parse("select d \"t\" [targets] \"title\""));
+
+assertEqual(
+  ["select",{"id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
+  Quaderno.parse("select d \"t\" [ a, b, c ] \"title\""));
+assertEqual(
+  ["select",{"id":"d","text":"t","title":"title","values":"targets"},[]],
+  Quaderno.parse("select d \"t\" [ targets ] \"title\""));
 

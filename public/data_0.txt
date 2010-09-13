@@ -1,5 +1,5 @@
 {
-  "destination0": "roma",
+  "destination0": "firenze",
   "destinations": [ "reykjavik", "oslo", "gothenburg" ],
   "customers": [
     { "name": "alice", "city": "aleph" },

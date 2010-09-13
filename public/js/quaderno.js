@@ -183,10 +183,10 @@ var Quaderno = function () {
     m = s.match(/^(\[.+\]) ?(.+)?$/)
 
     if (m && m[1]) {
-      try {
-        atts.values = JSON.parse(m[1]);
-      } catch (e) {
-      }
+      var vs = m[1].slice(1, -1).split(',');
+      var values = [];
+      for (var i = 0; i < vs.length; i++) { values.push($.trim(vs[i])); }
+      atts.values = values.length === 1 ? values[0] : values;
       s = m[2] || '';
     }
 
@@ -283,12 +283,32 @@ var Quaderno = function () {
   }
 
   //
-  // selection
+  // select
 
-  renderers.render_selection = function (container, template, data, options) {
+  renderers.render_select = function (container, template, data, options) {
+
+    var id = template[1].id;
+    var label = template[1].text || id;
+
+    create(container, 'span', '.quad_key', label);
+
+    var select = create(container, 'select', '.quad_value');
+
+    var value = id ? lookup(data, id) : undefined;
+    var values = template[1].values;
+
+    if ( ! $.isArray(values)) values = lookup(data, values);
+
+    for (var i = 0; i < values.length; i++) {
+      var opt = create(select, 'option', null, values[i]);
+      if (values[i] === value) $(opt).attr('selected', 'selected');
+    }
   }
 
-  renderers.produce_selection = function (container, data) {
+  renderers.produce_select = function (container, data) {
+
+    var sel = $(container).children('.quad_value')[0];
+    set(data, currentId(container), sel.value);
   }
 
   //
