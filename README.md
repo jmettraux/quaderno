@@ -4,9 +4,23 @@
 A mini form templating system in javascript.
 
 
-## samples
+## having a look
 
-TODO
+<a href="http://ruote.rubyforge.org/quaderno/viewer.html">http://ruote.rubyforge.org/quaderno/viewer.html</a>
+
+
+## getting started
+
+    git clone git://github.com/jmettraux/quaderno.git
+
+then open, with your browser, the file
+
+    public/viewer.html
+
+the default template and data are located in :
+
+    public/template_0.txt
+    public/data_0.txt
 
 
 ## extending
