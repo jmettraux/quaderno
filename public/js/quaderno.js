@@ -292,25 +292,33 @@ var Quaderno = function () {
 
   renderers.render_checkbox = function (container, template, data, options) {
 
-    var value = {};
-    var text = value['text'];
-    var checked = value['checked'];
-    value = value['value'];
-
-    var label = template[1].text || template[1].id;
+    var id = template[1].id;
+    var label = template[1].text || id;
 
     var checkbox = create(
-      container,
-      'input',
-      { 'class': 'quad_checkbox',
-        'type': 'checkbox',
-        'value': value });
-    if (checked) checkbox.attr('checked', 'checked');
-    if (options.mode === 'view') setAttribute(checkbox, 'disabled', 'disabled');
+      container, 'input', { 'class': 'quad_checkbox', 'type': 'checkbox' });
+
+    if (id) {
+
+      var cid = currentId(container);
+
+      checkbox.id = 'quad__' + cid.replace(/[\.]/, '_', 'g');
+        // for webrat / capybara
+
+      var value = lookup(data, cid) || '';
+    }
+
+    if (value === true) $(checkbox).attr('checked', 'checked');
+    if (options.mode === 'view') $(checkbox).attr('disabled', 'disabled');
 
     create(container, 'span', '.quad_checkbox_key', label);
+    //create(container, 'span', '.quad_text', label);
+  }
 
-    create(container, 'span', '.quad_text', text);
+  renderers.produce_checkbox = function (container, data, index) {
+
+    var cb = $(container).children('.quad_checkbox')[0];
+    set(data, currentId(container), $(cb).attr('checked'));
   }
 
   //

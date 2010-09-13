@@ -4,5 +4,6 @@ tabs
       text "customer"
       text_input .name
       text_input .city
+      checkbox .active "active"
   tab "b"
     text "nada"
