@@ -42,7 +42,7 @@ assertEqual(
             ["span",{"class":"quad_key"},[".name"]],
             ["input",{"class":"quad_value","type":"text","value":"alfred"},[]]]]]],
         ["div",{"class":"quad_element quad_box"},[
-          ["input",{"class":"quad_id","type":"hidden","value":".1"},[]],
+          ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
           ["div",{"class":"quad_element"},[
             ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],

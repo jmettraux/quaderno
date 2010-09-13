@@ -20,16 +20,17 @@
 // THE SOFTWARE.
 //
 
+// depends on the excellent jquery[-1.4.2]
+
 
 // TODO : prevent html/js injection !
-// depends on the excellent jquery-1.4.2
 
 var Quaderno = function () {
 
   //
   // misc
 
-  // TODO : print() is a ffox function !!!! :-(
+  // TODO : print() is a ffox function !!!! :-( fix
   //
   function clog (o) {
     try {
@@ -42,8 +43,12 @@ var Quaderno = function () {
     }
   }
 
+  function removeClassDot (cname) {
+    return (cname[0] === '.') ? cname.slice(1) : cname;
+  }
+
   function hide (container, cname, value) {
-    if (cname[0] == '.') cname = cname.slice(1);
+    cname = removeClassDot(cname);
     return create(
       container, 'input', { 'class': cname, 'type': 'hidden', 'value': value });
   }
@@ -74,7 +79,7 @@ var Quaderno = function () {
   function button (container, className, onclick, title) {
 
     if ( ! onclick.match(/return false;$/)) onclick += " return false;";
-    if (className[0] == '.') className = className.slice(1, className.length);
+    className = removeClassDot(className);
 
     title = title || {
       'quad_plus_button': 'add',
@@ -304,10 +309,13 @@ var Quaderno = function () {
 
     if (id) {
 
-      input.id = 'quad__' + template[1].id.replace(/[\.]/, '_', 'g');
+      var cid = currentId(container);
+      clog(cid);
+
+      input.id = 'quad__' + cid.replace(/[\.]/, '_', 'g');
         // for webrat / capybara
 
-      input.value = lookup(data, currentId(container)) || '';
+      input.value = lookup(data, cid) || '';
     }
 
     if (options.mode === 'view') input.attr('disabled', 'disabled');
@@ -414,10 +422,12 @@ var Quaderno = function () {
     return table;
   }
 
-  function computeSiblingOffset (elt, count) {
-    count = count || 0;
-    if ( ! elt.previousSibling) return count;
-    return computeSiblingOffset(elt.previousSibling, count + 1);
+  function computeSiblingOffset (elt, sel) {
+    var cs = $(elt.parentNode).children(sel);
+    for (var i = 0; i < cs.length; i++) {
+      if (cs[i] == elt) return i;
+    }
+    return -1;
   }
   function findTabBody (elt) {
     var td = $(elt).parents('td')[0];
@@ -464,7 +474,7 @@ var Quaderno = function () {
       // TODO implement me !!
 
     var t = JSON.parse(eltHidden(elt.parentNode, '.quad_array_template'));
-    t[1].id = '0';
+    t[1].id = '.0';
 
     var r = root(elt);
 
@@ -495,9 +505,6 @@ var Quaderno = function () {
 
   function currentId (elt) {
 
-    // TODO : recompute numerical ids, so that currentId may be used
-    //        when rendering AND when producing
-
     var id = localId(elt);
 
     if ( ! id) {
@@ -505,7 +512,10 @@ var Quaderno = function () {
       return undefined;
     }
 
-    if (id[0] === '.' && elt.parentNode) return currentId(elt.parentNode) + id;
+    if (id[0] === '.' && elt.parentNode) {
+      if (id === '.0') id = '.' + computeSiblingOffset(elt, '.quad_element');
+      return currentId(elt.parentNode) + id;
+    }
 
     return id;
   }
@@ -556,7 +566,8 @@ var Quaderno = function () {
 
       if (a) {
         for (var i = 0; i < a.length; i++) {
-          template[1].id = '.' + i;
+          //template[1].id = '.' + i;
+          template[1].id = '.0';
           renderElement(div, template, data, options);
         }
       }

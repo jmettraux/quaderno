@@ -231,7 +231,7 @@ var Element = function () {
     if ( ! this.parentNode) return undefined;
     var cs = this.parentNode.childNodes;
     var i = cs.indexOf(this);
-    return (i - 1 >= 0) ? cs[i -1] : undefined;
+    return (i - 1 >= 0) ? cs[i - 1] : undefined;
   });
   o.__defineGetter__('nextSibling', function () {
     if ( ! this.parentNode) return undefined;
