@@ -258,7 +258,7 @@ var Quaderno = function () {
     }
   }
 
-  renderers.produce_ = function (container, data, index) {
+  renderers.produce_ = function (container, data) {
     var type = eltHidden(container, '.quad_type');
     if ( ! data._quad_produce_failures) data._quad_produce_failures = [];
     data._quad_produce_failures.push("can't deal with '" + type + "'");
@@ -270,7 +270,7 @@ var Quaderno = function () {
     });
   }
 
-  renderers.produce__array = function (container, data, index) {
+  renderers.produce__array = function (container, data) {
 
     produceChildren(container, data);
 
@@ -285,7 +285,11 @@ var Quaderno = function () {
   //
   // selection
 
-  // .. TODO
+  renderers.render_selection = function (container, template, data, options) {
+  }
+
+  renderers.produce_selection = function (container, data) {
+  }
 
   //
   // checkbox
@@ -315,7 +319,7 @@ var Quaderno = function () {
     //create(container, 'span', '.quad_text', label);
   }
 
-  renderers.produce_checkbox = function (container, data, index) {
+  renderers.produce_checkbox = function (container, data) {
 
     var cb = $(container).children('.quad_checkbox')[0];
     set(data, currentId(container), $(cb).attr('checked'));
@@ -347,7 +351,7 @@ var Quaderno = function () {
     if (options.mode === 'view') input.attr('disabled', 'disabled');
   }
 
-  renderers.produce_text_input = function (container, data, index) {
+  renderers.produce_text_input = function (container, data) {
     var id = currentId(container);
     var value = eltHidden(container, '.quad_value');
     set(data, id, value);
@@ -368,7 +372,7 @@ var Quaderno = function () {
     create(container, 'div', '.quad_key.quad_text', text);
   }
 
-  renderers.produce_text = function (container, data, index) {
+  renderers.produce_text = function (container, data) {
     // nothing to do
   }
 
@@ -382,7 +386,7 @@ var Quaderno = function () {
     renderChildren(container, template, data, options);
   }
 
-  renderers.produce_box = function (container, data, index) {
+  renderers.produce_box = function (container, data) {
     produceChildren(container, data);
   }
 
@@ -394,7 +398,7 @@ var Quaderno = function () {
     renderChildren(container, template, data, options);
   }
 
-  renderers.produce_group = function (container, data, index) {
+  renderers.produce_group = function (container, data) {
     produceChildren(container, data);
   }
 
@@ -483,11 +487,11 @@ var Quaderno = function () {
   }
   hooks.showTab = showTab;
 
-  renderers.produce_tabs = function (elt, data, index) {
+  renderers.produce_tabs = function (elt, data) {
     var body = $(elt).find('.quad_tab_body')[0];
     produceChildren(body, data);
   }
-  renderers.produce_tab = function (elt, data, index) {
+  renderers.produce_tab = function (elt, data) {
     produceChildren(elt, data);
   }
 
@@ -666,12 +670,12 @@ var Quaderno = function () {
     return div;
   }
 
-  function produceElement (container, data, index) {
+  function produceElement (container, data) {
 
     var type = eltHidden(container, '.quad_type');
     var func = renderers['produce_' + type] || renderers['produce_'];
 
-    func(container, data, index);
+    func(container, data);
   }
 
   function render (container, template, data, options) {

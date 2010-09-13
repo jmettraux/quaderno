@@ -1,5 +1,7 @@
 tabs
   tab "a"
+    selection destination0 ["roma", "firenze", "pisa"]
+    selection destination1 [destinations]
     box customers.*^
       text "customer"
       text_input .name

@@ -1,4 +1,6 @@
 {
+  "destination0": "roma",
+  "destinations": [ "reykjavik", "oslo", "gothenburg" ],
   "customers": [
     { "name": "alice", "city": "aleph" },
     { "name": "bob", "city": "boston" },
