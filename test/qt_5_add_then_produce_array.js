@@ -13,7 +13,7 @@ load(dir + '/base.js');
 
 var template = " \n\
 group \n\
-  box customers.* \n\
+  box customers.+ \n\
     text_input .name \n\
 "
 var data = { "customers": [
@@ -32,7 +32,7 @@ assertEqual(
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"customers"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-        ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\"customers.*\"},[[\"text_input\",{\"id\":\".name\"},[]]]]"},[]],
+        ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\"customers.+\"},[[\"text_input\",{\"id\":\".name\"},[]]]]"},[]],
         ["div",{"class":"quad_element quad_box"},[
           ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],

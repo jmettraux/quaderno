@@ -278,7 +278,15 @@ var Quaderno = function () {
   }
 
   renderers.produce__array = function (container, data, index) {
+
     produceChildren(container, data);
+
+    // truncate array to desired length if necessary
+
+    var a = lookup(data, currentId(container));
+    var targetLength = $(container).children('.quad_element').length;
+
+    while (a.length > targetLength) { a.pop(); }
   }
 
   //
