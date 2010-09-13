@@ -123,13 +123,6 @@ var Quaderno = function () {
 
     //clog([ "set", hash, key, value ]);
 
-    //var m = key.match(/(.+)\.([^\.]+)$/)
-    //if (m) {
-    //  hash = lookup(hash, m[1], true);
-    //  key = m[2];
-    //}
-    //hash[key] = value;
-
     if ( ! $.isArray(key)) key = key.split('.');
 
     var k = key.shift();
@@ -515,6 +508,23 @@ var Quaderno = function () {
     $(elt.parentNode).remove();
   }
 
+  hooks.moveInArray = function (elt, direction) {
+
+    //stack(elt);
+      // TODO implement me !!
+
+    elt = elt.parentNode;
+
+    if (direction === 'up') {
+      if (elt.previousSibling) {
+        elt.parentNode.insertBefore(elt, elt.previousSibling);
+      }
+    }
+    else if (elt.nextSibling) {
+      elt.parentNode.insertBefore(elt.nextSibling, elt);
+    }
+  }
+
   //
   // render and produce, surface methods
 
@@ -609,6 +619,18 @@ var Quaderno = function () {
               '.quad_minus_button',
               'Quaderno.hooks.removeFromArray(this);');
             $(b).addClass('array_remove_button');
+          }
+          if (arrayId.canReorder) {
+            var up = button(
+              e,
+              '.quad_up_button',
+              'Quaderno.hooks.moveInArray(this, "up");');
+            var down = button(
+              e,
+              '.quad_down_button',
+              'Quaderno.hooks.moveInArray(this, "down");');
+            $(up).addClass('array_move_button');
+            $(down).addClass('array_move_button');
           }
         }
       }

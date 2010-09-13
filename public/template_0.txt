@@ -1,6 +1,6 @@
 tabs
   tab "a"
-    box customers.*
+    box customers.*^
       text "customer"
       text_input .name
       text_input .city
