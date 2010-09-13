@@ -499,6 +499,14 @@ var Quaderno = function () {
     elt.parentNode.insertBefore(elt.nextSibling, elt);
   }
 
+  hooks.removeFromArray = function (elt) {
+
+    //stack(elt);
+      // TODO implement me !!
+
+    $(elt.parentNode).remove();
+  }
+
   //
   // render and produce, surface methods
 
@@ -583,9 +591,17 @@ var Quaderno = function () {
 
       if (a) {
         for (var i = 0; i < a.length; i++) {
-          //template[1].id = '.' + i;
+
           template[1].id = '.0';
-          renderElement(div, template, data, options);
+          var e = renderElement(div, template, data, options);
+
+          if (arrayId.canRemove) {
+            var b = button(
+              e,
+              '.quad_minus_button',
+              'Quaderno.hooks.removeFromArray(this);');
+            $(b).addClass('array_remove_button');
+          }
         }
       }
       if (arrayId.canAdd) {

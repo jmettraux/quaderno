@@ -228,6 +228,15 @@ a.quad_right_button:hover {
 	background-position: -20px -160px;
 }
 
+a.array_remove_button {
+  /*
+  position: relative;
+  display: block;
+  top: -21px;
+  left: +4px;
+  */
+}
+
 /* dates */
 
 .quad_date_separator {
