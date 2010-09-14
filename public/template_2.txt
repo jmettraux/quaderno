@@ -1,0 +1,13 @@
+
+define customer
+  text "customer"
+  text_input .name
+  text_input .city
+
+tabs
+  tab "a"
+    box customers.*^
+      customer
+  tab "b"
+    text "nada"
+

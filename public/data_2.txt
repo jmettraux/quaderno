@@ -1,0 +1,7 @@
+{
+  "customers": [
+    { "name": "alice", "city": "aleph" },
+    { "name": "bob", "city": "boston" },
+    { "name": "charly", "city": "cartage", "active": true }
+  ]
+}

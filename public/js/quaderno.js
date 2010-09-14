@@ -30,14 +30,13 @@ var Quaderno = function () {
   //
   // misc
 
-  // TODO : print() is a ffox function !!!! :-( fix
-  //
   function clog (o) {
     try {
       if (arguments.length == 1) console.log(arguments[0]);
       else console.log(arguments);
     }
     catch (e) {
+      //if (navigator.userAgent...)
       if (arguments.length == 1) print(JSON.stringify(arguments[0]));
       else print(JSON.stringify(arguments));
     }
@@ -207,6 +206,7 @@ var Quaderno = function () {
 
     var current;
     var clevel = -1;
+    var definitions = {};
 
     for (var i = 0; i < lines.length; i++) {
 
@@ -220,7 +220,13 @@ var Quaderno = function () {
       var m = line.match(/^([ ]*)([^ ]+) ?(.+)?$/)
       var nlevel = m[1].length / 2;
 
+      var def = definitions[m[2]];
       var elt = [ m[2], parseAttributes(m[3]), [] ];
+
+      if (def) {
+        current[2] = current[2].concat(def[2]);
+        continue;
+      }
 
       if (nlevel > clevel) {
         elt.parent = current;
@@ -234,13 +240,17 @@ var Quaderno = function () {
         }
         elt.parent = current;
       }
+      if (elt[0] === 'define') definitions[elt[1].id] = elt;
       if (elt.parent) elt.parent[2].push(elt);
       current = elt;
       clevel = nlevel;
     }
 
     // get back to 'root'
+
     while (current.parent) { current = current.parent; }
+
+    // done
 
     return current;
   }
@@ -448,6 +458,12 @@ var Quaderno = function () {
   renderers.render_tabs = function (container, template, data, options) {
 
     var tabs = template[2];
+    //var tabs = [];
+    //for (var i = 0; i < template[2].length; i++) {
+    //  var child = template[2][i];
+    //  if (child[0] === 'tab') tabs.push(child);
+    //}
+
     var table = create(container, 'table', '.quad_tab_group');
 
     // tabs

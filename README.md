@@ -23,11 +23,6 @@ the default template and data are located in :
     public/data_0.txt
 
 
-## extending
-
-TODO : Quaderno.renderers and Quaderno.hooks
-
-
 ## the elements
 
 element-name id "text" value [ values ] "title"
@@ -40,6 +35,29 @@ element-name id "text" value [ values ] "title"
 
 * checkbox
 * text_input
+* select
+
+
+### macros
+
+Expanded at parse time.
+
+    define customer
+      text "customer"
+      text_input .name
+      text_input .city
+    
+    tabs
+      tab "a"
+        box customers.*^
+          customer
+      tab "b"
+        text "nada"
+
+
+## extending
+
+TODO : Quaderno.renderers and Quaderno.hooks
 
 
 ## testing
@@ -63,7 +81,7 @@ will run the test test/qt_0_identify.js
 
 Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
 
-The amazing jQuery ( http://jquery.com/ )
+The amazing jQuery - <a href="http://jquery.com/">http://jquery.com</a>
 
 
 ## license
