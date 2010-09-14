@@ -1,12 +1,17 @@
 tabs
-  tab "a"
+  tab "dates"
     select destination0 [roma, firenze, pisa]
     select destination1 [destinations]
-    text_area comments "lore ipsum"
+    box
+      date departure
+      date arrival
+      date_y birthyear
+      date_ym month
+  tab "customers"
     box customers.*^
       text "customer"
       text_input .name
       text_input .city
       checkbox .active "active"
-  tab "b"
-    text "nada"
+  tab "misc"
+    text_area comments

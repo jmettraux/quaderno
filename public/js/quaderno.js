@@ -23,8 +23,6 @@
 // depends on the excellent jquery[-1.4.2]
 
 
-// TODO : prevent html/js injection !
-
 var Quaderno = function () {
 
   //
@@ -285,7 +283,7 @@ var Quaderno = function () {
   }
 
   renderers.produce_ = function (container, data) {
-    var type = eltHidden(container, '.quad_type');
+    var type = childValue(container, '.quad_type');
     if ( ! data._quad_produce_failures) data._quad_produce_failures = [];
     data._quad_produce_failures.push("can't deal with '" + type + "'");
   }
@@ -398,7 +396,7 @@ var Quaderno = function () {
   }
 
   renderers.produce_text_input = function (container, data) {
-    var value = eltHidden(container, '.quad_value');
+    var value = childValue(container, '.quad_value');
     set(data, currentId(container), value);
   }
 
@@ -432,8 +430,144 @@ var Quaderno = function () {
   }
 
   renderers.produce_text_area = function (container, data) {
-    var value = eltHidden(container, '.quad_value');
+    var value = childValue(container, '.quad_value');
     set(data, currentId(container), value);
+  }
+
+  //
+  // date
+
+  renderers.render_date = function (container, template, data, options) {
+
+    var id = template[1].id;
+    var text = template[1].text || id;
+
+    create(container, 'span', '.quad_key', text);
+
+    var type = template[0].split('_')[1] || 'ymd';
+    var cid = currentId(container);
+
+    // year
+
+    var year;
+
+    if (type.match(/y/)) {
+
+      create(container, 'span', '.quad_date_separator', 'y');
+      var y = (new Date()).getYear() + 1900;
+      year = create(container, 'select', '.quad_date_year');
+      for (var i = 2000; i < 2200; i++) {
+        create(year, 'option', { 'value': '' + i }, i);
+      }
+      year.value = y;
+      $(year).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
+
+      if (cid) { // for webrat / capybara
+        year.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__year';
+      }
+    }
+
+    // month
+
+    var month;
+
+    if (type.match(/m/)) {
+
+      create(container, 'span', '.quad_date_separator', 'm');
+      month = create(container, 'select', '.quad_date_month');
+      for (var i = 1; i <= 12; i++) {
+        create(month, 'option', { 'value': '' + i }, i);
+      }
+      $(month).attr('onchange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
+
+      if (cid) { // for webrat / capybara
+        month.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__month';
+      }
+    }
+
+    // day
+
+    var day;
+
+    if (type.match(/d/)) {
+
+      create(container, 'span', '.quad_date_separator', 'd');
+      day = create(container, 'select', '.quad_date_day');
+      for (var i = 1; i <= 31; i++) {
+        create(day, 'option', { 'value': '' + i }, i);
+      }
+
+      if (cid) { // for webrat / capybara
+        day.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__day';
+      }
+    }
+
+    // set value
+
+    var value = cid ? lookup(data, cid) : undefined;
+
+    if (value) {
+
+      value = value.split('/');
+
+      if (year) year.value = new Number(value.shift());
+      if (month) month.value = new Number(value.shift());
+      if (day) day.value = new Number(value.shift());
+    }
+
+    // mode view => disable
+
+    if (options.mode === 'view') {
+
+      if (year) year.attr('disabled', 'disabled');
+      if (month) month.attr('disabled', 'disabled');
+      if (day) day.attr('disabled', 'disabled');
+    }
+  }
+  renderers.render_date_ymd = renderers.render_date;
+  renderers.render_date_y = renderers.render_date;
+  renderers.render_date_ym = renderers.render_date;
+  renderers.render_date_md = renderers.render_date;
+  
+  renderers.produce_date = function (container, data) {
+
+    // TODO
+  }
+  renderers.produce_date_ymd = renderers.produce_date;
+  renderers.produce_date_y = renderers.produce_date;
+  renderers.produce_date_ym = renderers.produce_date;
+  renderers.produce_date_md = renderers.produce_date;
+
+  var MD = [ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+  hooks.checkDate = function (elt, type) {
+
+    if ( ! type.match(/d/)) return;
+
+    // TODO : fix leap year
+
+    var dateElt = $(elt.parentNode);
+    var year = dateElt.children('.quad_date_year')[0];
+    var month = dateElt.children('.quad_date_month')[0];
+    var day = dateElt.children('.quad_date_day')[0];
+
+    if (type === 'ymd') {
+
+      var d = new Date();
+
+      clog([ 
+        year.value, year.month, year.day ]);
+      clog([ 
+        parseInt(year.value), parseInt(year.month) - 1, parseInt(year.day) ]);
+
+      d.setFullYear(
+        parseInt(year.value), parseInt(year.month) - 1, parseInt(year.day));
+
+      year.value = d.getFullYear();
+      month.value = d.getMonth() + 1;
+      day.value = d.getDate();
+      clog(d);
+    }
   }
 
   //
@@ -589,7 +723,7 @@ var Quaderno = function () {
     //stack(elt);
       // TODO implement me !!
 
-    var t = JSON.parse(eltHidden(elt.parentNode, '.quad_array_template'));
+    var t = JSON.parse(childValue(elt.parentNode, '.quad_array_template'));
     t[1].id = '.0';
 
     var r = root(elt);
@@ -630,7 +764,7 @@ var Quaderno = function () {
     return $(elt).parents('.quad_root')[0];
   }
 
-  function eltHidden (elt, cname) {
+  function childValue (elt, cname) {
     return $(elt).children(cname)[0].value;
   }
 
@@ -758,7 +892,7 @@ var Quaderno = function () {
 
   function produceElement (container, data) {
 
-    var type = eltHidden(container, '.quad_type');
+    var type = childValue(container, '.quad_type');
     var func = renderers['produce_' + type] || renderers['produce_'];
 
     func(container, data);
