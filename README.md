@@ -35,6 +35,7 @@ element-name id "text" value [ values ] "title"
 
 * checkbox
 * text_input
+* text_area
 * select
 
 

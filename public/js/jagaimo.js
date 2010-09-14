@@ -40,49 +40,6 @@ var Jagaimo = function () {
     return e;
   }
 
-  function renderArray (container, a) {
-
-    var span = create(container, 'span', 'jagaimo_element jagaimo_array');
-
-    create(span, 'span', 'jagaimo_bracket', '[');
-
-    for (var i = 0; i < a.length; i++) {
-      doRender(span, a[i]);
-      if (i < a.length - 1) create(span, 'span', 'jagaimo_comma', ',');
-    }
-
-    create(span, 'span', 'jagaimo_bracket', ']');
-
-    return span;
-  }
-
-  function renderObject (container, o) {
-
-    var span = create(container, 'span', 'jagaimo_element jagaimo_object');
-
-    create(span, 'span', 'jagaimo_brace', '{');
-
-    var lastComma;
-
-    var keys = [];
-    for (var k in o) { keys.push(k) };
-    keys = keys.sort();
-
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i];
-      var skey = doRender(span, k);
-      skey.className = skey.className + ' jagaimo_key';
-      create(span, 'span', 'jagaimo_colon', ':');
-      doRender(span, o[k]);
-      lastComma = create(span, 'span', 'jagaimo_comma', ',');
-    }
-    if (lastComma) lastComma.parentNode.removeChild(lastComma);
-
-    create(span, 'span', 'jagaimo_brace', '}');
-
-    return span;
-  }
-
   function determineType (o) {
     try {
       var con = o.constructor.toString();
@@ -94,22 +51,52 @@ var Jagaimo = function () {
     }
   }
 
+  function renderAtom (container, a) {
+    create(
+      container,
+      'span',
+      'jagaimo_atom jagaimo_' + (typeof a),
+      JSON.stringify(a));
+  }
+
   function doRender (container, o) {
 
     var type = determineType(o);
 
-    if (type === 'String') {
-      return create(
-        container, 'span', 'jagaimo_element jagaimo_string', JSON.stringify(o));
-    }
     if (type === 'Array') {
-      return renderArray(container, o);
+
+      create(container, 'span', 'jagaimo_bracket', '[');
+      for (var i = 0; i < o.length; i++) {
+        doRender(container, o[i]);
+        if (i < o.length - 1) {
+          create(container, 'span', 'jagaimo_comma', ',');
+        }
+      }
+      create(container, 'span', 'jagaimo_bracket', ']');
+
     }
-    if (type === 'Object') {
-      return renderObject(container, o);
+    else if (type === 'Object') {
+
+      create(container, 'span', 'jagaimo_brace', '{');
+
+      var keys = [];
+      for (var k in o) keys.push(k);
+
+      for (var i = 0; i < keys.length; i++) {
+        create(container, 'span', 'jagaimo_key', keys[i]);
+        create(container, 'span', 'jagaimo_colon', ':');
+        doRender(container, o[keys[i]]);
+        if (i < keys.length - 1) {
+          create(container, 'span', 'jagaimo_comma', ',');
+        }
+      }
+      create(container, 'span', 'jagaimo_brace', '}');
     }
-    return create(
-      container, 'span', 'jagaimo_element jagaimo_other', JSON.stringify(o));
+    else {
+
+      renderAtom(container, o);
+
+    }
   }
 
   function render (containerId, o) {

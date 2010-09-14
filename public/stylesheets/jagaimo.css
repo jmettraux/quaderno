@@ -8,10 +8,11 @@
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 
-.jagaimo_element {
+.jagaimo_atom {
+  display: inline-block;
 }
 .jagaimo_key {
   color: #86E34B;
@@ -30,13 +31,7 @@
 .jagaimo_comma {
   margin-right: 3px;
 }
-.jagaimo_array {
-}
-.jagaimo_object {
-}
-.jagaimo_string {
-}
-.jagaimo_other {
+.jagaimo_boolean {
   color: red;
 }
 
