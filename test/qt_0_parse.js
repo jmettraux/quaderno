@@ -49,7 +49,7 @@ assertEqual(
   Quaderno.parse("select d \"t\" [ targets ] \"title\""));
 
 
-// comments
+// line comments
 
 assertEqual(
   ["text",{"text":"customer"},[]],
@@ -61,3 +61,14 @@ assertEqual(
   Quaderno.parse("# nada \n\
     text \"customer\" \n\
   "));
+
+// eol comments
+
+assertEqual(
+  ["text",{"text":"customer"},[]],
+  Quaderno.parse("text \"customer\" // nada"));
+
+assertEqual(
+  ["text",{"text":"customer"},[]],
+  Quaderno.parse("text \"customer\" # nada"));
+

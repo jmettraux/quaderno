@@ -153,6 +153,8 @@ var Quaderno = function () {
 
     // id "text" value [ values ] "title"
 
+    // TODO : >value< if necessary
+
     var atts = {};
     var m;
 
