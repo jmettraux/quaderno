@@ -42,6 +42,10 @@ var Quaderno = function () {
     }
   }
 
+  function deepCopy (o) {
+    return JSON.parse(JSON.stringify(o));
+  }
+
   function removeClassDot (cname) {
     return (cname[0] === '.') ? cname.slice(1) : cname;
   }
@@ -75,10 +79,10 @@ var Quaderno = function () {
     return e;
   }
 
-  function button (container, className, onclick, title) {
+  function button (container, cname, onclick, title) {
 
     if ( ! onclick.match(/return false;$/)) onclick += " return false;";
-    className = removeClassDot(className);
+    cname = removeClassDot(cname);
 
     title = title || {
       'quad_plus_button': 'add',
@@ -91,13 +95,13 @@ var Quaderno = function () {
       'quad_go_button': 'go',
       'quad_left_button': 'left',
       'quad_right_button': 'right'
-    }[className];
+    }[cname];
 
     return create(
       container,
       'a',
       { 'href': '',
-        'class': className + ' quad_button',
+        'class': cname + ' quad_button',
         'title': title,
         'onclick': onclick });
   }
@@ -223,11 +227,6 @@ var Quaderno = function () {
       var def = definitions[m[2]];
       var elt = [ m[2], parseAttributes(m[3]), [] ];
 
-      if (def) {
-        current[2] = current[2].concat(def[2]);
-        continue;
-      }
-
       if (nlevel > clevel) {
         elt.parent = current;
       }
@@ -240,8 +239,20 @@ var Quaderno = function () {
         }
         elt.parent = current;
       }
-      if (elt[0] === 'define') definitions[elt[1].id] = elt;
-      if (elt.parent) elt.parent[2].push(elt);
+
+      if (def) {
+        def = deepCopy(def);
+        for (var j = 0; j < def.length; j++) {
+          elt.parent[2].push(def[j]);
+        }
+      }
+      else if (elt[0] === 'define') {
+        definitions[elt[1].id] = elt[2];
+      }
+      else if (elt.parent) { // don't place macros in parent
+        elt.parent[2].push(elt);
+      }
+
       current = elt;
       clevel = nlevel;
     }
