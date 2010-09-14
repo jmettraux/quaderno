@@ -103,7 +103,7 @@ var Quaderno = function () {
       { 'href': '',
         'class': cname + ' quad_button',
         'title': title,
-        'onclick': onclick });
+        'onClick': onclick });
   }
 
   //
@@ -496,7 +496,7 @@ var Quaderno = function () {
 
     var a = $(create(td, 'a', '.quad_tab', label));
     a.attr('href', '');
-    a.attr('onclick', 'return Quaderno.hooks.showTab(this.parentNode);');
+    a.attr('onClick', 'return Quaderno.hooks.showTab(this.parentNode);');
 
     return td;
   }
