@@ -9,11 +9,13 @@ file = arguments[0];
 dir = file.split('/').slice(0, -1).join('/');
 load(dir + '/base.js');
 
-// 0
 
-assertEqual(true, true); // warm up
+// warm up ;-)
 
-// 1
+assertEqual(true, true);
+
+
+// basics
 
 var s = " \n\
 tabs \n\
@@ -29,7 +31,8 @@ assertEqual(2, t[2].length);
 assertEqual('tab', t[2][0][0]);
 assertEqual('tab', t[2][1][0]);
 
-// 2
+
+// extended attributes
 
 assertEqual(
   ["select",{"id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
@@ -45,3 +48,16 @@ assertEqual(
   ["select",{"id":"d","text":"t","title":"title","values":"targets"},[]],
   Quaderno.parse("select d \"t\" [ targets ] \"title\""));
 
+
+// comments
+
+assertEqual(
+  ["text",{"text":"customer"},[]],
+  Quaderno.parse("// nada \n\
+    text \"customer\" \n\
+  "));
+assertEqual(
+  ["text",{"text":"customer"},[]],
+  Quaderno.parse("# nada \n\
+    text \"customer\" \n\
+  "));

@@ -212,7 +212,8 @@ var Quaderno = function () {
       var tline = $.trim(line);
 
       if (tline == '') continue;
-      if (tline.match(/^\/\//)) continue;
+      if (tline.match(/^\/\//)) continue; // // comment line
+      if (tline.match(/^#/)) continue; // # comment line
 
       var m = line.match(/^([ ]*)([^ ]+) ?(.+)?$/)
       var nlevel = m[1].length / 2;
