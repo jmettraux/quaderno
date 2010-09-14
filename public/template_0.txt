@@ -2,6 +2,7 @@ tabs
   tab "a"
     select destination0 [roma, firenze, pisa]
     select destination1 [destinations]
+    text_area comments "lore ipsum"
     box customers.*^
       text "customer"
       text_input .name

@@ -126,6 +126,8 @@ var Quaderno = function () {
 
     //clog([ "set", hash, key, value ]);
 
+    if ( ! key) return;
+
     if ( ! $.isArray(key)) key = key.split('.');
 
     var k = key.shift();
@@ -396,9 +398,42 @@ var Quaderno = function () {
   }
 
   renderers.produce_text_input = function (container, data) {
-    var id = currentId(container);
     var value = eltHidden(container, '.quad_value');
-    set(data, id, value);
+    set(data, currentId(container), value);
+  }
+
+  //
+  // text_area
+
+  renderers.render_text_area = function (container, template, data, options) {
+
+    var id = template[1].id;
+    var text = template[1].text || id;
+
+    create(container, 'span', '.quad_key', text);
+
+    var value = '';
+    var aid = '';
+
+    if (id) {
+
+      var cid = currentId(container);
+
+      value = lookup(data, cid) || '';
+
+      aid = 'quad__' + cid.replace(/[\.]/, '_', 'g');
+        // for webrat / capybara
+    }
+
+    var area = create(
+      container, 'textarea', { 'id': aid, 'class': 'quad_value' }, value);
+
+    if (options.mode === 'view') area.attr('disabled', 'disabled');
+  }
+
+  renderers.produce_text_area = function (container, data) {
+    var value = eltHidden(container, '.quad_value');
+    set(data, currentId(container), value);
   }
 
   //
@@ -541,6 +576,7 @@ var Quaderno = function () {
     var body = $(elt).find('.quad_tab_body')[0];
     produceChildren(body, data);
   }
+
   renderers.produce_tab = function (elt, data) {
     produceChildren(elt, data);
   }
