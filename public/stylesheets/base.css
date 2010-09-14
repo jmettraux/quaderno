@@ -75,16 +75,16 @@ textarea {
   text-align: right;
 }
 .produce_buttons {
-  text-align: right;
   margin-bottom: 7px;
 }
 
-/*
-pre {
-  font-family: "Menlo Regular", monaco, monospaced;
-  font-size: 11px;
-  line-height: 11px;
-  display: block;
+td {
+  width: 50%;
+  padding: 7px;
+  vertical-align: top;
+}
+
+.group {
   padding: 8px 12px;
   background: #fff;
   border: 1px dashed #ccd0d4;
@@ -92,5 +92,4 @@ pre {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-*/
 

@@ -14,41 +14,42 @@
 
   <h1><a href="http://github.com/jmettraux/quaderno">Quaderno (take 3)</a></h1>
 
-  <div>
-    <div style="float: left; width: 49%;">
-      template :
-      <textarea id="template"></textarea>
-      <div class="buttons template_buttons">
-        <a href="" onclick="return render();">render</a>
-      </div>
-    </div>
-    <div style="float: right; width: 50%">
-      data :
-      <div id="data" class="jagaimo"></div>
-    </div>
-  </div>
+  <table>
+    <tr>
+      <td>
+        <div class="template group">
+          template :
+          <textarea id="template"></textarea>
+          <div class="buttons template_buttons">
+            <a href="" onclick="return render();">render ↓→</a>
+          </div>
 
-  <div style="clear: both;">
-    <div style="float: left; width: 49%;">
-      template, parsed :
-      <div id="parsed" class="jagaimo"></div>
-    </div>
-    <div style="float: right; width: 50%;">
-      quaderno :
-      <div id="quad" class="quad_root"></div>
-    </div>
-  </div>
+          template, parsed :
+          <div id="parsed" class="jagaimo"></div>
+        </div>
 
-  <div style="clear: both;">
-    <div style="float: left; width: 49%;">
-    </div>
-    <div style="float: right; width: 50%;">
-      <div class="buttons produce_buttons">
-        <a href="" onclick="return produce();">produce</a>
-      </div>
-      <div id="product" class="jagaimo"></div>
-    </div>
-  </div>
+        <div class="data">
+        </div>
+      </td>
+      <td>
+        quaderno :
+        <div id="quad" class="quad_root"></div>
+        <div class="buttons produce_buttons">
+          <a href="" onclick="return produce();">produce ↓</a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        data (in) :
+        <div id="data" class="jagaimo"></div>
+      </td>
+      <td>
+        data (out) :
+        <div id="product" class="jagaimo"></div>
+      </td>
+    </tr>
+  </table>
 
   <script>
 

@@ -3,6 +3,7 @@
 /* quad */
 
 .quad_root {
+  margin-top: 4px;
 }
 .quad_tab {
 	display: block;
@@ -111,6 +112,7 @@ span.quad_checkbox_key {
 textarea.quad_value {
   display: inline-block;
   width: auto;
+  height: 77px;
   font: inherit;
   font-size: 90%;
 }
