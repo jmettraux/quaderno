@@ -329,6 +329,8 @@ var Quaderno = function () {
       var opt = create(select, 'option', null, values[i]);
       if (values[i] === value) $(opt).attr('selected', 'selected');
     }
+
+    if (options.mode === 'view') $(select).attr('disabled', 'disabled');
   }
 
   renderers.produce_select = function (container, data) {
@@ -394,7 +396,7 @@ var Quaderno = function () {
       input.value = lookup(data, cid) || '';
     }
 
-    if (options.mode === 'view') input.attr('disabled', 'disabled');
+    if (options.mode === 'view') $(input).attr('disabled', 'disabled');
   }
 
   renderers.produce_text_input = function (container, data) {
@@ -428,7 +430,7 @@ var Quaderno = function () {
     var area = create(
       container, 'textarea', { 'id': aid, 'class': 'quad_value' }, value);
 
-    if (options.mode === 'view') area.attr('disabled', 'disabled');
+    if (options.mode === 'view') $(area).attr('disabled', 'disabled');
   }
 
   renderers.produce_text_area = function (container, data) {
@@ -521,9 +523,9 @@ var Quaderno = function () {
 
     if (options.mode === 'view') {
 
-      if (year) year.attr('disabled', 'disabled');
-      if (month) month.attr('disabled', 'disabled');
-      if (day) day.attr('disabled', 'disabled');
+      if (year) $(year).attr('disabled', 'disabled');
+      if (month) $(month).attr('disabled', 'disabled');
+      if (day) $(day).attr('disabled', 'disabled');
     }
   }
   renderers.render_date_ymd = renderers.render_date;

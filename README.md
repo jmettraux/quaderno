@@ -38,6 +38,12 @@ element-name id "text" value [ values ] "title"
 * text_area
 * select
 
+* date
+* date_ymd
+* date_y
+* date_ym
+* date_md
+
 
 ### macros
 

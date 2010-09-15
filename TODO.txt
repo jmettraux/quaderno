@@ -2,6 +2,7 @@
 [o] template : define x {
 [o] date : fix leap year
 [o] html escaping
+[o] 'view' mode
 [ ] jagaimo : undefined
 [ ] undo/redo/reset
 [ ] translation

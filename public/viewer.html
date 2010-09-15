@@ -84,16 +84,10 @@
 
     data = JSON.parse(data);
 
-    //template = Quaderno.parse(template);
-    //Jagaimo.render('#parsed', template);
-
     Jagaimo.render('#data', data);
 
     var translations = {};
-    var mode = 'use';
-
-    //Quaderno.render(
-    //  '#quad', template, data, { 'translations': translations, 'mode': mode });
+    var mode = qs.mode || 'use';
 
     Jagaimo.render('#product', {});
 
@@ -115,6 +109,7 @@
 
       return false;
     }
+
   </script>
 </body>
 </html>
