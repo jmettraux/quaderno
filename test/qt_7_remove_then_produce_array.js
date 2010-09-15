@@ -38,7 +38,7 @@ assertEqual(
             ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
             ["span",{"class":"quad_key"},[".name"]],
             ["input",{"class":"quad_value","type":"text","value":"alfred"},[]]]],
-          ["a",{"class":"quad_minus_button quad_button array_remove_button","href":"","onclick":"Quaderno.hooks.removeFromArray(this); return false;"},[]]]],
+          ["a",{"class":"quad_minus_button quad_button array_remove_button","href":"","onClick":"Quaderno.hooks.removeFromArray(this); return false;"},[]]]],
         ["div",{"class":"quad_element quad_box"},[
           ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
@@ -47,8 +47,8 @@ assertEqual(
             ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
             ["span",{"class":"quad_key"},[".name"]],
             ["input",{"class":"quad_value","type":"text","value":"bob"},[]]]],
-          ["a",{"class":"quad_minus_button quad_button array_remove_button","href":"","onclick":"Quaderno.hooks.removeFromArray(this); return false;"},[]]]],
-      ["a",{"class":"quad_plus_button quad_button","href":"","onclick":"Quaderno.hooks.addToArray(this); return false;"},[]]]]]]]],
+          ["a",{"class":"quad_minus_button quad_button array_remove_button","href":"","onClick":"Quaderno.hooks.removeFromArray(this); return false;"},[]]]],
+      ["a",{"class":"quad_plus_button quad_button","href":"","onClick":"Quaderno.hooks.addToArray(this); return false;"},[]]]]]]]],
   $('.quad_root')[0].toArray());
 
 //assertEqual(

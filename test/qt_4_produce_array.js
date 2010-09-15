@@ -60,7 +60,7 @@ assertEqual(
             ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
             ["span",{"class":"quad_key"},[".city"]],
             ["input",{"class":"quad_value","type":"text","value":"london"},[]]]]]],
-        ["a",{"class":"quad_plus_button quad_button","href":"","onclick":"Quaderno.hooks.addToArray(this); return false;"},[]]]]]]]],
+        ["a",{"class":"quad_plus_button quad_button","href":"","onClick":"Quaderno.hooks.addToArray(this); return false;"},[]]]]]]]],
   $('.quad_root')[0].toArray());
 
 assertEqual(
