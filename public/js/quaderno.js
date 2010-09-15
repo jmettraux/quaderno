@@ -66,8 +66,10 @@ var Quaderno = function () {
     var e = $('<' + tagName + '/>', atts)[0];
 
     if (innerText) {
-      //e.innerHTML = innerText; // doesn't work with Safari
+      //e.innerHTML = innerText;
+        // doesn't work with Safari and doesn't escape text
       e.appendChild(document.createTextNode(innerText));
+        // is fine
     }
 
     if (container) {

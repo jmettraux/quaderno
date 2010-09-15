@@ -1,9 +1,11 @@
 
 [o] template : define x {
 [o] date : fix leap year
+[o] html escaping
 [ ] jagaimo : undefined
 [ ] undo/redo/reset
-[ ] html escaping
+[ ] translation
+[ ] check html escaping with IE8
 
 [ ] validations ? jq validations ?
 
