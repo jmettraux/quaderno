@@ -308,26 +308,42 @@ var Quaderno = function () {
     while (a.length > targetLength) { a.pop(); }
   }
 
+  function translate (elt, text, def) {
+
+    //if ((typeof text) !== 'string') return text;
+    if (text.match(/\s/)) return def || text;
+
+    var opts = root(elt).options;
+    var t = lookup(opts.translations[opts.lang || 'en'], text)
+    return ((typeof t) === 'string') ? t : def || text;
+  }
+
   //
   // select
 
   renderers.render_select = function (container, template, data, options) {
 
-    var id = template[1].id;
-    var label = template[1].text || id;
+    var id = currentId(container);
+    var text = template[1].text || id;
 
-    create(container, 'span', '.quad_key', label);
+    create(container, 'span', '.quad_key', translate(container, text));
 
     var select = create(container, 'select', '.quad_value');
 
-    var value = id ? lookup(data, id) : undefined;
+    if (id) select.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
+      // for webrat / capybara
+
+    var value = lookup(data, id);
     var values = template[1].values;
 
-    if ( ! $.isArray(values)) values = lookup(data, values);
+    if ( ! $.isArray(values)) { values = lookup(data, values); }
 
     for (var i = 0; i < values.length; i++) {
-      var opt = create(select, 'option', null, values[i]);
-      if (values[i] === value) $(opt).attr('selected', 'selected');
+
+      var opt = create(
+        select, 'option', { 'value': values[i] }, values[i]);
+
+      if (value && values[i] === value) $(opt).attr('selected', 'selected');
     }
 
     if (options.mode === 'view') $(select).attr('disabled', 'disabled');
@@ -344,27 +360,25 @@ var Quaderno = function () {
 
   renderers.render_checkbox = function (container, template, data, options) {
 
-    var id = template[1].id;
-    var label = template[1].text || id;
+    var id = currentId(container);
+    var text = template[1].text || id;
 
     var checkbox = create(
       container, 'input', { 'class': 'quad_checkbox', 'type': 'checkbox' });
 
     if (id) {
 
-      var cid = currentId(container);
-
-      checkbox.id = 'quad__' + cid.replace(/[\.]/, '_', 'g');
+      checkbox.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
         // for webrat / capybara
 
-      var value = lookup(data, cid) || '';
+      var value = lookup(data, id) || '';
     }
 
     if (value === true) $(checkbox).attr('checked', 'checked');
     if (options.mode === 'view') $(checkbox).attr('disabled', 'disabled');
 
-    create(container, 'span', '.quad_checkbox_key', label);
-    //create(container, 'span', '.quad_text', label);
+    create(
+      container, 'span', '.quad_checkbox_key', translate(container, text));
   }
 
   renderers.produce_checkbox = function (container, data) {
@@ -378,22 +392,20 @@ var Quaderno = function () {
 
   renderers.render_text_input = function (container, template, data, options) {
 
-    var id = template[1].id;
+    var id = currentId(container);
     var text = template[1].text || id;
 
-    create(container, 'span', '.quad_key', text);
+    create(container, 'span', '.quad_key', translate(container, text));
 
     var input = create(
       container, 'input', { 'class': 'quad_value', 'type': 'text' });
 
     if (id) {
 
-      var cid = currentId(container);
-
-      input.id = 'quad__' + cid.replace(/[\.]/, '_', 'g');
+      input.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
         // for webrat / capybara
 
-      input.value = lookup(data, cid) || '';
+      input.value = lookup(data, id) || '';
     }
 
     if (options.mode === 'view') $(input).attr('disabled', 'disabled');
@@ -409,21 +421,19 @@ var Quaderno = function () {
 
   renderers.render_text_area = function (container, template, data, options) {
 
-    var id = template[1].id;
+    var id = currentId(container);
     var text = template[1].text || id;
 
-    create(container, 'span', '.quad_key', text);
+    create(container, 'span', '.quad_key', translate(container, text));
 
     var value = '';
     var aid = '';
 
     if (id) {
 
-      var cid = currentId(container);
+      value = lookup(data, id) || '';
 
-      value = lookup(data, cid) || '';
-
-      aid = 'quad__' + cid.replace(/[\.]/, '_', 'g');
+      aid = 'quad__' + id.replace(/[\.]/, '_', 'g');
         // for webrat / capybara
     }
 
@@ -443,13 +453,12 @@ var Quaderno = function () {
 
   renderers.render_date = function (container, template, data, options) {
 
-    var id = template[1].id;
+    var id = currentId(container);
     var text = template[1].text || id;
 
-    create(container, 'span', '.quad_key', text);
+    create(container, 'span', '.quad_key', translate(container, text));
 
     var type = template[0].split('_')[1] || 'ymd';
-    var cid = currentId(container);
 
     // year
 
@@ -457,7 +466,10 @@ var Quaderno = function () {
 
     if (type.match(/y/)) {
 
-      create(container, 'span', '.quad_date_separator', 'y');
+      create(
+        container, 'span', '.quad_date_separator',
+        translate(container, 'date.y', 'y'));
+
       var y = (new Date()).getYear() + 1900;
       year = create(container, 'select', '.quad_date_year');
       for (var i = 2000; i < 2200; i++) {
@@ -466,8 +478,8 @@ var Quaderno = function () {
       year.value = y;
       $(year).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
 
-      if (cid) { // for webrat / capybara
-        year.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__year';
+      if (id) { // for webrat / capybara
+        year.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__year';
       }
     }
 
@@ -477,15 +489,18 @@ var Quaderno = function () {
 
     if (type.match(/m/)) {
 
-      create(container, 'span', '.quad_date_separator', 'm');
+      create(
+        container, 'span', '.quad_date_separator',
+        translate(container, 'date.m', 'm'));
+
       month = create(container, 'select', '.quad_date_month');
       for (var i = 1; i <= 12; i++) {
         create(month, 'option', { 'value': '' + i }, i);
       }
       $(month).attr('onchange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
 
-      if (cid) { // for webrat / capybara
-        month.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__month';
+      if (id) { // for webrat / capybara
+        month.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__month';
       }
     }
 
@@ -495,20 +510,23 @@ var Quaderno = function () {
 
     if (type.match(/d/)) {
 
-      create(container, 'span', '.quad_date_separator', 'd');
+      create(
+        container, 'span', '.quad_date_separator',
+        translate(container, 'date.d', 'd'));
+
       day = create(container, 'select', '.quad_date_day');
       for (var i = 1; i <= 31; i++) {
         create(day, 'option', { 'value': '' + i }, i);
       }
 
-      if (cid) { // for webrat / capybara
-        day.id = 'quad__' + cid.replace(/[\.]/, '_', 'g') + '__day';
+      if (id) { // for webrat / capybara
+        day.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__day';
       }
     }
 
     // set value
 
-    var value = cid ? lookup(data, cid) : undefined;
+    var value = lookup(data, id);
 
     if (value) {
 
@@ -606,12 +624,7 @@ var Quaderno = function () {
 
     var text = template[1].text || '';
 
-    if (template[1].id) {
-      var id = currentId(container);
-      text = lookup(data, id);
-    }
-
-    create(container, 'div', '.quad_key.quad_text', text);
+    create(container, 'div', '.quad_key.quad_text', translate(container, text));
   }
 
   renderers.produce_text = function (container, data) {
@@ -931,13 +944,13 @@ var Quaderno = function () {
 
     container = toElement(container);
 
+    container.data = data;
+    container.options = options;
+
     while (container.firstChild) container.removeChild(container.firstChild);
 
     if ((typeof template) === 'string') template = parse(template);
     renderElement(container, template, data, options);
-
-    container.data = data;
-    container.options = options;
   }
 
   function produce (container, data) {

@@ -10,8 +10,8 @@ tabs
   tab "customers"
     box customers.*^
       text "customer"
-      text_input .name
-      text_input .city
+      text_input .name "customer.name"
+      text_input .city "city"
       checkbox .active "active"
   tab "misc"
     text_area comments

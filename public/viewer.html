@@ -39,6 +39,14 @@
         </div>
       </td>
     </tr>
+    <tr class="translations">
+      <td>
+        translations :
+        <div id="translations" class="jagaimo"></div>
+      </td>
+      <td>
+      </td>
+    </tr>
     <tr>
       <td>
         data (in) :
@@ -66,12 +74,16 @@
       return h;
     }();
 
+    if (qs.translations !== 'true') $('tr.translations').hide();
+
     var sample = qs['sample'] || '0';
     var t = 'template_' + sample + '.txt';
     var d = 'data_' + sample + '.txt';
+    var tr = 'translations_' + sample + '.txt';
 
     var template;
     var data = '{}';
+    var translations = '{}';
 
     $.ajax({ url: t, async: false, success: function (s) {
       template = s;
@@ -79,15 +91,20 @@
     $.ajax({ url: d, async: false, success: function (s) {
       data = s;
     } });
+    $.ajax({ url: tr, async: false, success: function (s) {
+      translations = s;
+    } });
 
     $('#template')[0].value = template;
 
     data = JSON.parse(data);
-
     Jagaimo.render('#data', data);
 
-    var translations = {};
+    translations = JSON.parse(translations);
+    Jagaimo.render('#translations', translations);
+
     var mode = qs.mode || 'use';
+    var lang = qs.lang || 'en';
 
     Jagaimo.render('#product', {});
 
@@ -95,7 +112,10 @@
       var template = Quaderno.parse($('#template')[0].value);
       Jagaimo.render('#parsed', template);
       Quaderno.render(
-        '#quad', template, data, { 'translations': translations, 'mode': mode });
+        '#quad',
+        template,
+        data,
+        { 'translations': translations, 'lang': lang, 'mode': mode });
       return false;
     }
 

@@ -3,10 +3,12 @@
 [o] date : fix leap year
 [o] html escaping
 [o] 'view' mode
+[o] translations
 [ ] jagaimo : undefined
 [ ] undo/redo/reset
-[ ] translation
+[ ] translations for select values
 [ ] check html escaping with IE8
+[ ] tests for translations
 
 [ ] validations ? jq validations ?
 

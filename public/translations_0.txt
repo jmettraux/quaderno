@@ -1,0 +1,10 @@
+{
+  "en": {
+    "destination0": "initial destination"
+  },
+  "ja": {
+    "destination0": "行き先",
+    "date": { "y": "年", "m": "月", "d": "日" },
+    "customer": { "name": "名前" }
+  }
+}
