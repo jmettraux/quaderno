@@ -7,7 +7,6 @@
     { "name": "charly", "city": "cartage", "active": true }
   ],
   "departure": "2011/12/12",
-  "arrival": "2009/02/28",
   "birthyear": "1988",
   "month": "2012/03",
   "day": "3/31"

@@ -4,7 +4,6 @@ tabs
     select destination1 [destinations]
     box
       date departure
-      date arrival
       date_y birthyear
       date_ym month
       date_md day
