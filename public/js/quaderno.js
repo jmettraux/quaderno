@@ -531,7 +531,17 @@ var Quaderno = function () {
   
   renderers.produce_date = function (container, data) {
 
-    // TODO
+    var dateElt = $(container);
+    var year = dateElt.children('.quad_date_year')[0];
+    var month = dateElt.children('.quad_date_month')[0];
+    var day = dateElt.children('.quad_date_day')[0];
+
+    var a = [];
+    if (year) a.push(year.value);
+    if (month) a.push(month.value);
+    if (day) a.push(day.value);
+
+    set(data, currentId(container), a.join('/'));
   }
   renderers.produce_date_ymd = renderers.produce_date;
   renderers.produce_date_y = renderers.produce_date;
@@ -540,11 +550,15 @@ var Quaderno = function () {
 
   var MD = [ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
+  function isLeapYear (year) {
+    var d = new Date();
+    d.setFullYear(year, 1, 29);
+    return (d.getMonth() == 1);
+  }
+
   hooks.checkDate = function (elt, type) {
 
     if ( ! type.match(/d/)) return;
-
-    // TODO : fix leap year
 
     var dateElt = $(elt.parentNode);
     var year = dateElt.children('.quad_date_year')[0];
@@ -555,19 +569,30 @@ var Quaderno = function () {
 
       var d = new Date();
 
-      clog([ 
-        year.value, year.month, year.day ]);
-      clog([ 
-        parseInt(year.value), parseInt(year.month) - 1, parseInt(year.day) ]);
-
       d.setFullYear(
-        parseInt(year.value), parseInt(year.month) - 1, parseInt(year.day));
+        parseInt(year.value), parseInt(month.value) - 1, parseInt(day.value));
 
       year.value = d.getFullYear();
       month.value = d.getMonth() + 1;
       day.value = d.getDate();
-      clog(d);
     }
+
+    // adjust days (february and co)
+
+    var d = day.value;
+
+    while (day.firstChild) { day.removeChild(day.firstChild); }
+
+    var days = MD[month.value];
+    if (
+      month && month.value == 2 && year && isLeapYear(year.value)
+    ) days = days + 1;
+
+    for (var i = 1; i <= days; i++) {
+      create(day, 'option', { 'value': '' + i }, i);
+    }
+
+    day.value = d;
   }
 
   //

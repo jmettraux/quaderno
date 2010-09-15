@@ -1,7 +1,9 @@
 
 [o] template : define x {
+[o] date : fix leap year
 [ ] jagaimo : undefined
 [ ] undo/redo/reset
 [ ] html escaping
-[ ] date : fix leap year
+
+[ ] validations ? jq validations ?
 
