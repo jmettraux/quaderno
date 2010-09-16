@@ -310,7 +310,6 @@ var Quaderno = function () {
 
   function translate (elt, text, def) {
 
-    //if ((typeof text) !== 'string') return text;
     if (text.match(/\s/)) return def || text;
 
     var opts = root(elt).options;
@@ -324,7 +323,7 @@ var Quaderno = function () {
   renderers.render_select = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || id;
+    var text = template[1].text || template[1].id;
 
     create(container, 'span', '.quad_key', translate(container, text));
 
@@ -340,8 +339,14 @@ var Quaderno = function () {
 
     for (var i = 0; i < values.length; i++) {
 
-      var opt = create(
-        select, 'option', { 'value': values[i] }, values[i]);
+      var v = values[i];
+      var t = translate(container, v);
+      if (t && v !== t) {
+        var m = v.match(/[^\.]+$/)
+        v = m[0];
+      }
+
+      var opt = create(select, 'option', { 'value': v }, t);
 
       if (value && values[i] === value) $(opt).attr('selected', 'selected');
     }
@@ -361,7 +366,7 @@ var Quaderno = function () {
   renderers.render_checkbox = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || id;
+    var text = template[1].text || template[1].id;
 
     var checkbox = create(
       container, 'input', { 'class': 'quad_checkbox', 'type': 'checkbox' });
@@ -395,7 +400,11 @@ var Quaderno = function () {
     var id = currentId(container);
     var text = template[1].text || id;
 
-    create(container, 'span', '.quad_key', translate(container, text));
+    create(
+      container,
+      'span',
+      '.quad_key',
+      translate(container, text, template[1].id));
 
     var input = create(
       container, 'input', { 'class': 'quad_value', 'type': 'text' });
@@ -422,7 +431,7 @@ var Quaderno = function () {
   renderers.render_text_area = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || id;
+    var text = template[1].text || template[1].id;
 
     create(container, 'span', '.quad_key', translate(container, text));
 
@@ -454,7 +463,7 @@ var Quaderno = function () {
   renderers.render_date = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || id;
+    var text = template[1].text || template[1].id;
 
     create(container, 'span', '.quad_key', translate(container, text));
 
@@ -622,7 +631,8 @@ var Quaderno = function () {
 
   renderers.render_text = function (container, template, data, options) {
 
-    var text = template[1].text || '';
+    var id = currentId(container);
+    var text = template[1].text || lookup(data, id) || '';
 
     create(container, 'div', '.quad_key.quad_text', translate(container, text));
   }
@@ -668,9 +678,10 @@ var Quaderno = function () {
 
     var td = create(container, 'td', {});
 
-    var label = template[1].text || template[1].id;
+    var id = currentId(container);
+    var text = template[1].text || template[1].id;
 
-    var a = $(create(td, 'a', '.quad_tab', label));
+    var a = $(create(td, 'a', '.quad_tab', translate(container, text)));
     a.attr('href', '');
     a.attr('onClick', 'return Quaderno.hooks.showTab(this.parentNode);');
 
@@ -680,11 +691,6 @@ var Quaderno = function () {
   renderers.render_tabs = function (container, template, data, options) {
 
     var tabs = template[2];
-    //var tabs = [];
-    //for (var i = 0; i < template[2].length; i++) {
-    //  var child = template[2][i];
-    //  if (child[0] === 'tab') tabs.push(child);
-    //}
 
     var table = create(container, 'table', '.quad_tab_group');
 
@@ -943,6 +949,9 @@ var Quaderno = function () {
   function render (container, template, data, options) {
 
     container = toElement(container);
+
+    options = options || {};
+    options.translations = options.translations || {};
 
     container.data = data;
     container.options = options;

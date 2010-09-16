@@ -2,6 +2,7 @@ tabs
   tab "dates"
     select destination0 [roma, firenze, pisa]
     select destination1 [destinations]
+    select destination2 [country.france, country.us]
     box
       date departure
       date_y birthyear

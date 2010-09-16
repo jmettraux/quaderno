@@ -1,10 +1,12 @@
 {
   "en": {
-    "destination0": "initial destination"
+    "destination0": "initial destination",
+    "country": { "france": "france", "us": "US" }
   },
   "ja": {
     "destination0": "行き先",
     "date": { "y": "年", "m": "月", "d": "日" },
-    "customer": { "name": "名前" }
+    "customer": { "name": "名前" },
+    "country": { "france": "仏", "us": "米" }
   }
 }

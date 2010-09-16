@@ -11,8 +11,8 @@ load(dir + '/base.js');
 
 // 0
 
-var template = "  \n\
-text customer     \n\
+var template = " \n\
+text customer \n\
 "
 var data = { "customer": "kanazawa" };
 

@@ -4,11 +4,11 @@
 [o] html escaping
 [o] 'view' mode
 [o] translations
+[o] tests for translations
+[o] translations for select values
 [ ] jagaimo : undefined
 [ ] undo/redo/reset
-[ ] translations for select values
 [ ] check html escaping with IE8
-[ ] tests for translations
 
 [ ] validations ? jq validations ?
 
