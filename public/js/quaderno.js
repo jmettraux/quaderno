@@ -876,17 +876,38 @@ var Quaderno = function () {
   //
   // array hooks
 
+  function addRemoveButton (elt) {
+    button(
+      elt,
+      '.quad_minus_button.array_remove_button',
+      'Quaderno.hooks.removeFromArray(this);');
+  }
+  function addReorderButtons (elt) {
+    button(
+      elt,
+      '.quad_up_button.array_move_button',
+      'Quaderno.hooks.moveInArray(this, "up");');
+    button(
+      elt,
+      '.quad_down_button.array_move_button',
+      'Quaderno.hooks.moveInArray(this, "down");');
+  }
+
   hooks.addToArray = function (elt) {
 
     stack(elt);
 
     var t = JSON.parse(childValue(elt.parentNode, '.quad_array_template'));
+    var tid = t[1].id;
     t[1].id = '.0';
 
     var r = root(elt);
 
     renderElement(elt.parentNode, t, r.data, r.options);
     elt.parentNode.insertBefore(elt.nextSibling, elt);
+
+    if (tid.match(/[\*-]/)) addRemoveButton(elt.previousSibling);
+    if (tid.match(/\^$/)) addReorderButtons(elt.previousSibling);
   }
 
   hooks.removeFromArray = function (elt) {
@@ -1002,32 +1023,12 @@ var Quaderno = function () {
           template[1].id = '.0';
           var e = renderElement(div, template, data, options);
 
-          if (arrayId.canRemove) {
-            var b = button(
-              e,
-              '.quad_minus_button',
-              'Quaderno.hooks.removeFromArray(this);');
-            $(b).addClass('array_remove_button');
-          }
-          if (arrayId.canReorder) {
-            var up = button(
-              e,
-              '.quad_up_button',
-              'Quaderno.hooks.moveInArray(this, "up");');
-            var down = button(
-              e,
-              '.quad_down_button',
-              'Quaderno.hooks.moveInArray(this, "down");');
-            $(up).addClass('array_move_button');
-            $(down).addClass('array_move_button');
-          }
+          if (arrayId.canRemove) addRemoveButton(e);
+          if (arrayId.canReorder) addReorderButtons(e);
         }
       }
       if (arrayId.canAdd) {
-        button(
-          div,
-          '.quad_plus_button',
-          'Quaderno.hooks.addToArray(this);');
+        button(div, '.quad_plus_button', 'Quaderno.hooks.addToArray(this);');
       }
 
       return div;

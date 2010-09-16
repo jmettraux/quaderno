@@ -11,6 +11,6 @@
 [ ] check html escaping with IE8
 
 [ ] validations ? jq validations ? custom types email...
-[ ] bug : -^v buttons are gone when + an element
 [ ] link ? href: value, text: text
+[ ] arrays : duplicate button ?
 
