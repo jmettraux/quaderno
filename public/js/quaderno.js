@@ -334,28 +334,39 @@ var Quaderno = function () {
 
     if (elt.stacked) return;
 
+    $(elt).attr('value', elt.value);
     stack(elt);
     elt.stacked = true;
   }
 
   hooks.stackOnChange = function (elt) {
 
-    var $elt = elt;
+    var $elt = $(elt);
+    var tagname = elt.tagName.toLowerCase();
 
-    if (elt.type === 'checkbox') {
+    if (elt.type === 'text') {
+
+      elt.stacked = false;
+    }
+    else if (elt.type === 'checkbox') {
 
       var checked = $elt.attr('checked');
       $elt.attr('checked', ! checked);
       stack(elt);
       $elt.attr('checked', checked);
     }
-    else if (elt.tagName.toLowerCase() === 'select') {
+    else if (tagname === 'select') {
 
       var newValue = elt.value;
       setSelectValue(elt, elt.previousValue);
       stack(elt);
       setSelectValue(elt, newValue);
       elt.previousValue = newValue;
+    }
+    else if (tagname === 'textarea') {
+
+      stack(elt);
+      $elt.text(elt.value);
     }
   }
 
@@ -497,14 +508,15 @@ var Quaderno = function () {
       'input',
       { 'class': 'quad_value',
         'type': 'text',
-        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);' });
+        'onKeyPress': 'Quaderno.hooks.stackOnKey(this);',
+        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
 
     if (id) {
 
       input.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
         // for webrat / capybara
 
-      input.value = lookup(data, id) || '';
+      $(input).attr('value', lookup(data, id) || '');
     }
 
     if (options.mode === 'view') $(input).attr('disabled', 'disabled');
@@ -541,7 +553,8 @@ var Quaderno = function () {
       'textarea',
       { 'id': aid,
         'class': 'quad_value',
-        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);' },
+        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);',
+        'onChange': 'Quaderno.hooks.stackOnChange(this);' },
       value);
 
     if (options.mode === 'view') $(area).attr('disabled', 'disabled');

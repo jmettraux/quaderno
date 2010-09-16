@@ -6,8 +6,8 @@
 [o] translations
 [o] tests for translations
 [o] translations for select values
+[o] undo/redo/reset
 [ ] jagaimo : undefined
-[ ] undo/redo/reset
 [ ] check html escaping with IE8
 
 [ ] validations ? jq validations ? custom types email...
