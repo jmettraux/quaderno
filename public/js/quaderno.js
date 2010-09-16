@@ -59,8 +59,10 @@ var Quaderno = function () {
     var atts = attributes || {};
 
     if (attributes && ((typeof attributes) === 'string')) {
-      attributes = $.trim(attributes.split('.').join(' '));
       atts = { 'class': attributes };
+    }
+    if (atts['class']) {
+      atts['class'] = $.trim((atts['class'] || '').split('.').join(' '));
     }
 
     var e = $('<' + tagName + '/>', atts)[0];
@@ -327,7 +329,73 @@ var Quaderno = function () {
     r.stack.push(copy);
     while (r.stack.length > 14) r.stack.length.shift();
   }
-  hooks.stack = stack;
+
+  hooks.stackOnKey = function (elt) {
+
+    if (elt.stacked) return;
+
+    stack(elt);
+    elt.stacked = true;
+  }
+
+  hooks.stackOnChange = function (elt) {
+
+    var $elt = elt;
+
+    if (elt.type === 'checkbox') {
+
+      var checked = $elt.attr('checked');
+      $elt.attr('checked', ! checked);
+      stack(elt);
+      $elt.attr('checked', checked);
+    }
+    else if (elt.tagName.toLowerCase() === 'select') {
+
+      var newValue = elt.value;
+      setSelectValue(elt, elt.previousValue);
+      stack(elt);
+      setSelectValue(elt, newValue);
+      elt.previousValue = newValue;
+    }
+  }
+
+  //
+  // select helpers
+
+  // Setting the value in hard (to make cloneNode()'s work easier...
+  //
+  function setSelectValue (sel, value) {
+
+    value = '' + value;
+
+    var opts = $(sel).children('option');
+
+    for (var i = 0; i < opts.length; i++) {
+
+      var opt = opts[i]; var $opt = $(opt);
+
+      var nopt = '<option value="';
+      nopt += $opt.attr('value');
+      nopt += '"';
+      if ($opt.attr('value') === value) nopt += ' selected="selected"';
+      nopt += '>';
+      nopt += $opt.text();
+      nopt += '</option>';
+
+      $opt.remove();
+      sel.appendChild($(nopt)[0]);
+    }
+  }
+
+  function createSelect (container, cname) {
+
+    return create(
+      container,
+      'select',
+      { 'class': cname,
+        'onFocus': 'this.previousValue = this.value;',
+        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
+  }
 
   //
   // select
@@ -339,7 +407,7 @@ var Quaderno = function () {
 
     create(container, 'span', '.quad_key', translate(container, text));
 
-    var select = create(container, 'select', '.quad_value');
+    var select = createSelect(container, '.quad_value');
 
     if (id) select.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
       // for webrat / capybara
@@ -360,8 +428,10 @@ var Quaderno = function () {
 
       var opt = create(select, 'option', { 'value': v }, t);
 
-      if (value && values[i] === value) $(opt).attr('selected', 'selected');
+      //if (value && values[i] === value) $(opt).attr('selected', 'selected');
     }
+
+    if (value) setSelectValue(select, value);
 
     if (options.mode === 'view') $(select).attr('disabled', 'disabled');
   }
@@ -381,7 +451,11 @@ var Quaderno = function () {
     var text = template[1].text || template[1].id;
 
     var checkbox = create(
-      container, 'input', { 'class': 'quad_checkbox', 'type': 'checkbox' });
+      container,
+      'input',
+      { 'class': 'quad_checkbox',
+        'type': 'checkbox',
+        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
 
     if (id) {
 
@@ -422,8 +496,8 @@ var Quaderno = function () {
       container,
       'input',
       { 'class': 'quad_value',
-        'type': 'text' });
-        //'onChange' : 'Quaderno.hooks.stack(this);' });
+        'type': 'text',
+        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);' });
 
     if (id) {
 
@@ -463,7 +537,12 @@ var Quaderno = function () {
     }
 
     var area = create(
-      container, 'textarea', { 'id': aid, 'class': 'quad_value' }, value);
+      container,
+      'textarea',
+      { 'id': aid,
+        'class': 'quad_value',
+        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);' },
+      value);
 
     if (options.mode === 'view') $(area).attr('disabled', 'disabled');
   }
@@ -496,11 +575,11 @@ var Quaderno = function () {
         translate(container, 'date.y', 'y'));
 
       var y = (new Date()).getYear() + 1900;
-      year = create(container, 'select', '.quad_date_year');
-      for (var i = 2000; i < 2200; i++) {
+      year = createSelect(container, '.quad_date_year');
+      for (var i = 2000; i < 2050; i++) {
         create(year, 'option', { 'value': '' + i }, i);
       }
-      year.value = y;
+      setSelectValue(year, y);
       $(year).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
@@ -518,7 +597,7 @@ var Quaderno = function () {
         container, 'span', '.quad_date_separator',
         translate(container, 'date.m', 'm'));
 
-      month = create(container, 'select', '.quad_date_month');
+      month = createSelect(container, '.quad_date_month');
       for (var i = 1; i <= 12; i++) {
         create(month, 'option', { 'value': '' + i }, i);
       }
@@ -539,7 +618,7 @@ var Quaderno = function () {
         container, 'span', '.quad_date_separator',
         translate(container, 'date.d', 'd'));
 
-      day = create(container, 'select', '.quad_date_day');
+      day = createSelect(container, '.quad_date_day');
       for (var i = 1; i <= 31; i++) {
         create(day, 'option', { 'value': '' + i }, i);
       }
@@ -557,9 +636,9 @@ var Quaderno = function () {
 
       value = value.split('/');
 
-      if (year) year.value = new Number(value.shift());
-      if (month) month.value = new Number(value.shift());
-      if (day) day.value = new Number(value.shift());
+      if (year) setSelectValue(year, new Number(value.shift()));
+      if (month) setSelectValue(month, new Number(value.shift()));
+      if (day) setSelectValue(day, new Number(value.shift()));
     }
 
     // mode view => disable
@@ -605,6 +684,8 @@ var Quaderno = function () {
 
   hooks.checkDate = function (elt, type) {
 
+    hooks.stackOnChange(elt);
+
     if ( ! type.match(/d/)) return;
 
     var dateElt = $(elt.parentNode);
@@ -619,9 +700,9 @@ var Quaderno = function () {
       d.setFullYear(
         parseInt(year.value), parseInt(month.value) - 1, parseInt(day.value));
 
-      year.value = d.getFullYear();
-      month.value = d.getMonth() + 1;
-      day.value = d.getDate();
+      setSelectValue(year, d.getFullYear());
+      setSelectValue(month, d.getMonth() + 1);
+      setSelectValue(day, d.getDate());
     }
 
     // adjust days (february and co)
@@ -639,7 +720,7 @@ var Quaderno = function () {
       create(day, 'option', { 'value': '' + i }, i);
     }
 
-    day.value = d;
+    setSelectValue(day, d);
   }
 
   //

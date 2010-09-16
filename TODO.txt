@@ -12,4 +12,5 @@
 
 [ ] validations ? jq validations ? custom types email...
 [ ] bug : -^v buttons are gone when + an element
+[ ] link ? href: value, text: text
 
