@@ -318,6 +318,18 @@ var Quaderno = function () {
   }
 
   //
+  // stacking for undoing
+
+  function stack (elt) {
+    var r = root(elt);
+    var firstElt = $(r).children('.quad_element')[0];
+    var copy = firstElt.cloneNode(true);
+    r.stack.push(copy);
+    while (r.stack.length > 14) r.stack.length.shift();
+  }
+  hooks.stack = stack;
+
+  //
   // select
 
   renderers.render_select = function (container, template, data, options) {
@@ -407,7 +419,11 @@ var Quaderno = function () {
       translate(container, text, template[1].id));
 
     var input = create(
-      container, 'input', { 'class': 'quad_value', 'type': 'text' });
+      container,
+      'input',
+      { 'class': 'quad_value',
+        'type': 'text' });
+        //'onChange' : 'Quaderno.hooks.stack(this);' });
 
     if (id) {
 
@@ -506,7 +522,7 @@ var Quaderno = function () {
       for (var i = 1; i <= 12; i++) {
         create(month, 'option', { 'value': '' + i }, i);
       }
-      $(month).attr('onchange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
+      $(month).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
         month.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__month';
@@ -768,8 +784,7 @@ var Quaderno = function () {
 
   hooks.addToArray = function (elt) {
 
-    //stack(elt);
-      // TODO implement me !!
+    stack(elt);
 
     var t = JSON.parse(childValue(elt.parentNode, '.quad_array_template'));
     t[1].id = '.0';
@@ -782,16 +797,14 @@ var Quaderno = function () {
 
   hooks.removeFromArray = function (elt) {
 
-    //stack(elt);
-      // TODO implement me !!
+    stack(elt);
 
     $(elt.parentNode).remove();
   }
 
   hooks.moveInArray = function (elt, direction) {
 
-    //stack(elt);
-      // TODO implement me !!
+    stack(elt);
 
     elt = elt.parentNode;
 
@@ -809,7 +822,9 @@ var Quaderno = function () {
   // render and produce, surface methods
 
   function root (elt) {
-    return $(elt).parents('.quad_root')[0];
+    var $elt = $(elt);
+    if ($elt.hasClass('quad_root')) return elt;
+    return $elt.parents('.quad_root')[0];
   }
 
   function childValue (elt, cname) {
@@ -955,11 +970,15 @@ var Quaderno = function () {
 
     container.data = data;
     container.options = options;
+    container.stack = [];
 
     while (container.firstChild) container.removeChild(container.firstChild);
 
     if ((typeof template) === 'string') template = parse(template);
     renderElement(container, template, data, options);
+
+    stack(container);
+    container.original = container.stack[0].cloneNode(true);
   }
 
   function produce (container, data) {
@@ -968,10 +987,22 @@ var Quaderno = function () {
 
     data = data || container.data;
 
-    var root = $(container).children('.quad_element')[0]
-    produceElement(root, data, 0);
+    produceElement($(container).children('.quad_element')[0], data, 0);
 
     return data;
+  }
+
+  function undo (container) {
+    container = toElement(container);
+    while (container.firstChild) container.removeChild(container.firstChild);
+    var tree = container.stack.pop() || container.original.cloneNode(true);
+    container.appendChild(tree);
+  }
+
+  function reset (container) {
+    container = toElement(container);
+    while (container.firstChild) container.removeChild(container.firstChild);
+    container.appendChild(container.original.cloneNode(true));
   }
 
   return {
@@ -992,7 +1023,10 @@ var Quaderno = function () {
 
     parse: parse,
     render: render,
-    produce: produce
+    produce: produce,
+
+    undo: undo,
+    reset: reset
   }
 }();
 

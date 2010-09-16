@@ -35,6 +35,8 @@
         quaderno :
         <div id="quad" class="quad_root"></div>
         <div class="buttons produce_buttons">
+          <a href="" onclick="return undo();">undo</a>
+          <a href="" onclick="return reset();">reset</a>
           <a href="" onclick="return produce();">produce ↓</a>
         </div>
       </td>
@@ -127,6 +129,15 @@
 
       Jagaimo.render('#product', product);
 
+      return false;
+    }
+
+    function undo () {
+      Quaderno.undo('#quad');
+      return false;
+    }
+    function reset () {
+      Quaderno.reset('#quad');
       return false;
     }
 

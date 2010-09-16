@@ -10,5 +10,6 @@
 [ ] undo/redo/reset
 [ ] check html escaping with IE8
 
-[ ] validations ? jq validations ?
+[ ] validations ? jq validations ? custom types email...
+[ ] bug : -^v buttons are gone when + an element
 
