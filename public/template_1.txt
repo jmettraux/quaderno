@@ -1,3 +1,3 @@
-box
-  text_input x "x"
-  checkbox really "really?"
+tabs
+  tab "x"
+    text_input x "x"

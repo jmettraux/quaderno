@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="stylesheets/jagaimo.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="stylesheets/quaderno.css" type="text/css" media="screen" />
   <!--[if IE]>
+    <link rel="stylesheet" href="stylesheets/quaderno_ie.css" type="text/css" media="screen" />
+  <![endif]-->
+  <!--[if IE]>
     <script src="js/json2.js"></script>
   <![endif]-->
   <script src="js/jquery-1.4.2.js"></script>
@@ -114,14 +117,19 @@
     Jagaimo.render('#product', {});
 
     function render () {
-      var template = Quaderno.parse($('#template')[0].value);
-      Jagaimo.render('#parsed', template);
-      Quaderno.render(
-        '#quad',
-        template,
-        data,
-        { 'translations': translations, 'lang': lang, 'mode': mode });
-      return false;
+      try {
+        var template = Quaderno.parse($('#template')[0].value);
+        Jagaimo.render('#parsed', template);
+        Quaderno.render(
+          '#quad',
+          template,
+          data,
+          { 'translations': translations, 'lang': lang, 'mode': mode });
+        return false;
+      }
+      catch (e) {
+        return false;
+      }
     }
 
     render();
