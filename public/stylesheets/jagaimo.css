@@ -1,7 +1,8 @@
 
 .jagaimo {
   color: #e7eef5;
-  background: rgba(0,0,0,.85);
+  /*background: rgba(0,0,0,.85);*/
+  background: black;
   font: 12px/20px menlo, monaco, courier, mono;
   padding: 12px;
   margin: 1px;

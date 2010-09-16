@@ -104,7 +104,7 @@ var Jagaimo = function () {
     var container = containerId;
 
     if ((typeof containerId) === 'string') {
-      if (containerId[0] === '#') containerId = containerId.slice(1);
+      if (containerId.match(/^#/)) containerId = containerId.slice(1);
       container = document.getElementById(containerId);
     }
 

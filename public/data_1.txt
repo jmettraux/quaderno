@@ -1,6 +1,2 @@
 {
-  "season": "year end",
-  "customer": { "name": "Kanazawa", "age": 202 },
-  "orders": [ "gifts", "champaign", "oysters" ],
-  "destination": "Cipangu"
 }

@@ -1,13 +1,3 @@
-tabs
-  tab "orders"
-    box
-      text orders.
-    box
-      text_input orders.
-  tab "input"
-    text_input destination "destination"
-  tab customer "customer"
-    text "hello"
-    text season
-    text .name
-    text .age
+box
+  text_input x "x"
+  checkbox really "really?"

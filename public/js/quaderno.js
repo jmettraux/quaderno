@@ -45,7 +45,7 @@ var Quaderno = function () {
   }
 
   function removeClassDot (cname) {
-    return (cname[0] === '.') ? cname.slice(1) : cname;
+    return (cname.match(/^\./)) ? cname.slice(1) : cname;
   }
 
   function hide (container, cname, value) {
@@ -228,8 +228,10 @@ var Quaderno = function () {
       var m = line.match(/^([ ]*)([^ ]+) ?(.+)?$/)
       var nlevel = m[1].length / 2;
 
-      var def = definitions[m[2]];
-      var elt = [ m[2], parseAttributes(m[3]), [] ];
+      var key = $.trim(m[2]);
+
+      var def = definitions[key];
+      var elt = [ key, parseAttributes($.trim(m[3])), [] ];
 
       if (nlevel > clevel) {
         elt.parent = current;
@@ -965,7 +967,7 @@ var Quaderno = function () {
       return undefined;
     }
 
-    if (id[0] === '.' && elt.parentNode) {
+    if (id.match(/^\./) && elt.parentNode) {
       if (id === '.0') id = '.' + computeSiblingOffset(elt, '.quad_element');
       return currentId(elt.parentNode) + id;
     }
