@@ -25,7 +25,7 @@ the default template and data are located in :
 
 ## the elements
 
-element-name id "text" value [ values ] "title"
+element-name id "text" value [values] "title" disabled
 
 * group
 * box

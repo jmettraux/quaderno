@@ -158,7 +158,7 @@ var Quaderno = function () {
 
   function parseAttributes (s) {
 
-    // id "text" value [ values ] "title"
+    // id "text" value \[ values \] "title" [disabled]
 
     // TODO : >value< if necessary
 
@@ -201,9 +201,16 @@ var Quaderno = function () {
 
     // title
 
-    m = s.match(/^"([^"]+)"$/)
+    m = s.match(/^"([^"]+)" ?(.+)?$/)
 
-    if (m) atts.title = m[1];
+    if (m) {
+      atts.title = m[1];
+      s = m[2] || '';
+    }
+
+    // disabled
+
+    if (s.match(/disabled$/)) atts.disabled = true;
 
     return atts;
   }
@@ -446,7 +453,9 @@ var Quaderno = function () {
 
     if (value) setSelectValue(select, value);
 
-    if (options.mode === 'view') $(select).attr('disabled', 'disabled');
+    if (template[1].disabled || options.mode === 'view') {
+      $(select).attr('disabled', 'disabled');
+    }
   }
 
   renderers.produce_select = function (container, data) {
@@ -479,7 +488,10 @@ var Quaderno = function () {
     }
 
     if (value === true) $(checkbox).attr('checked', 'checked');
-    if (options.mode === 'view') $(checkbox).attr('disabled', 'disabled');
+
+    if (template[1].disabled || options.mode === 'view') {
+      $(checkbox).attr('disabled', 'disabled');
+    }
 
     create(
       container, 'span', '.quad_checkbox_key', translate(container, text));
@@ -521,7 +533,9 @@ var Quaderno = function () {
       $(input).attr('value', lookup(data, id) || '');
     }
 
-    if (options.mode === 'view') $(input).attr('disabled', 'disabled');
+    if (template[1].disabled || options.mode === 'view') {
+      $(input).attr('disabled', 'disabled');
+    }
   }
 
   renderers.produce_text_input = function (container, data) {
@@ -559,7 +573,9 @@ var Quaderno = function () {
         'onChange': 'Quaderno.hooks.stackOnChange(this);' },
       value);
 
-    if (options.mode === 'view') $(area).attr('disabled', 'disabled');
+    if (template[1].disabled || options.mode === 'view') {
+      $(area).attr('disabled', 'disabled');
+    }
   }
 
   renderers.produce_text_area = function (container, data) {
@@ -658,7 +674,7 @@ var Quaderno = function () {
 
     // mode view => disable
 
-    if (options.mode === 'view') {
+    if (template[1].disabled || options.mode === 'view') {
 
       if (year) $(year).attr('disabled', 'disabled');
       if (month) $(month).attr('disabled', 'disabled');
