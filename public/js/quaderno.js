@@ -348,6 +348,7 @@ var Quaderno = function () {
     $(elt).attr('value', elt.value);
     stack(elt);
     elt.stacked = true;
+    $(elt).val('');
   }
 
   hooks.stackOnClick = function (elt) {
