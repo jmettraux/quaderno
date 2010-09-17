@@ -11,7 +11,7 @@
 [o] validations ? jq validations ? custom types email...
 [x] jagaimo : undefined
 [o] /disabled$/
+[o] arrays : duplicate button ?
 
 [ ] link ? href: value, text: text
-[ ] arrays : duplicate button ?
 

@@ -84,26 +84,26 @@ var Quaderno = function () {
   function button (container, cname, onclick, title) {
 
     if ( ! onclick.match(/return false;$/)) onclick += " return false;";
-    cname = removeClassDot(cname);
+    var m = cname.match(/quad_([^_]+)_button/);
 
-    title = title || {
-      'quad_plus_button': 'add',
-      'quad_minus_button': 'remove',
-      'quad_up_button': 'move up',
-      'quad_down_button': 'move down',
-      'quad_copy_button': 'copy',
-      'quad_cut_button': 'cut',
-      'quad_paste_button': 'paste',
-      'quad_go_button': 'go',
-      'quad_left_button': 'left',
-      'quad_right_button': 'right'
-    }[cname];
+    title = title || m ? {
+      'plus': translate(container, 'quaderno.button.add', 'add'),
+      'minus': translate(container, 'quaderno.button.remove', 'remove'),
+      'up': translate(container, 'quaderno.button.up', 'move up'),
+      'down': translate(container, 'quaderno.button.down', 'move down'),
+      'copy': translate(container, 'quaderno.button.duplicate', 'duplicate'),
+      //'cut': translate(container, 'quaderno.button.cut', 'cut'),
+      //'paste': translate(container, 'quaderno.button.paste', 'paste'),
+      //'go': translate(container, 'quaderno.button.go', 'go'),
+      //'left': translate(container, 'quaderno.button.left', 'left'),
+      //'right': translate(container, 'quaderno.button.right', 'right')
+    }[m[1]] : undefined;
 
     return create(
       container,
       'a',
       { 'href': '',
-        'class': cname + ' quad_button',
+        'class': cname + '.quad_button',
         'title': title,
         'onClick': onclick });
   }
@@ -910,6 +910,12 @@ var Quaderno = function () {
       '.quad_down_button.array_move_button',
       'Quaderno.hooks.moveInArray(this, "down");');
   }
+  function addDuplicateButton (elt) {
+    button(
+      elt,
+      '.quad_copy_button.array_remove_button',
+      'Quaderno.hooks.duplicateInArray(this);');
+  }
 
   hooks.addToArray = function (elt) {
 
@@ -926,6 +932,7 @@ var Quaderno = function () {
 
     if (tid.match(/[\*-]/)) addRemoveButton(elt.previousSibling);
     if (tid.match(/\^$/)) addReorderButtons(elt.previousSibling);
+    if (tid.match(/[\*\+]/)) addDuplicateButton(elt.previousSibling);
   }
 
   hooks.removeFromArray = function (elt) {
@@ -949,6 +956,15 @@ var Quaderno = function () {
     else if (elt.nextSibling) {
       elt.parentNode.insertBefore(elt.nextSibling, elt);
     }
+  }
+
+  hooks.duplicateInArray = function (elt) {
+
+    stack(elt);
+
+    elt = elt.parentNode;
+
+    elt.parentNode.insertBefore(elt.cloneNode(true), elt);
   }
 
   //
@@ -1043,6 +1059,7 @@ var Quaderno = function () {
 
           if (arrayId.canRemove) addRemoveButton(e);
           if (arrayId.canReorder) addReorderButtons(e);
+          if (arrayId.canAdd) addDuplicateButton(e);
         }
       }
       if (arrayId.canAdd) {
