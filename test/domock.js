@@ -279,6 +279,11 @@ function Text () {
     toString: function () {
       return this.text + '\n';
     },
+    cloneNode: function (deep) {
+      var t = new Text();
+      t.text = this.text;
+      return t;
+    },
     nodeType: 3
   }
 }

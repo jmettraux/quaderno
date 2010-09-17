@@ -232,7 +232,9 @@ var Quaderno = function () {
       if (tline.match(/^\/\//)) continue; // // comment line
       if (tline.match(/^#/)) continue; // # comment line
 
-      var m = line.match(/^([ ]*)([^ ]+) ?(.+)?$/)
+      var m = line.match(/^([ ]*)([^ ]+) ?(.+)?\r?$/)
+        // notice the \r?
+
       var nlevel = m[1].length / 2;
 
       var key = $.trim(m[2]);
@@ -913,7 +915,7 @@ var Quaderno = function () {
   function addDuplicateButton (elt) {
     button(
       elt,
-      '.quad_copy_button.array_remove_button',
+      '.quad_copy_button.array_duplicate_button',
       'Quaderno.hooks.duplicateInArray(this);');
   }
 

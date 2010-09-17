@@ -35,6 +35,6 @@ assertEqual(
         ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
         ["span",{"class":"quad_key"},["Name"]],
-        ["input",{"class":"quad_value","type":"text","value":"danza"},[]]]]]]]],
+        ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.hooks.stackOnKey(this);","onChange":"Quaderno.hooks.stackOnChange(this);","value":"danza"},[]]]]]]]],
   $('.quad_root')[0].toArray());
 
