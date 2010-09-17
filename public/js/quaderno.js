@@ -338,7 +338,7 @@ var Quaderno = function () {
     var firstElt = $(r).children('.quad_element')[0];
     var copy = firstElt.cloneNode(true);
     r.stack.push(copy);
-    while (r.stack.length > 14) r.stack.length.shift();
+    while (r.stack.length > 14) r.stack.shift();
   }
 
   hooks.stackOnKey = function (elt) {
