@@ -350,6 +350,18 @@ var Quaderno = function () {
     elt.stacked = true;
   }
 
+  hooks.stackOnClick = function (elt) {
+
+    // checkboxes
+
+    var $elt = $(elt);
+
+    var checked = $elt.attr('checked');
+    $elt.attr('checked', ! checked);
+    stack(elt);
+    $elt.attr('checked', checked);
+  }
+
   hooks.stackOnChange = function (elt) {
 
     var $elt = $(elt);
@@ -358,13 +370,6 @@ var Quaderno = function () {
     if (elt.type === 'text') {
 
       elt.stacked = false;
-    }
-    else if (elt.type === 'checkbox') {
-
-      var checked = $elt.attr('checked');
-      $elt.attr('checked', ! checked);
-      stack(elt);
-      $elt.attr('checked', checked);
     }
     else if (tagname === 'select') {
 
@@ -479,7 +484,7 @@ var Quaderno = function () {
       'input',
       { 'class': 'quad_checkbox',
         'type': 'checkbox',
-        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
+        'onClick': 'Quaderno.hooks.stackOnClick(this);' });
 
     if (id) {
 
