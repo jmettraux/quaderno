@@ -330,6 +330,17 @@ var Quaderno = function () {
     return ((typeof t) === 'string') ? t : def || text;
   }
 
+  function getKey (container, template, id) {
+
+    if (template[1].text) return translate(container, template[1].text);
+
+    text = translate(container, id)
+
+    if (text && text !== id) return text;
+
+    return template[1].id;
+  }
+
   //
   // stacking for undoing
 
@@ -431,9 +442,8 @@ var Quaderno = function () {
   renderers.render_select = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || template[1].id;
 
-    create(container, 'span', '.quad_key', translate(container, text));
+    create(container, 'span', '.quad_key', getKey(container, template, id));
 
     var select = createSelect(container, '.quad_value');
 
@@ -517,13 +527,8 @@ var Quaderno = function () {
   renderers.render_text_input = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || id;
 
-    create(
-      container,
-      'span',
-      '.quad_key',
-      translate(container, text, template[1].id));
+    create(container, 'span', '.quad_key', getKey(container, template, id));
 
     var input = create(
       container,
@@ -557,9 +562,8 @@ var Quaderno = function () {
   renderers.render_text_area = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || template[1].id;
 
-    create(container, 'span', '.quad_key', translate(container, text));
+    create(container, 'span', '.quad_key', getKey(container, template, id));
 
     var value = '';
     var aid = '';
@@ -597,9 +601,8 @@ var Quaderno = function () {
   renderers.render_date = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || template[1].id;
 
-    create(container, 'span', '.quad_key', translate(container, text));
+    create(container, 'span', '.quad_key', getKey(container, template, id));
 
     var type = template[0].split('_')[1] || 'ymd';
 
@@ -771,6 +774,7 @@ var Quaderno = function () {
     var text = template[1].text || lookup(data, id) || '';
 
     create(container, 'div', '.quad_key.quad_text', translate(container, text));
+    //create(container, 'div', '.quad_key.quad_text', getKey(container, template, id));
   }
 
   renderers.produce_text = function (container, data) {
