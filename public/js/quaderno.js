@@ -823,7 +823,7 @@ var Quaderno = function () {
     var td = create(tr, 'td', { 'colspan': tabs.length });
     var qtb = create(td, 'div', '.quad_tab_body');
 
-    for (i = 0; i < tabs.length; i++) {
+    for (var i = 0; i < tabs.length; i++) {
       var div = renderElement(qtb, tabs[i], data, options);
       if (i != 0) div.style.display = 'none';
     }

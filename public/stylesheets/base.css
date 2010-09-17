@@ -64,9 +64,9 @@ textarea {
   font-size: 11px;
   line-height: 11px;
   margin: 0;
-  width: 100%;
   padding: 3px;
-  height: 210;
+  width: 100%;
+  height: 270px;
   border: 1px solid #c1c1c1;
   border-top-color: #848484;
   border-bottom-color: #ddd;

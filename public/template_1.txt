@@ -1,3 +1,5 @@
 tabs
   tab "x"
     text_input x "x"
+  tab "y"
+    text_input y "y"
