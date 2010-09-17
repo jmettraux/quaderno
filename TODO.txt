@@ -12,6 +12,7 @@
 [x] jagaimo : undefined
 [o] /disabled$/
 [o] arrays : duplicate button ?
+[x] tab order issue : http://machintsandtips.com/e-f-g-h/firefox/tab-through-checkboxes-and-radio-buttons-in-firefox-and-safari/
 
 [ ] link ? href: value, text: text
 
