@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+  <title>Quaderno : readme 0</title>
+
+  <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="stylesheets/quaderno.css" type="text/css" media="screen" />
+  <!--[if IE]>
+    <link rel="stylesheet" href="stylesheets/quaderno_ie.css" type="text/css" media="screen" />
+  <![endif]-->
+
+  <!--[if IE]>
+    <script src="js/json2.js"></script>
+  <![endif]-->
+  <script src="js/jquery-1.4.2.js"></script>
+  <script src="js/quaderno.js"></script>
+</head>
+<body>
+  <div id="quad" class="quad_root"></div>
+
+  <script>
+    var template = '\n\
+      tabs \n\
+        tab "general" \n\
+          text_input name \n\
+          text_input age \n\
+        tab "extra info" \n\
+          text_input driving_license \n\
+      '
+    var data = { name: "Jo Average", age: '35' };
+
+    Quaderno.render('#quad', template, data);
+  </script>
+</body>
+</html>
+

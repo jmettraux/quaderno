@@ -3,6 +3,30 @@
 
 A mini form templating system in javascript.
 
+The rendering all happens in the browser.
+
+    <div id="quad" class="quad_root"></div>
+
+    <script>
+      var template = '\n\
+        tabs \n\
+          tab "general" \n\
+            text_input name \n\
+            text_input age \n\
+          tab "extra info" \n\
+            text_input driving_license \n\
+        '
+      var data = { name: "Jo Average", age: 35 };
+
+      Quaderno.render('#quad', template, data);
+    </script>
+
+will result in
+
+<img src="http://github.com/jmettraux/quaderno/raw/master/doc/quaderno_0.png"/>
+
+The complete example is at <a href="http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html">http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html</a>.
+
 
 ## having a look
 
@@ -81,14 +105,17 @@ where x is the number (integer) of the test. For example
 
     ruby test/test.rb 0
 
-will run the test test/qt_0_identify.js
+will run the test test/qt_0_parse.js
 
 
 ## credits
 
 Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
 
+Claudio Petasecca Donati - <a href="http://github.com/etapeta">http://github.com/etapeta</a> - testing
+
 Torsten Schoenebaum - <a href="http://github.com/tosch">http://github.com/tosch</a> - testing on webkit
+
 
 The amazing jQuery - <a href="http://jquery.com/">http://jquery.com</a>
 
