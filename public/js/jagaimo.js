@@ -28,18 +28,9 @@ var Jagaimo = function () {
   function create (container, tagName, className, innerText) {
 
     var e = document.createElement(tagName);
-
-    if (className) {
-      e.className = className;
-    }
-    if (innerText) {
-      //e.innerHTML = innerText; // doesn't work with Safari
-      e.appendChild(document.createTextNode(innerText));
-    }
-    if (container) {
-      container.appendChild(e);
-    }
-
+    if (className) e.className = className;
+    if (innerText) e.appendChild(document.createTextNode(innerText));
+    if (container) container.appendChild(e);
     return e;
   }
 
@@ -48,21 +39,13 @@ var Jagaimo = function () {
     catch (e) { return false; }
   }
 
-  function renderAtom (container, a) {
-    create(
-      container,
-      'span',
-      'jagaimo_atom jagaimo_' + (typeof a),
-      JSON.stringify(a));
-  }
-
-  function doRender (container, o) {
+  function renderFlat (container, o) {
 
     if (isArray(o)) {
 
       create(container, 'span', 'jagaimo_bracket', '[');
       for (var i = 0; i < o.length; i++) {
-        doRender(container, o[i]);
+        renderFlat(container, o[i]);
         if (i < o.length - 1) {
           create(container, 'span', 'jagaimo_comma', ',');
         }
@@ -79,7 +62,7 @@ var Jagaimo = function () {
       for (var i = 0; i < keys.length; i++) {
         create(container, 'span', 'jagaimo_key', keys[i]);
         create(container, 'span', 'jagaimo_colon', ':');
-        doRender(container, o[keys[i]]);
+        renderFlat(container, o[keys[i]]);
         if (i < keys.length - 1) {
           create(container, 'span', 'jagaimo_comma', ',');
         }
@@ -88,8 +71,45 @@ var Jagaimo = function () {
     }
     else {
 
-      renderAtom(container, o);
+      create(
+        container,
+        'span',
+        'jagaimo_atom jagaimo_' + (typeof o),
+        JSON.stringify(o));
+    }
+  }
 
+  function renderTree (container, o) {
+
+    if ((typeof o) !== 'object') {
+
+      create(
+        container,
+        'span',
+        'jagaimo_tree_atom jagaimo_' + (typeof o),
+        o.toString());
+      return;
+    }
+
+    var line = create(container, 'div', 'jagaimo_tree_line');
+
+    if (isArray(o)) {
+
+      for (var i = 0; i < o.length; i++) {
+        var bullet = create(line, 'div', 'jagaimo_tree_bullet', '- ');
+        renderTree(bullet, o[i]);
+      }
+    }
+    else {
+
+      var keys = [];
+      for (var k in o) keys.push(k);
+      keys = keys.sort();
+
+      for (var i = 0; i < keys.length; i++) {
+        var key = create(line, 'div', 'jagaimo_tree_key', keys[i] + ': ');
+        renderTree(key, o[keys[i]]);
+      }
     }
   }
 
@@ -105,75 +125,33 @@ var Jagaimo = function () {
 
     var fc; while (fc = container.firstChild) { container.removeChild(fc); }
 
-    var jaga = create(container, 'div', '');
+    var flat = create(container, 'div', 'jagaimo_flat');
 
-    doRender(jaga, o);
+    renderFlat(flat, o);
 
-    var pre = create(container, 'pre', 'jagaimo_yama', toString(o));
-    pre.style.display = 'none';
+    var tree = create(container, 'div', 'jagaimo_tree');
+    tree.style.display = 'none';
+
+    renderTree(tree, o);
 
     container.onclick = function () {
-      if (jaga.style.display === 'none') {
-        jaga.style.display = 'block';
-        pre.style.display = 'none';
+      if (flat.style.display === 'none') {
+        flat.style.display = 'block';
+        tree.style.display = 'none';
       }
       else {
-        jaga.style.display = 'none';
-        pre.style.display = 'block';
+        flat.style.display = 'none';
+        tree.style.display = 'block';
       }
     };
     container.style.cursor = 'pointer';
 
-    if (opts.expanded === true) container.onclick();
-  }
-
-  //
-  // toYama()
-
-  function indent (i) {
-    var s = '';
-    for (var j = 0; j < i; j++) { s = s + '  '; }
-    return s;
-  }
-
-  function toString (o, ind) {
-
-    ind = ind || 0;
-
-    var s = '';
-
-    if (isArray(o)) {
-
-      if (ind > 0) s = s + '\n';
-
-      for (var i = 0; i < o.length; i++) {
-        s = s + indent(ind) + '- ' + toString(o[i], ind + 1);
-      }
-    }
-    else if ((typeof o) === 'object') {
-
-      if (ind > 0) s = s + '\n';
-
-      var keys = [];
-      for (var k in o) { keys.push(k) };
-      keys = keys.sort();
-
-      for (var i = 0; i < keys.length; i++) {
-        s = s + indent(ind) + keys[i] + ': ' + toString(o[keys[i]], ind + 1);
-      }
-    }
-    else {
-
-      s = s + o.toString() + '\n';
-    }
-
-    return s;
+    if (opts.mode === 'tree') container.onclick();
   }
 
   return {
 
-    render: render,
-    toString: toString
+    render: render
   };
 }();
 

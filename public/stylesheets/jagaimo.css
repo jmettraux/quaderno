@@ -3,7 +3,7 @@
   color: #e7eef5;
   /*background: rgba(0,0,0,.85);*/
   background: black;
-  font: 12px/20px menlo, monaco, courier, mono;
+  font: 10.5px/14px "Menlo regular", monaco, courier, mono;
   padding: 12px;
   margin: 1px;
   -webkit-border-radius: 8px;
@@ -36,6 +36,15 @@
   color: red;
 }
 
-.jagaimo_yama {
-  font: 10.5px/13px menlo, monaco, courier, mono;
+.jagaimo_tree_line {
+  margin-left: 14px;
+}
+.jagaimo_tree_key {
+  color: #86E34B;
+}
+.jagaimo_tree_bullet {
+  color: red;
+}
+.jagaimo_tree_atom {
+  color: white;
 }

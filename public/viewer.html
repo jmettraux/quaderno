@@ -111,12 +111,10 @@
     $('#template')[0].value = template;
 
     data = JSON.parse(data);
-    //Jagaimo.render('#data', data, { expanded: true });
-    Jagaimo.render('#data', data);
+    Jagaimo.render('#data', data, { mode: 'tree' });
 
     translations = JSON.parse(translations);
-    Jagaimo.render('#translations', translations);
-    //Jagaimo.render('#translations', translations, { expanded: true });
+    Jagaimo.render('#translations', translations, { mode: 'tree' });
 
     var mode = qs.mode || 'use';
     var lang = qs.lang || 'en';
@@ -145,8 +143,7 @@
 
       var product = Quaderno.produce('#quad');
 
-      //Jagaimo.render('#product', product, { expanded: true });
-      Jagaimo.render('#product', product);
+      Jagaimo.render('#product', product, { mode: 'tree' });
 
       return false;
     }

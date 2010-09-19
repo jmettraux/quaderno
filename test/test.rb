@@ -5,12 +5,10 @@
 # Mon May 31 09:45:27 JST 2010
 #
 
-files =
-  Dir[File.join(File.dirname(__FILE__), 'qt_*.js')] +
-  Dir[File.join(File.dirname(__FILE__), 'yt_*.js')]
+files = Dir[File.join(File.dirname(__FILE__), 'qt_*.js')]
 
 if a = ARGV[0]
-  files = files.select { |f| f.match('.t_' + a + '_.+\.js$') }
+  files = files.select { |f| f.match('qt_' + a + '_.+\.js$') }
 end
 
 `rhino -e '1'`
