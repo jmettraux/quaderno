@@ -15,28 +15,28 @@ load(dir + "/../public/js/jagaimo.js");
 
 assertEqual(
   '1\n',
-  Yama.toString(1));
+  Jagaimo.toYama(1));
 
 
 // string
 
 assertEqual(
   'hello\n',
-  Yama.toString('hello'));
+  Jagaimo.toYama('hello'));
 
 
 // array
 
 assertEqual(
   '- 1\n- 2\n- car\n',
-  Yama.toString([ 1, 2, 'car' ]));
+  Jagaimo.toYama([ 1, 2, 'car' ]));
 
 
 // object
 
 assertEqual(
   'a: b\nc: 4\n',
-  Yama.toString({ 'a': 'b', 'c': 4 }));
+  Jagaimo.toYama({ 'a': 'b', 'c': 4 }));
 
 
 // nested object
@@ -47,7 +47,7 @@ assertEqual('\
   a: b\n\
   c: 4\n\
 ',
-  Yama.toString([ 1, { 'a': 'b', 'c': 4 } ]));
+  Jagaimo.toYama([ 1, { 'a': 'b', 'c': 4 } ]));
 
 
 // nested array
@@ -58,31 +58,31 @@ a: \n\
   - 2\n\
 c: 3\n\
 ',
-  Yama.toString({ 'a': [ 1, 2 ], 'c': 3 }));
+  Jagaimo.toYama({ 'a': [ 1, 2 ], 'c': 3 }));
 
 
 // data_0
 
 assertEqual('\
+audit: \n\
+  project: \n\
+    id: nada\n\
 comments: oh well\n\
+customers: \n\
+  - \n\
+    city: boston\n\
+    name: bob\n\
+  - \n\
+    active: true\n\
+    city: cartage\n\
+    name: charly\n\
+departure: 2011/12/12\n\
 destinations: \n\
   - reykjavik\n\
   - oslo\n\
   - gothenburg\n\
-customers: \n\
-  - \n\
-    name: bob\n\
-    city: boston\n\
-  - \n\
-    name: charly\n\
-    city: cartage\n\
-    active: true\n\
-departure: 2011/12/12\n\
-audit: \n\
-  project: \n\
-    id: nada\n\
 ',
-  Yama.toString({
+  Jagaimo.toYama({
     "comments": "oh well",
     "destinations": [ "reykjavik", "oslo", "gothenburg" ],
     "customers": [

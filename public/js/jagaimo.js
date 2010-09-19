@@ -22,6 +22,9 @@
 
 var Jagaimo = function () {
 
+  //
+  // render()
+
   function create (container, tagName, className, innerText) {
 
     var e = document.createElement(tagName);
@@ -106,7 +109,7 @@ var Jagaimo = function () {
 
     doRender(jaga, o);
 
-    var pre = create(container, 'pre', 'jagaimo_yama', Yama.toString(o));
+    var pre = create(container, 'pre', 'jagaimo_yama', toYama(o));
     pre.style.display = 'none';
 
     container.onclick = function () {
@@ -124,20 +127,8 @@ var Jagaimo = function () {
     if (opts.expanded === true) container.onclick();
   }
 
-  return {
-
-    // used by 'Yama'
-    //
-    _isArray: isArray,
-
-    render: render
-  };
-}();
-
-
-// Turns a javascript (JSON) thing into a string, with a nice indentation.
-//
-var Yama = function () {
+  //
+  // toYama()
 
   function indent (i) {
     var s = '';
@@ -145,18 +136,18 @@ var Yama = function () {
     return s;
   }
 
-  function toString (o, ind) {
+  function toYama (o, ind) {
 
     ind = ind || 0;
 
     var s = '';
 
-    if (Jagaimo._isArray(o)) {
+    if (isArray(o)) {
 
       if (ind > 0) s = s + '\n';
 
       for (var i = 0; i < o.length; i++) {
-        s = s + indent(ind) + '- ' + toString(o[i], ind + 1);
+        s = s + indent(ind) + '- ' + toYama(o[i], ind + 1);
       }
     }
     else if ((typeof o) === 'object') {
@@ -168,7 +159,7 @@ var Yama = function () {
       keys = keys.sort();
 
       for (var i = 0; i < keys.length; i++) {
-        s = s + indent(ind) + keys[i] + ': ' + toString(o[keys[i]], ind + 1);
+        s = s + indent(ind) + keys[i] + ': ' + toYama(o[keys[i]], ind + 1);
       }
     }
     else {
@@ -180,7 +171,9 @@ var Yama = function () {
   }
 
   return {
-    toString: toString
+
+    render: render,
+    toYama: toYama
   };
 }();
 
