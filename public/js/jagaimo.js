@@ -109,7 +109,7 @@ var Jagaimo = function () {
 
     doRender(jaga, o);
 
-    var pre = create(container, 'pre', 'jagaimo_yama', toYama(o));
+    var pre = create(container, 'pre', 'jagaimo_yama', toString(o));
     pre.style.display = 'none';
 
     container.onclick = function () {
@@ -136,7 +136,7 @@ var Jagaimo = function () {
     return s;
   }
 
-  function toYama (o, ind) {
+  function toString (o, ind) {
 
     ind = ind || 0;
 
@@ -147,7 +147,7 @@ var Jagaimo = function () {
       if (ind > 0) s = s + '\n';
 
       for (var i = 0; i < o.length; i++) {
-        s = s + indent(ind) + '- ' + toYama(o[i], ind + 1);
+        s = s + indent(ind) + '- ' + toString(o[i], ind + 1);
       }
     }
     else if ((typeof o) === 'object') {
@@ -159,7 +159,7 @@ var Jagaimo = function () {
       keys = keys.sort();
 
       for (var i = 0; i < keys.length; i++) {
-        s = s + indent(ind) + keys[i] + ': ' + toYama(o[keys[i]], ind + 1);
+        s = s + indent(ind) + keys[i] + ': ' + toString(o[keys[i]], ind + 1);
       }
     }
     else {
@@ -173,7 +173,7 @@ var Jagaimo = function () {
   return {
 
     render: render,
-    toYama: toYama
+    toString: toString
   };
 }();
 
