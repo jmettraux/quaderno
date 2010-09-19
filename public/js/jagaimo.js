@@ -40,15 +40,9 @@ var Jagaimo = function () {
     return e;
   }
 
-  function determineType (o) {
-    try {
-      var con = o.constructor.toString();
-      var m = con.match(/function ([^\(]+)/)
-      return m[1];
-    }
-    catch (e) {
-      return undefined;
-    }
+  function isArray (o) {
+    try { return o.constructor.toString().match(/function Array\(/); }
+    catch (e) { return false; }
   }
 
   function renderAtom (container, a) {
@@ -61,9 +55,7 @@ var Jagaimo = function () {
 
   function doRender (container, o) {
 
-    var type = determineType(o);
-
-    if (type === 'Array') {
+    if (isArray(o)) {
 
       create(container, 'span', 'jagaimo_bracket', '[');
       for (var i = 0; i < o.length; i++) {
@@ -73,9 +65,8 @@ var Jagaimo = function () {
         }
       }
       create(container, 'span', 'jagaimo_bracket', ']');
-
     }
-    else if (type === 'Object') {
+    else if ((typeof o) === 'object') {
 
       create(container, 'span', 'jagaimo_brace', '{');
 
@@ -110,11 +101,74 @@ var Jagaimo = function () {
 
     var fc; while (fc = container.firstChild) { container.removeChild(fc); }
 
-    doRender(container, o);
+    var jaga = create(container, 'div', '');
+
+    doRender(jaga, o);
+
+    var pre = create(container, 'pre', 'jagaimo_yama', Yama.toString(o));
+    pre.style.display = 'none';
+
+    container.onclick = function () {
+      if (jaga.style.display === 'none') {
+        jaga.style.display = 'block';
+        pre.style.display = 'none';
+      }
+      else {
+        jaga.style.display = 'none';
+        pre.style.display = 'block';
+      }
+    };
+    container.style.cursor = 'pointer';
   }
 
   return {
+
+    // used by 'Yama'
+    //
+    _isArray: isArray,
+
     render: render
+  };
+}();
+
+
+// Turns a javascript (JSON) thing into a string, with a nice indentation.
+//
+var Yama = function () {
+
+  function indent (i) {
+    var s = '';
+    for (var j = 0; j < i; j++) { s = s + '  '; }
+    return s;
+  }
+
+  function toString (o, ind) {
+
+    ind = ind || 0;
+
+    var s = '';
+
+    if (Jagaimo._isArray(o)) {
+      if (ind > 0) s = s + '\n';
+      for (var i = 0; i < o.length; i++) {
+        s = s + indent(ind) + '- ' + toString(o[i], ind + 1);
+      }
+    }
+    else if ((typeof o) === 'object') {
+      if (ind > 0) s = s + '\n';
+      for (var k in o) {
+        s = s + indent(ind) + k + ': ' + toString(o[k], ind + 1);
+      }
+    }
+    else {
+      s = s + o.toString() + '\n';
+    }
+
+    return s;
+  }
+
+  return {
+    toString: toString
   };
 }();
 
