@@ -10,5 +10,10 @@
   "birthyear": "1988",
   "month": "2012/03",
   "day": "3/31",
-  "audit": { "project": { "id": "nada" } }
+  "audit": { "project": { "id": "nada" } },
+  "products": [
+    { "name": "prod x", "active": true },
+    { "name": "prod y", "active": false },
+    { "name": "prod z", "active": true }
+  ]
 }

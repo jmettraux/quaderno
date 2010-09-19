@@ -330,9 +330,18 @@ var Quaderno = function () {
     return ((typeof t) === 'string') ? t : def || text;
   }
 
-  function getKey (container, template, id) {
+  function getKey (container, template, data, id) {
 
-    if (template[1].text) return translate(container, template[1].text);
+    var text = template[1].text;
+
+    if (text) {
+      if (text.match(/^\./)) {
+        var key = currentId(container, text);
+        var d = lookup(data, key);
+        if (d) return d;
+      }
+      return translate(container, text);
+    }
 
     text = translate(container, id)
 
@@ -443,7 +452,8 @@ var Quaderno = function () {
 
     var id = currentId(container);
 
-    create(container, 'span', '.quad_key', getKey(container, template, id));
+    create(
+      container, 'span', '.quad_key', getKey(container, template, data, id));
 
     var select = createSelect(container, '.quad_value');
 
@@ -488,7 +498,7 @@ var Quaderno = function () {
   renderers.render_checkbox = function (container, template, data, options) {
 
     var id = currentId(container);
-    var text = template[1].text || template[1].id;
+    //var text = template[1].text || template[1].id;
 
     var checkbox = create(
       container,
@@ -512,7 +522,8 @@ var Quaderno = function () {
     }
 
     create(
-      container, 'span', '.quad_checkbox_key', translate(container, text));
+      container, 'span', '.quad_checkbox_key', getKey(
+        container, template, data, id));
   }
 
   renderers.produce_checkbox = function (container, data) {
@@ -528,7 +539,8 @@ var Quaderno = function () {
 
     var id = currentId(container);
 
-    create(container, 'span', '.quad_key', getKey(container, template, id));
+    create(
+      container, 'span', '.quad_key', getKey(container, template, data, id));
 
     var input = create(
       container,
@@ -563,7 +575,8 @@ var Quaderno = function () {
 
     var id = currentId(container);
 
-    create(container, 'span', '.quad_key', getKey(container, template, id));
+    create(
+      container, 'span', '.quad_key', getKey(container, template, data, id));
 
     var value = '';
     var aid = '';
@@ -602,7 +615,8 @@ var Quaderno = function () {
 
     var id = currentId(container);
 
-    create(container, 'span', '.quad_key', getKey(container, template, id));
+    create(
+      container, 'span', '.quad_key', getKey(container, template, data, id));
 
     var type = template[0].split('_')[1] || 'ymd';
 
@@ -774,7 +788,6 @@ var Quaderno = function () {
     var text = template[1].text || lookup(data, id) || '';
 
     create(container, 'div', '.quad_key.quad_text', translate(container, text));
-    //create(container, 'div', '.quad_key.quad_text', getKey(container, template, id));
   }
 
   renderers.produce_text = function (container, data) {
@@ -1002,9 +1015,9 @@ var Quaderno = function () {
     return elt.parentNode ? localId(elt.parentNode) : undefined;
   }
 
-  function currentId (elt) {
+  function currentId (elt, lId) {
 
-    var id = localId(elt);
+    var id = lId || localId(elt);
 
     if ( ! id) {
       if (elt.parentNode) return currentId(elt.parentNode);

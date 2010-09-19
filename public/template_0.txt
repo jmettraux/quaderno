@@ -1,4 +1,7 @@
 tabs
+  tab "products"
+    group products.
+      checkbox .active ".name"
   tab "dates"
     text_input audit.project.id "project"
     select destination0 [roma, firenze, pisa]
