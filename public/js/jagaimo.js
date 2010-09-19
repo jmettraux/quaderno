@@ -90,9 +90,10 @@ var Jagaimo = function () {
     }
   }
 
-  function render (containerId, o) {
+  function render (containerId, o, opts) {
 
     var container = containerId;
+    opts = opts || {};
 
     if ((typeof containerId) === 'string') {
       if (containerId.match(/^#/)) containerId = containerId.slice(1);
@@ -119,6 +120,8 @@ var Jagaimo = function () {
       }
     };
     container.style.cursor = 'pointer';
+
+    if (opts.expanded === true) container.onclick();
   }
 
   return {

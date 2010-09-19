@@ -111,10 +111,12 @@
     $('#template')[0].value = template;
 
     data = JSON.parse(data);
+    //Jagaimo.render('#data', data, { expanded: true });
     Jagaimo.render('#data', data);
 
     translations = JSON.parse(translations);
     Jagaimo.render('#translations', translations);
+    //Jagaimo.render('#translations', translations, { expanded: true });
 
     var mode = qs.mode || 'use';
     var lang = qs.lang || 'en';
@@ -143,6 +145,7 @@
 
       var product = Quaderno.produce('#quad');
 
+      //Jagaimo.render('#product', product, { expanded: true });
       Jagaimo.render('#product', product);
 
       return false;
