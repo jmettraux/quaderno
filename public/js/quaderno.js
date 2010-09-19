@@ -461,9 +461,10 @@ var Quaderno = function () {
       // for webrat / capybara
 
     var value = lookup(data, id);
-    var values = template[1].values;
+    var values = template[1].values || [];
 
-    if ( ! $.isArray(values)) { values = lookup(data, values); }
+    if ( ! $.isArray(values)) values = lookup(data, values);
+    if ( ! $.isArray(values)) values = [ '' + values ];
 
     for (var i = 0; i < values.length; i++) {
 
