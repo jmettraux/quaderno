@@ -152,18 +152,27 @@ var Yama = function () {
     var s = '';
 
     if (Jagaimo._isArray(o)) {
+
       if (ind > 0) s = s + '\n';
+
       for (var i = 0; i < o.length; i++) {
         s = s + indent(ind) + '- ' + toString(o[i], ind + 1);
       }
     }
     else if ((typeof o) === 'object') {
+
       if (ind > 0) s = s + '\n';
-      for (var k in o) {
-        s = s + indent(ind) + k + ': ' + toString(o[k], ind + 1);
+
+      var keys = [];
+      for (var k in o) { keys.push(k) };
+      keys = keys.sort();
+
+      for (var i = 0; i < keys.length; i++) {
+        s = s + indent(ind) + keys[i] + ': ' + toString(o[keys[i]], ind + 1);
       }
     }
     else {
+
       s = s + o.toString() + '\n';
     }
 
