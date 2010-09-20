@@ -318,7 +318,7 @@ var Quaderno = function () {
     var a = lookup(data, currentId(container));
     var targetLength = $(container).children('.quad_element').length;
 
-    while (a.length > targetLength) { a.pop(); }
+    while (a && a.length > targetLength) { a.pop(); }
   }
 
   function translate (elt, text, def) {
