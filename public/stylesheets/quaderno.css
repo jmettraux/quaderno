@@ -83,6 +83,9 @@ div.quad_key.quad_text {
   width: auto;
   margin-bottom: 4px;
 }
+.quad_label {
+  color: #8b8f91;
+}
 .quad_link_target {
 	width: 70px;
 }

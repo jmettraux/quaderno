@@ -323,6 +323,7 @@ var Quaderno = function () {
 
   function translate (elt, text, def) {
 
+    if ( ! text) return def;
     if (text.match(/\s/)) return def || text;
 
     var opts = root(elt).options;
@@ -802,6 +803,12 @@ var Quaderno = function () {
 
     $(container).addClass('quad_box');
 
+    var label = getKey(container, template, data, currentId(container));
+
+    if (label != template[1].id) {
+      create(container, 'span', '.quad_label', label);
+    }
+
     renderChildren(container, template, data, options);
   }
 
@@ -813,6 +820,12 @@ var Quaderno = function () {
   // group
 
   renderers.render_group = function (container, template, data, options) {
+
+    var label = getKey(container, template, data, currentId(container));
+
+    if (label != template[1].id) {
+      create(container, 'span', '.quad_label', label);
+    }
 
     renderChildren(container, template, data, options);
   }

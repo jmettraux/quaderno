@@ -2,12 +2,12 @@ tabs
   tab "products"
     group products.
       checkbox .active ".name"
-  tab "dates"
+  tab "destinations and dates"
     text_input audit.project.id "project"
     select destination0 [roma, firenze, pisa]
     select destination1 [destinations]
     select destination2 [country.france, country.us]
-    box
+    box "dates"
       date departure
       date_y birthyear
       date_ym month
