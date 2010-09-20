@@ -1052,9 +1052,9 @@ var Quaderno = function () {
     var h = {};
     h.id = m[1];
     h.slicedId = m[1].slice(0, -1);
-    h.canAdd = (m[2] == '*' || m[2] == '+');
-    h.canRemove = (m[2] == '*' || m[2] == '-');
-    h.canReorder = (m[3] != undefined);
+    h.canAdd = (m[2] === '*' || m[2] === '+');
+    h.canRemove = (m[2] === '*' || m[2] === '-');
+    h.canReorder = (m[3] === '^');
 
     return h;
   }
