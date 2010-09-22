@@ -1,0 +1,46 @@
+
+tabs
+
+  tab "basics"
+    text "a text"
+    text_input comment "a text_input"
+    checkbox activated "a checkbox"
+    select car "a select" [audi,bmw,citroën,lada]
+    text_area text "a text_area"
+
+  tab "dates"
+    date arrival "a date"
+    date_ymd departure "a date_ymd"
+    date_y year "a date_y"
+    date_ym year_and_month "a date_ym"
+    date_md month_and_day "a date_md"
+
+  tab "boxes"
+    box "first box"
+      text_input first_impression
+    box "second box"
+      text_input second_impression
+
+  tab "arrays"
+
+    box "array of strings"
+      text_input artists.*^ "artist"
+        // * means add + or remove -, while ^ means reorderable
+    box "array of hashes"
+      group customers.+^ // remove - not possible
+        text_input .name
+        text_input .city
+          // note the "." prefix
+    box holydays.+ "holyday"
+      date_md .day
+
+  tab "more tabs"
+    text "nested tabs are OK"
+    tabs
+      tab "a"
+      tab "b"
+      tab "c"
+    tabs
+      tab "d"
+      tab "e"
+      tab "f"

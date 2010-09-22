@@ -49,6 +49,8 @@ the default template and data are located in :
 
 ## the elements
 
+Maybe it's easier to have a look at a [full example](http://ruote.rubyforge.org/quaderno/viewer.html?translations=true&sample=9).
+
 element-name id "text" value [values] "title" disabled
 
 * group
@@ -67,6 +69,8 @@ element-name id "text" value [values] "title" disabled
 * date_y
 * date_ym
 * date_md
+
+End of line comments starting with // or # are supported.
 
 
 ### macros
