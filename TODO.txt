@@ -23,4 +23,5 @@
 
 [ ] Benjamin's ideas at http://jmettraux.wordpress.com/2010/09/22/quaderno/
     http://github.com/byu
+[ ] VERSION
 
