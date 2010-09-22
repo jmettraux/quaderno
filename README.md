@@ -27,6 +27,8 @@ will result in
 
 The complete example is at <a href="http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html">http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html</a>.
 
+Quaderno takes as input a template (written in a small DSL), a data hash (dictionary) and an optional translations hash. It renders dynamically. The user then interacts with the form, once he is done, the quaderno produce() method can be used to output an updated version of the data.
+
 
 ## having a look
 
