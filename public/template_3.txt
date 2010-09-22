@@ -1,0 +1,10 @@
+tabs
+  tab "general"
+    text_input name
+    text_input age
+    select gender [male, female]
+  tab "appointments"
+    box appointments.*^
+      date .date
+      text_input .goal
+      text_area .comment

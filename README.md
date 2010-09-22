@@ -25,14 +25,14 @@ will result in
 
 <img src="http://github.com/jmettraux/quaderno/raw/master/doc/quaderno_0.png"/>
 
-The complete example is at <a href="http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html">http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html</a>.
+The complete example is at [http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html](http://github.com/jmettraux/quaderno/blob/master/public/readme_0.html), you can [browse it directly](http://ruote.rubyforge.org/quaderno/readme_0.html).
 
 Quaderno takes as input a template (written in a small DSL), a data hash (dictionary) and an optional translations hash. It renders dynamically. The user then interacts with the form, once he is done, the quaderno produce() method can be used to output an updated version of the data.
 
 
 ## having a look
 
-<a href="http://ruote.rubyforge.org/quaderno/viewer.html">http://ruote.rubyforge.org/quaderno/viewer.html</a>
+[http://ruote.rubyforge.org/quaderno/viewer.html](http://ruote.rubyforge.org/quaderno/viewer.html)
 
 
 ## getting started
@@ -100,6 +100,11 @@ Expanded at parse time.
 ## extending
 
 TODO : Quaderno.renderers and Quaderno.hooks
+
+
+## appearance
+
+see public/stylesheets/quaderno.css
 
 
 ## testing
