@@ -38,13 +38,9 @@ tabs
     text_input customer.name
     text_input cname "customer.name"
 
-  tab "more tabs"
+  tab "tabs"
     text "nested tabs are OK"
     tabs
-      tab "a"
-      tab "b"
-      tab "c"
-    tabs
-      tab "d"
-      tab "e"
-      tab "f"
+      tab "Haendel"
+      tab "Bach"
+      tab "Mozart"
