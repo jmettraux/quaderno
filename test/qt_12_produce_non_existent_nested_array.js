@@ -26,7 +26,7 @@ Quaderno.render('quad', template, data, {});
 //print("================================");
 
 var addButton = $('.quad_plus_button')[0];
-Quaderno.hooks.addToArray(addButton);
+Quaderno.handlers.addToArray(addButton);
 
 //print($('.quad_root')[0]);
 
@@ -35,7 +35,7 @@ assertEqual(
   Quaderno.produce('quad'));
 
 addButton = $('.quad_plus_button')[0];
-Quaderno.hooks.addToArray(addButton);
+Quaderno.handlers.addToArray(addButton);
 
 assertEqual(
   { "customers": [ { 'name': '', 'opinions': [ { "comment": "" } ] } ] },

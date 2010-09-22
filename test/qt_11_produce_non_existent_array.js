@@ -25,7 +25,7 @@ Quaderno.render('quad', template, data, {});
 //print($('.quad_plus_button')[0]);
 
 var addButton = $('.quad_plus_button')[0];
-Quaderno.hooks.addToArray(addButton);
+Quaderno.handlers.addToArray(addButton);
 
 assertEqual(
   { "customers": [

@@ -99,7 +99,8 @@ Expanded at parse time.
 
 ## extending
 
-TODO : Quaderno.renderers and Quaderno.hooks
+TODO : Quaderno.renderers and Quaderno.handlers
+TODO : Quaderno.callbacks
 
 
 ## appearance

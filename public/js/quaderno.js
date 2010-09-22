@@ -285,7 +285,7 @@ var Quaderno = function () {
   // rendering and producing
 
   var renderers = {};
-  var hooks = {};
+  var handlers = {};
 
   renderers.render_ = function (container, template, data, options) {
     create(container, 'span', {}, JSON.stringify(template));
@@ -362,7 +362,7 @@ var Quaderno = function () {
     while (r.stack.length > 14) r.stack.shift();
   }
 
-  hooks.stackOnKey = function (elt) {
+  handlers.stackOnKey = function (elt) {
 
     if (elt.stacked) return;
 
@@ -372,7 +372,7 @@ var Quaderno = function () {
     $(elt).val('');
   }
 
-  hooks.stackOnClick = function (elt) {
+  handlers.stackOnClick = function (elt) {
 
     // checkboxes
 
@@ -384,7 +384,7 @@ var Quaderno = function () {
     $elt.attr('checked', checked);
   }
 
-  hooks.stackOnChange = function (elt) {
+  handlers.stackOnChange = function (elt) {
 
     var $elt = $(elt);
     var tagname = elt.tagName.toLowerCase();
@@ -443,7 +443,7 @@ var Quaderno = function () {
       'select',
       { 'class': cname,
         'onFocus': 'this.previousValue = this.value;',
-        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
+        'onChange': 'Quaderno.handlers.stackOnChange(this);' });
   }
 
   //
@@ -507,7 +507,7 @@ var Quaderno = function () {
       'input',
       { 'class': 'quad_checkbox',
         'type': 'checkbox',
-        'onClick': 'Quaderno.hooks.stackOnClick(this);' });
+        'onClick': 'Quaderno.handlers.stackOnClick(this);' });
 
     if (id) {
 
@@ -549,8 +549,8 @@ var Quaderno = function () {
       'input',
       { 'class': 'quad_value',
         'type': 'text',
-        'onKeyPress': 'Quaderno.hooks.stackOnKey(this);',
-        'onChange': 'Quaderno.hooks.stackOnChange(this);' });
+        'onKeyPress': 'Quaderno.handlers.stackOnKey(this);',
+        'onChange': 'Quaderno.handlers.stackOnChange(this);' });
 
     if (id) {
 
@@ -596,8 +596,8 @@ var Quaderno = function () {
       'textarea',
       { 'id': aid,
         'class': 'quad_value',
-        'onKeyPress' : 'Quaderno.hooks.stackOnKey(this);',
-        'onChange': 'Quaderno.hooks.stackOnChange(this);' },
+        'onKeyPress' : 'Quaderno.handlers.stackOnKey(this);',
+        'onChange': 'Quaderno.handlers.stackOnChange(this);' },
       value);
 
     if (template[1].disabled || options.mode === 'view') {
@@ -638,7 +638,7 @@ var Quaderno = function () {
         create(year, 'option', { 'value': '' + i }, i);
       }
       setSelectValue(year, y);
-      $(year).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
+      $(year).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
         year.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__year';
@@ -659,7 +659,7 @@ var Quaderno = function () {
       for (var i = 1; i <= 12; i++) {
         create(month, 'option', { 'value': '' + i }, i);
       }
-      $(month).attr('onChange', 'Quaderno.hooks.checkDate(this, "' + type + '");');
+      $(month).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
         month.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__month';
@@ -740,9 +740,9 @@ var Quaderno = function () {
     return (d.getMonth() == 1);
   }
 
-  hooks.checkDate = function (elt, type) {
+  handlers.checkDate = function (elt, type) {
 
-    hooks.stackOnChange(elt);
+    handlers.stackOnChange(elt);
 
     if ( ! type.match(/d/)) return;
 
@@ -850,7 +850,7 @@ var Quaderno = function () {
 
     var a = $(create(td, 'a', '.quad_tab', translate(container, text)));
     a.attr('href', '');
-    a.attr('onClick', 'return Quaderno.hooks.showTab(this.parentNode);');
+    a.attr('onClick', 'return Quaderno.handlers.showTab(this.parentNode);');
 
     return td;
   }
@@ -919,7 +919,7 @@ var Quaderno = function () {
 
     return false; // no further HTTP request...
   }
-  hooks.showTab = showTab;
+  handlers.showTab = showTab;
 
   renderers.produce_tabs = function (elt, data) {
     var body = $(elt).find('.quad_tab_body')[0];
@@ -931,32 +931,32 @@ var Quaderno = function () {
   }
 
   //
-  // array hooks
+  // array handlers
 
   function addRemoveButton (elt) {
     button(
       elt,
       '.quad_minus_button.array_remove_button',
-      'Quaderno.hooks.removeFromArray(this);');
+      'Quaderno.handlers.removeFromArray(this);');
   }
   function addReorderButtons (elt) {
     button(
       elt,
       '.quad_up_button.array_move_button',
-      'Quaderno.hooks.moveInArray(this, "up");');
+      'Quaderno.handlers.moveInArray(this, "up");');
     button(
       elt,
       '.quad_down_button.array_move_button',
-      'Quaderno.hooks.moveInArray(this, "down");');
+      'Quaderno.handlers.moveInArray(this, "down");');
   }
   function addDuplicateButton (elt) {
     button(
       elt,
       '.quad_copy_button.array_duplicate_button',
-      'Quaderno.hooks.duplicateInArray(this);');
+      'Quaderno.handlers.duplicateInArray(this);');
   }
 
-  hooks.addToArray = function (elt) {
+  handlers.addToArray = function (elt) {
 
     stack(elt);
 
@@ -974,14 +974,14 @@ var Quaderno = function () {
     if (tid.match(/[\*\+]/)) addDuplicateButton(elt.previousSibling);
   }
 
-  hooks.removeFromArray = function (elt) {
+  handlers.removeFromArray = function (elt) {
 
     stack(elt);
 
     $(elt.parentNode).remove();
   }
 
-  hooks.moveInArray = function (elt, direction) {
+  handlers.moveInArray = function (elt, direction) {
 
     stack(elt);
 
@@ -997,7 +997,7 @@ var Quaderno = function () {
     }
   }
 
-  hooks.duplicateInArray = function (elt) {
+  handlers.duplicateInArray = function (elt) {
 
     stack(elt);
 
@@ -1102,7 +1102,7 @@ var Quaderno = function () {
         }
       }
       if (arrayId.canAdd) {
-        button(div, '.quad_plus_button', 'Quaderno.hooks.addToArray(this);');
+        button(div, '.quad_plus_button', 'Quaderno.handlers.addToArray(this);');
       }
 
       return div;
@@ -1186,9 +1186,9 @@ var Quaderno = function () {
     //
     renderers: renderers,
 
-    // A hash for 'hooks', like for example, the showTab function.
+    // A hash for 'handlers', like for example, the showTab function.
     //
-    hooks: hooks,
+    handlers: handlers,
 
     parse: parse,
     render: render,
