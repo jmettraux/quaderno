@@ -157,6 +157,19 @@
       return false;
     }
 
+    //
+    // translation links
+
+    var td = $('#translations')[0].parentNode;
+
+    for (var lang in translations) {
+
+      var link = "?translations=true&sample=" + qs.sample + "&lang=" + lang;
+
+      td.appendChild($('<a href="' + link + '">' + lang + '</a>')[0]);
+      td.appendChild(document.createTextNode('  '));
+    }
+
   </script>
   <!--script type="text/javascript" src="http://fbug.googlecode.com/svn/lite/branches/firebug1.3/content/firebug-lite-dev.js"></script-->
 </body>

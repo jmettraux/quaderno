@@ -15,4 +15,6 @@
 [x] tab order issue : http://machintsandtips.com/e-f-g-h/firefox/tab-through-checkboxes-and-radio-buttons-in-firefox-and-safari/
 
 [ ] link ? href: value, text: text
+[ ] image ?
+[ ] viewer : link ?lang=xx
 
