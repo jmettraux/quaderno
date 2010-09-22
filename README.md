@@ -73,7 +73,12 @@ element-name id "text" value [values] "title" disabled
 End of line comments starting with // or # are supported.
 
 
-### macros
+## translations
+
+TODO
+
+
+## macros
 
 Expanded at parse time.
 

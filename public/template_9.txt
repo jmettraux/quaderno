@@ -34,6 +34,10 @@ tabs
     box holydays.+ "holyday"
       date_md .day
 
+  tab "translations"
+    text_input customer.name
+    text_input cname "customer.name"
+
   tab "more tabs"
     text "nested tabs are OK"
     tabs

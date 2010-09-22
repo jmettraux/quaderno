@@ -1,6 +1,22 @@
 {
   "en": {
+    "customer": {
+      "name": "name"
+    }
   },
   "ja": {
+    "customer": {
+      "name": "名前"
+    }
+  },
+  "fr": {
+    "customer": {
+      "name": "nom"
+    }
+  },
+  "de": {
+    "customer": {
+      "name": "Name"
+    }
   }
 }
