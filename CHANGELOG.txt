@@ -1,0 +1,13 @@
+
+= quaderno
+
+
+== quaderno 0.3.1    not yet released
+
+- $('#quad')[0].onQuadChange = function (elt, product) {};
+
+
+== quaderno 0.3.0    pseudo-release on 2010/09/22
+
+- http://jmettraux.wordpress.com/2010/09/22/quaderno/
+

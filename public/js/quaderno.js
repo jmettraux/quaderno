@@ -355,11 +355,21 @@ var Quaderno = function () {
   // stacking for undoing
 
   function stack (elt) {
+
     var r = root(elt);
     var firstElt = $(r).children('.quad_element')[0];
     var copy = firstElt.cloneNode(true);
+
+    var notFirstPush = r.stack.length > 0;
+
     r.stack.push(copy);
     while (r.stack.length > 14) r.stack.shift();
+
+    var callback = r.onQuadernoChange;
+    if (notFirstPush && callback) {
+      var product = (callback.length > 1) ? produce(r) : null;
+      callback(elt, product);
+    }
   }
 
   handlers.stackOnKey = function (elt) {

@@ -6,6 +6,7 @@ A mini form templating system in javascript.
 The rendering all happens in the browser.
 
     <div id="quad" class="quad_root"></div>
+      <!-- the class 'quad_root' is mandatory -->
 
     <script>
       var template = '\n\
@@ -97,10 +98,19 @@ Expanded at parse time.
         text "nada"
 
 
-## extending
+## onQuadernoChange callback
+
+You can bind to any quaderno root a callback :
+
+    $('#quad')[0].onQuadernoChange = function (elt, product) {
+      // elt is the elt that was actually changed
+      // product is the whole data set, as 'produced'
+    };
+
+
+## extending (custom types)
 
 TODO : Quaderno.renderers and Quaderno.handlers
-TODO : Quaderno.callbacks
 
 
 ## appearance
@@ -133,6 +143,7 @@ Claudio Petasecca Donati - <a href="http://github.com/etapeta">http://github.com
 
 Torsten Schoenebaum - <a href="http://github.com/tosch">http://github.com/tosch</a> - testing on webkit
 
+Benjami Yu - [http://github.com/byu](http://github.com/byu) - for the callbacks ideas
 
 The amazing jQuery - <a href="http://jquery.com/">http://jquery.com</a>
 
