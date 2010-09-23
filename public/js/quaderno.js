@@ -1186,6 +1186,8 @@ var Quaderno = function () {
 
   return {
 
+    VERSION: '1.3.1',
+
     // only for testing
     //
     _lookup: lookup,

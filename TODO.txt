@@ -14,6 +14,7 @@
 [o] arrays : duplicate button ?
 [x] tab order issue : http://machintsandtips.com/e-f-g-h/firefox/tab-through-checkboxes-and-radio-buttons-in-firefox-and-safari/
 [o] viewer : link ?lang=xx
+[o] VERSION
 
 [ ] link ? href: value, text: text
 [ ] image ?
@@ -23,5 +24,4 @@
 
 [ ] Benjamin's ideas at http://jmettraux.wordpress.com/2010/09/22/quaderno/
     http://github.com/byu
-[ ] VERSION
 
