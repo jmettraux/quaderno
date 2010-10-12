@@ -111,6 +111,7 @@ You can bind to any quaderno root a callback :
 ## extending (custom types)
 
 TODO : Quaderno.renderers and Quaderno.handlers
+       email field example ?
 
 
 ## appearance

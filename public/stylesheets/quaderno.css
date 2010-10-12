@@ -94,6 +94,12 @@ div.quad_key.quad_text {
 	margin-right: 4px;
 }
 
+/* text_input */
+
+input.quad_value {
+  width: 350px;
+}
+
 /* checkbox */
 
 input.quad_checkbox {
