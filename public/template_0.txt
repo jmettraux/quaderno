@@ -1,7 +1,10 @@
 tabs
-  tab "products"
-    group products.
-      checkbox .active ".name"
+  tab "customers"
+    box customers.*^
+      text "customer"
+      text_input .name "customer.name"
+      text_input .city "city"
+      checkbox .active "active"
   tab "destinations and dates"
     text_input audit.project.id "project"
     select destination0 [roma, firenze, pisa]
@@ -12,11 +15,8 @@ tabs
       date_y birthyear
       date_ym month
       date_md day
-  tab "customers"
-    box customers.*^
-      text "customer"
-      text_input .name "customer.name"
-      text_input .city "city"
-      checkbox .active "active"
+  tab "products"
+    group products.
+      checkbox .active ".name"
   tab "misc"
     text_area comments

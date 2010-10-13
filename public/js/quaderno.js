@@ -621,6 +621,30 @@ var Quaderno = function () {
   }
 
   //
+  // text
+
+  renderers.render_text = function (container, template, data, options) {
+
+    var id = currentId(container);
+
+    if (template[1].id) {
+      create(
+        container, 'span', '.quad_key', getKey(container, template, data, id));
+      create(
+        container, 'span', '.quad_value.quad_text', lookup(data, id));
+    }
+    else {
+      var text = template[1].text || lookup(data, id) || '';
+      create(
+        container, 'div', '.quad_key.quad_text', translate(container, text));
+    }
+  }
+
+  renderers.produce_text = function (container, data) {
+    // nothing to do
+  }
+
+  //
   // date
 
   renderers.render_date = function (container, template, data, options) {
@@ -789,21 +813,6 @@ var Quaderno = function () {
     }
 
     setSelectValue(day, d);
-  }
-
-  //
-  // text
-
-  renderers.render_text = function (container, template, data, options) {
-
-    var id = currentId(container);
-    var text = template[1].text || lookup(data, id) || '';
-
-    create(container, 'div', '.quad_key.quad_text', translate(container, text));
-  }
-
-  renderers.produce_text = function (container, data) {
-    // nothing to do
   }
 
   //
