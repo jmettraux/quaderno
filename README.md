@@ -140,7 +140,7 @@ will run the test test/qt_0_parse.js
 
 Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
 
-Claudio Petasecca Donati - <a href="http://github.com/etapeta">http://github.com/etapeta</a> - testing
+Claudio Petasecca Donati - <a href="http://github.com/etapeta">http://github.com/etapeta</a> - lots of testing
 
 Torsten Schoenebaum - <a href="http://github.com/tosch">http://github.com/tosch</a> - testing on webkit
 

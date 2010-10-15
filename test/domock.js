@@ -327,6 +327,11 @@ function Document () {
     return t;
   }
 
+  //function createDocumentFragment () {
+  //  var e = Element();
+  //  return e;
+  //}
+
   function createComment (comment) {
     var c = Comment();
     return c;
@@ -368,6 +373,7 @@ function Document () {
     createElement: createElement,
     createTextNode: createTextNode,
     createComment: createComment,
+    //createDocumentFragment: createDocumentFragment,
     getElementById: getElementById,
     getElementsByClass: getElementsByClass,
     getElementsByTagName: getElementsByTagName,

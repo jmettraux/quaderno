@@ -433,16 +433,13 @@ var Quaderno = function () {
 
       var opt = opts[i]; var $opt = $(opt);
 
-      var nopt = '<option value="';
-      nopt += $opt.attr('value');
-      nopt += '"';
-      if ($opt.attr('value') === value) nopt += ' selected="selected"';
-      nopt += '>';
-      nopt += $opt.text();
-      nopt += '</option>';
+      var atts = { 'value': $opt.attr('value') };
+      if ($opt.attr('value') === value) atts.selected = 'selected';
+      var text = $opt.text();
 
       $opt.remove();
-      sel.appendChild($(nopt)[0]);
+
+      create(sel, 'option', atts, text);
     }
   }
 
@@ -1082,6 +1079,7 @@ var Quaderno = function () {
     if ( ! m) return undefined;
 
     var h = {};
+    h.originalId = id;
     h.id = m[1];
     h.slicedId = m[1].slice(0, -1);
     h.canAdd = (m[2] === '*' || m[2] === '+');
@@ -1112,8 +1110,10 @@ var Quaderno = function () {
       if (a) {
         for (var i = 0; i < a.length; i++) {
 
-          template[1].id = '.0';
-          var e = renderElement(div, template, data, options);
+          templ = deepCopy(template);
+
+          templ[1].id = '.0';
+          var e = renderElement(div, templ, data, options);
 
           if (arrayId.canRemove) addRemoveButton(e);
           if (arrayId.canReorder) addReorderButtons(e);

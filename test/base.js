@@ -11,10 +11,60 @@ $ = window.jQuery;
 
 load(dir + "/../public/js/quaderno.js");
 
+
+function prettyAst(tree, indentation) {
+
+  var s = '';
+
+  indentation = indentation || 0;
+  for (var i = 0; i < indentation; i++) s = s + '  ';
+
+  var cs = "[\n";
+  var children = tree[2];
+  if (children.length === 0) {
+    cs = "[]";
+  }
+  else if (children.length === 1 && ((typeof children[0]) === 'string')) {
+    cs = "[" + JSON.stringify(children[0]) + "]";
+  }
+
+  s = s + "[\"" + tree[0] + "\",";
+  s = s + (JSON.stringify(tree[1]) + ",");
+  s = s + cs;
+
+  if (cs === "[\n") {
+    for (var i = 0; i < children.length; i++) {
+      s = s + prettyAst(children[i], indentation + 1);
+      if (i < children.length - 1) s = s + ",\n";
+    }
+    s = s + "]";
+  }
+
+  s = s + "]";
+
+  return s;
+}
+
+function isArray(o) {
+  return (o.constructor.toString().match(/^function Array/) != undefined);
+}
+
+function stringify(o) {
+  if (isArray(o) &&
+    o.length === 3 &&
+    ((typeof o[0]) === 'string') &&
+    ((typeof o[1]) === 'object') &&
+    isArray(o[2])
+  ) {
+    return prettyAst(o);
+  }
+  return JSON.stringify(o);
+}
+
 //
 // assertEqual
 
-function keys (o) {
+function keys(o) {
 
   var keys = [];
   for (var k in o) { if (o[k] !== undefined) keys.push(k); }
@@ -22,7 +72,7 @@ function keys (o) {
   return keys.sort();
 }
 
-function diff (a, b) {
+function diff(a, b) {
 
   var ta = (typeof a);
   var tb = (typeof b);
@@ -67,7 +117,7 @@ function diff (a, b) {
   return '';
 }
 
-function assertEqual (a, b) {
+function assertEqual(a, b) {
 
   var d = diff(a, b);
 
@@ -76,13 +126,13 @@ function assertEqual (a, b) {
   print("  diff :"); 
   print(d);
 
-  aa = JSON.stringify(a);
-  bb = JSON.stringify(b);
+  aa = stringify(a);
+  bb = stringify(b);
 
   print();
-  print("  expected :");
+  print("  - - - expected :");
   print(aa);
-  print("  but was :");
+  print("  - - - but was :");
   print(bb);
 
   //throw { 'name': 'AssertionError', 'message': 'assertion error' };
