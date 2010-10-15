@@ -30,7 +30,8 @@ assertEqual(
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
-        ["div",{"class":"quad_key quad_text"},["danza"]]]],
+        ["span",{"class":"quad_key"},["Name"]],
+        ["span",{"class":"quad_value quad_text"},["danza"]]]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],

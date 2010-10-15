@@ -37,6 +37,7 @@ assertEqual(
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customer"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
-      ["div",{"class":"quad_key quad_text"},["kanazawa"]]]]]],
+      ["span",{"class":"quad_key"},["customer"]],
+      ["span",{"class":"quad_value quad_text"},["kanazawa"]]]]]],
   $('.quad_root')[0].toArray());
 

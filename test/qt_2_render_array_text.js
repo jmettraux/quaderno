@@ -30,14 +30,17 @@ assertEqual(
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
-        ["div",{"class":"quad_key quad_text"},["alice"]]]],
+        ["span",{"class":"quad_key"},[".0"]],
+        ["span",{"class":"quad_value quad_text"},["alice"]]]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
-        ["div",{"class":"quad_key quad_text"},["bob"]]]],
+        ["span",{"class":"quad_key"},[".0"]],
+        ["span",{"class":"quad_value quad_text"},["bob"]]]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
-        ["div",{"class":"quad_key quad_text"},["charly"]]]]]]]],
+        ["span",{"class":"quad_key"},[".0"]],
+        ["span",{"class":"quad_value quad_text"},["charly"]]]]]]]],
   $('.quad_root')[0].toArray());
 
