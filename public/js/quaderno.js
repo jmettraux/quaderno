@@ -323,6 +323,8 @@ var Quaderno = function () {
 
   function translate (elt, text, def) {
 
+    if ($.isArray(text)) text = text[0];
+
     if ( ! text) return def;
     if (text.match(/\s/)) return def || text;
 
@@ -478,10 +480,8 @@ var Quaderno = function () {
 
       var v = values[i];
       var t = translate(container, v);
-      if (t && v !== t) {
-        var m = v.match(/[^\.]+$/)
-        v = m[0];
-      }
+      if (t && v !== t && ( ! $.isArray(v))) v = v.match(/[^\.]+$/)[0];
+      if ($.isArray(v)) v = v[1];
 
       var opt = create(select, 'option', { 'value': v }, t);
 
