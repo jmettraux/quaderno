@@ -909,26 +909,19 @@ var Quaderno = function () {
     }
     return -1;
   }
-  function findTabBody (elt) {
-    //var td = $(elt).parents('td')[0];
-    var td = elt[0];
+  function findTabBody (td) {
     var index = computeSiblingOffset(td);
-    var table = $(elt).parents('table')[0];
+    var table = $(td).parents('table')[0];
     var tr = $(table).children('tr')[1];
     return $(tr).find('td > .quad_tab_body > .quad_element')[index];
   }
 
   function showTab (td) {
 
-    for (var i = 0; i < td.parentNode.children.length; i++) {
-      var tab = $(td.parentNode.children[i]).children('.quad_tab');
-      tab.removeClass('quad_selected');
-    }
-    //var tab = $(td).children('.quad_tab');
-    var tab = $(td);
-    tab.addClass('quad_selected');
+    $(td.parentNode).children('.quad_tab').removeClass('quad_selected');
+    $(td).addClass('quad_selected');
 
-    var tab_body = findTabBody(tab);
+    var tab_body = findTabBody(td);
 
     for (var i = 0; i < tab_body.parentNode.children.length; i++) {
       tab_body.parentNode.children[i].style.display = 'none';
