@@ -859,12 +859,12 @@ var Quaderno = function () {
 
   renderers.render_tab_label = function (container, template, data, options) {
 
-    var td = create(container, 'td', {});
+    var td = create(container, 'td', '.quad_tab');
 
     var id = currentId(container);
     var text = template[1].text || template[1].id;
 
-    var a = $(create(td, 'a', '.quad_tab', translate(container, text)));
+    var a = $(create(td, 'a', {}, translate(container, text)));
     a.attr('href', '');
     a.attr('onClick', 'return Quaderno.handlers.showTab(this.parentNode);');
 
@@ -885,7 +885,7 @@ var Quaderno = function () {
       renderers.render_tab_label(tr0, tabs[i], data, options);
     }
 
-    var tab = $(tr0).find('td > .quad_tab')[0];
+    var tab = $(tr0).find('td.quad_tab')[0];
     $(tab).addClass('quad_selected');
 
     // content
@@ -910,7 +910,8 @@ var Quaderno = function () {
     return -1;
   }
   function findTabBody (elt) {
-    var td = $(elt).parents('td')[0];
+    //var td = $(elt).parents('td')[0];
+    var td = elt[0];
     var index = computeSiblingOffset(td);
     var table = $(elt).parents('table')[0];
     var tr = $(table).children('tr')[1];
@@ -923,7 +924,8 @@ var Quaderno = function () {
       var tab = $(td.parentNode.children[i]).children('.quad_tab');
       tab.removeClass('quad_selected');
     }
-    var tab = $(td).children('.quad_tab');
+    //var tab = $(td).children('.quad_tab');
+    var tab = $(td);
     tab.addClass('quad_selected');
 
     var tab_body = findTabBody(tab);
