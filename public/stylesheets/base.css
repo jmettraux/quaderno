@@ -1,28 +1,22 @@
-
 /* general */
-
 body {
-	font: 14px/1.75em "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
-	background: #fff;
+	font: 14px/1.75em "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: black;
+	background: white;
 	padding: 24px;
 }
 h1 {
-	color: #86e34b;
-	text-shadow: #555555 0 1px 1px;
-	text-transform: uppercase;
-	font-size: 175%;
-	margin-bottom: 24px;
-	font-weight: bold;
+	font-size: 200%;
+	margin-bottom: .75em;
 }
 h1 a {
 	text-decoration: none;
-	color: inherit;
 }
 .buttons {
 	white-space: nowrap;
-	padding: 12px 0 6px 0;
+	padding: 12px 0;
 }
-.buttons a, input[type=submit] {
+.buttons a, a.button, input[type=submit] {
 	vertical-align: baseline;
 	margin: 0 2px;
 	padding: 3px 9px 4px 9px;
@@ -32,64 +26,52 @@ h1 a {
 	line-height: 1.25em;
 	font-weight: bold;
 	border: none;
-	border-radius: 15px;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
+	border-radius: 15px;
 	text-decoration: none;
 }
 input[type=submit] {
-	background: #77ce41;
+	background: #00e;
 	padding: 3px 9px 4px 9px;
 	font-weight: bold;
-}
-input[type=submit]:active {
-	background: #6fbf40;
 }
 .buttons a:hover, input[type=submit]:hover {
 	cursor: pointer;
 	text-shadow: #555555 0 1px 0;
 }
-.buttons a:active {
-	background: #9b9ea0;
-}
-input[type=text] {
+input[type=text], input[type=password] {
 	padding: 3px;
 }
-input[type=password] {
+#template {
+	display: block;
+	font-family: "Menlo Regular", monaco, monospaced;
+	font-size: 11px;
+	line-height: 11px;
+	margin: 0;
 	padding: 3px;
-}
-textarea {
-  display: block;
-  font-family: "Menlo Regular", monaco, monospaced;
-  font-size: 11px;
-  line-height: 11px;
-  margin: 0;
-  padding: 3px;
-  width: 100%;
-  height: 270px;
-  border: 1px solid #c1c1c1;
-  border-top-color: #848484;
-  border-bottom-color: #ddd;
+	width: 100%;
+	height: 270px;
 }
 .template_buttons {
-  text-align: right;
+	text-align: right;
 }
-.produce_buttons {
-  margin-bottom: 7px;
-}
-
 td {
-  width: 50%;
-  padding: 7px;
-  vertical-align: top;
+	width: 50%;
+	padding: 6px;
+	vertical-align: top;
 }
-
+td:first-child {
+	padding-left: 0;
+}
+td:last-child {
+	padding-right: 0;
+	border-color: #fffeff;
+}
 .group {
-  padding: 8px 12px;
-  background: #fff;
-  border: 1px dashed #ccd0d4;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+	padding: 8px 12px;
+	border: 1px solid #dbdbdb;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
-
