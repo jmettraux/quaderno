@@ -1,13 +1,16 @@
 /* @override http://localhost:3000/stylesheets/quaderno.css */
 /* quad */
+table.quad_tab_group {
+	border-collapse: separate;
+	border-spacing: 0;
+}
 .quad_tab_group td {
-	vertical-align: bottom;
+	vertical-align: middle;
+	padding: 0;
 }
 .quad_tab {
-	display: block;
-	line-height: 1.25em;
-	padding: 8px;
-	border: 1px solid black;
+	border: 1px solid #919191;
+	border-bottom-color: black;
 	-webkit-border-top-right-radius: 6px;
 	-webkit-border-top-left-radius: 6px;
 	-moz-border-radius-topright: 6px;
@@ -16,23 +19,23 @@
 	border-top-left-radius: 6px;
 	background: #f6f6f6;
 }
-.quad_root table td {
-	padding: 0;
-}
-a.quad_tab {
+.quad_tab a {
+	display: block;
+	padding: 8px;
 	color: #919191;
-	border-color: #919191;
-	border-bottom-color: black;
+	line-height: 1.25em;
 	text-align: center;
 	text-decoration: none;
 	font-size: 13px;
 	font-weight: bold;
 }
 .quad_tab.quad_selected {
-	color: black;
 	background: white;
 	border-color: black;
 	border-bottom-color: transparent;
+}
+.quad_tab.quad_selected a {
+	color: black;
 }
 .quad_tab_body {
 	padding: 12px;
