@@ -381,7 +381,7 @@ var Quaderno = function () {
     $(elt).attr('value', elt.value);
     stack(elt);
     elt.stacked = true;
-    $(elt).val('');
+    //$(elt).val('');
   }
 
   handlers.stackOnClick = function (elt) {
