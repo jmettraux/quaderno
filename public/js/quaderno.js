@@ -208,9 +208,10 @@ var Quaderno = function () {
       s = m[2] || '';
     }
 
-    // disabled
+    // disabled / hidden
 
-    if (s.match(/disabled$/)) atts.disabled = true;
+    if (s.match(/\bdisabled\b/)) atts.disabled = true;
+    if (s.match(/\bhidden\b/)) atts.hidden = true;
 
     return atts;
   }
@@ -1132,6 +1133,8 @@ var Quaderno = function () {
     hide(div, '.quad_type', template[0]);
 
     func(div, template, data, options);
+
+    if (template[1].hidden) div.style.display = 'none';
 
     return div;
   }

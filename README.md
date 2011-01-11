@@ -54,7 +54,7 @@ the default template and data are located in :
 
 Maybe it's easier to have a look at a [full example](http://ruote.rubyforge.org/quaderno/viewer.html?translations=true&sample=9).
 
-element-name id "text" value [values] "title" disabled
+element-name id "text" value [values] "title" disabled/hidden
 
 * group
 * box
@@ -94,6 +94,21 @@ Expanded at parse time.
       tab "a"
         box customers.*^
           customer
+      tab "b"
+        text "nada"
+
+
+## disabled and hidden
+
+A field can be flagged as 'disabled' or 'hidden' :
+
+    tabs
+      tab "a"
+        box customers.*^
+          text "customer"
+          text_input .name hidden # won't show up
+          text_input .city
+          text_input .county disabled # will be visible but not editable
       tab "b"
         text "nada"
 

@@ -4,6 +4,7 @@
 
 == quaderno 1.3.1    not yet released (edge)
 
+- introduced 'hidden' (similar to 'disabled')
 - fixed issue with text inputs and areas (spurious reset) (Thanks Claudio)
 - select with [ [ 'text0', 'key0' ], [ 'text1', 'key1' ] ] (Thanks Claudio)
 - fixed issue with arrays in arrays (Thanks Claudio)
