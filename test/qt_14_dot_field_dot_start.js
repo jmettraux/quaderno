@@ -98,7 +98,7 @@ assertEqual(
               ["input",{"class":"quad_id","type":"hidden","value":".rating_justification"},[]],
               ["input",{"class":"quad_type","type":"hidden","value":"text_area"},[]],
               ["span",{"class":"quad_key"},["rating justification"]],
-              ["textarea",{"class":"quad_value","id":"quad__audit_opinions.0.opinion_types.0.rating_justification","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);"},[]]]],
+              ["textarea",{"class":"quad_value","id":"quad:audit.opinions.0.opinion_types.0.rating_justification","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);"},[]]]],
             ["div",{"class":"quad_element"},[
               ["input",{"class":"quad_id","type":"hidden","value":".audit_report"},[]],
               ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],

@@ -467,7 +467,7 @@ var Quaderno = function () {
 
     var select = createSelect(container, '.quad_value');
 
-    if (id) select.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
+    if (id) select.id = 'quad:' + id;
       // for webrat / capybara
 
     var value = lookup(data, id);
@@ -518,7 +518,7 @@ var Quaderno = function () {
 
     if (id) {
 
-      checkbox.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
+      checkbox.id = 'quad:' + id;
         // for webrat / capybara
 
       var value = lookup(data, id) || '';
@@ -561,7 +561,7 @@ var Quaderno = function () {
 
     if (id) {
 
-      input.id = 'quad__' + id.replace(/[\.]/, '_', 'g');
+      input.id = 'quad:' + id;
         // for webrat / capybara
 
       $(input).attr('value', lookup(data, id) || '');
@@ -594,7 +594,7 @@ var Quaderno = function () {
 
       value = lookup(data, id) || '';
 
-      aid = 'quad__' + id.replace(/[\.]/, '_', 'g');
+      aid = 'quad:' + id;
         // for webrat / capybara
     }
 
@@ -672,7 +672,7 @@ var Quaderno = function () {
       $(year).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
-        year.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__year';
+        year.id = 'quad:' + id + ':year';
       }
     }
 
@@ -693,7 +693,7 @@ var Quaderno = function () {
       $(month).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
       if (id) { // for webrat / capybara
-        month.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__month';
+        month.id = 'quad:' + id + ':month';
       }
     }
 
@@ -713,7 +713,7 @@ var Quaderno = function () {
       }
 
       if (id) { // for webrat / capybara
-        day.id = 'quad__' + id.replace(/[\.]/, '_', 'g') + '__day';
+        day.id = 'quad:' + id + ':day';
       }
     }
 
