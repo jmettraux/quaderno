@@ -208,6 +208,13 @@ var Quaderno = function () {
       s = m[2] || '';
     }
 
+    // attributes
+
+    while (m = s.match(/^(, *)?([^= ]+)=([^, ]+) ?(.+)?$/)) {
+      atts[m[2]] = m[3];
+      s = m[4] || '';
+    }
+
     // disabled / hidden
 
     if (s.match(/\bdisabled\b/)) atts.disabled = true;

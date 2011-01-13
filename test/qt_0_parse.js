@@ -62,6 +62,7 @@ assertEqual(
     text \"customer\" \n\
   "));
 
+
 // eol comments
 
 assertEqual(
@@ -72,6 +73,7 @@ assertEqual(
   ["text",{"text":"customer"},[]],
   Quaderno.parse("text \"customer\" # nada"));
 
+
 // hidden / disabled
 
 assertEqual(
@@ -80,9 +82,27 @@ assertEqual(
 
 assertEqual(
   ["text",{"text":"customer", "disabled":true},[]],
+  Quaderno.parse("text \"customer\" disabled "));
+
+assertEqual(
+  ["text",{"text":"customer", "disabled":true},[]],
   Quaderno.parse("text \"customer\" disabled # nada"));
 
 assertEqual(
   ["text",{"text":"customer", "disabled":true, "hidden":true},[]],
   Quaderno.parse("text \"customer\" disabled hidden"));
+
+
+// attributes
+
+assertEqual(
+  ["text",{"text":"customer", "id":"nada", "on_change":"x"},[]],
+  Quaderno.parse("text \"customer\" id=nada,on_change=x"));
+assertEqual(
+  ["text",{"text":"customer", "id":"nada", "on_change":"x"},[]],
+  Quaderno.parse("text \"customer\" id=nada, on_change=x"));
+
+assertEqual(
+  ["text",{"text":"customer", "id":"nada", "on_change":"x", "disabled":true},[]],
+  Quaderno.parse("text \"customer\" id=nada, on_change=x disabled"));
 
