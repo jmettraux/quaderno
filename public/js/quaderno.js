@@ -172,7 +172,7 @@ var Quaderno = function () {
     m = s.match(/^([^ "]+) ?(.+)?$/)
 
     if (m && m[1]) {
-      atts.id = m[1];
+      atts._id = m[1];
       s = m[2] || '';
     }
 
@@ -270,7 +270,7 @@ var Quaderno = function () {
         }
       }
       else if (elt[0] === 'define') {
-        definitions[elt[1].id] = elt[2];
+        definitions[elt[1]._id] = elt[2];
       }
       else if (elt.parent) { // don't place macros in parent
         elt.parent[2].push(elt);
@@ -358,7 +358,7 @@ var Quaderno = function () {
 
     if (text && text !== id) return text;
 
-    return template[1].id;
+    return template[1]._id;
   }
 
   //
@@ -515,7 +515,6 @@ var Quaderno = function () {
   renderers.render_checkbox = function (container, template, data, options) {
 
     var id = currentId(container);
-    //var text = template[1].text || template[1].id;
 
     var checkbox = create(
       container,
@@ -632,7 +631,7 @@ var Quaderno = function () {
 
     var id = currentId(container);
 
-    if (template[1].id) {
+    if (template[1]._id) {
       create(
         container, 'span', '.quad_key', getKey(container, template, data, id));
       create(
@@ -826,7 +825,7 @@ var Quaderno = function () {
 
     var label = getKey(container, template, data, currentId(container));
 
-    if (label != template[1].id) {
+    if (label != template[1]._id) {
       create(container, 'span', '.quad_label', label);
     }
 
@@ -844,7 +843,7 @@ var Quaderno = function () {
 
     var label = getKey(container, template, data, currentId(container));
 
-    if (label != template[1].id) {
+    if (label != template[1]._id) {
       create(container, 'span', '.quad_label', label);
     }
 
@@ -867,7 +866,7 @@ var Quaderno = function () {
     var td = create(container, 'td', '.quad_tab');
 
     var id = currentId(container);
-    var text = template[1].text || template[1].id;
+    var text = template[1].text || template[1]._id;
 
     var a = $(create(td, 'a', {}, translate(container, text)));
     a.attr('href', '');
@@ -977,8 +976,8 @@ var Quaderno = function () {
     stack(elt);
 
     var t = JSON.parse(childValue(elt.parentNode, '.quad_array_template'));
-    var tid = t[1].id;
-    t[1].id = '.0';
+    var tid = t[1]._id;
+    t[1]._id = '.0';
 
     var r = root(elt);
 
@@ -1076,7 +1075,7 @@ var Quaderno = function () {
 
   function extractArrayId (div, template) {
 
-    var id = template[1].id;
+    var id = template[1]._id;
     if ( ! id) return undefined;
 
     var m = id.match(/(.+\.)([*+-])?(\^)?$/);
@@ -1116,7 +1115,7 @@ var Quaderno = function () {
 
           templ = deepCopy(template);
 
-          templ[1].id = '.0';
+          templ[1]._id = '.0';
           var e = renderElement(div, templ, data, options);
 
           if (arrayId.canRemove) addRemoveButton(e);
@@ -1133,7 +1132,7 @@ var Quaderno = function () {
 
     // vanilla stuff, no repetition
 
-    var id = template[1].id;
+    var id = template[1]._id;
 
     if (id) hide(div, '.quad_id', id);
 
@@ -1143,6 +1142,7 @@ var Quaderno = function () {
     func(div, template, data, options);
 
     if (template[1].hidden) div.style.display = 'none';
+    if (template[1].id) div.id = template[1].id;
 
     return div;
   }

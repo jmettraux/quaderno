@@ -179,7 +179,9 @@ var Element = function () {
   }
 
   function toArray () {
-    var a = [ this.tagName, this.attributes, [] ];
+    var atts = JSON.parse(JSON.stringify(this.attributes));
+    atts.id = this.id;
+    var a = [ this.tagName, atts, [] ];
     for (var i = 0; i < this.childNodes.length; i++) {
       var c = this.childNodes[i];
       if ((typeof c) === 'string') a[2].push(c);

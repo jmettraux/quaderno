@@ -21,9 +21,9 @@ box customers. \n\
 ";
 
 assertEqual(
-  ["box",{"id":"customers."},[
-    ["text_input",{"id":".name"},[]],
-    ["text_input",{"id":".city"},[]]]],
+  ["box",{"_id":"customers."},[
+    ["text_input",{"_id":".name"},[]],
+    ["text_input",{"_id":".city"},[]]]],
   Quaderno.parse(s));
 
 
@@ -39,10 +39,10 @@ box customers. \n\
 ";
 
 assertEqual(
-  ["box",{"id":"customers."},[
-    ["text_input",{"id":".name"},[]],
-    ["text_input",{"id":".city"},[]],
-    ["text_input",{"id":".name"},[]],
-    ["text_input",{"id":".city"},[]]]],
+  ["box",{"_id":"customers."},[
+    ["text_input",{"_id":".name"},[]],
+    ["text_input",{"_id":".city"},[]],
+    ["text_input",{"_id":".name"},[]],
+    ["text_input",{"_id":".city"},[]]]],
   Quaderno.parse(s));
 

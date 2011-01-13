@@ -33,7 +33,7 @@ Quaderno.render('quad', template, data, {});
 //  document.documentElement.toArray());
 
 assertEqual(
-  ["div",{"class":"quad_root"},[
+  ["div",{"id":"quad","class":"quad_root"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customer"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],

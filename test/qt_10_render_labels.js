@@ -22,11 +22,11 @@ Quaderno.render('quad', template, data, {});
 //print(JSON.stringify(document.documentElement.toArray()));
 
 assertEqual(
-  ["div",{"class":"quad_root"},[
+  ["div",{"class":"quad_root","id":"quad"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customer.name"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
       ["span",{"class":"quad_key"},["name"]],
-      ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"kanazawa"},[]]]]]],
+      ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"kanazawa","id":"quad:quad:customer.name"},[]]]]]],
   $('.quad_root')[0].toArray());
 

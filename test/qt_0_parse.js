@@ -35,17 +35,17 @@ assertEqual('tab', t[2][1][0]);
 // extended attributes
 
 assertEqual(
-  ["select",{"id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
+  ["select",{"_id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
   Quaderno.parse("select d \"t\" [a,b,c] \"title\""));
 assertEqual(
-  ["select",{"id":"d","text":"t","title":"title","values":"targets"},[]],
+  ["select",{"_id":"d","text":"t","title":"title","values":"targets"},[]],
   Quaderno.parse("select d \"t\" [targets] \"title\""));
 
 assertEqual(
-  ["select",{"id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
+  ["select",{"_id":"d","text":"t","title":"title","values":["a","b","c"]},[]],
   Quaderno.parse("select d \"t\" [ a, b, c ] \"title\""));
 assertEqual(
-  ["select",{"id":"d","text":"t","title":"title","values":"targets"},[]],
+  ["select",{"_id":"d","text":"t","title":"title","values":"targets"},[]],
   Quaderno.parse("select d \"t\" [ targets ] \"title\""));
 
 

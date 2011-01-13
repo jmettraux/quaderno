@@ -26,13 +26,13 @@ Quaderno.render('quad', template, data, {});
 //print(JSON.stringify($('.quad_root')[0].toArray()));
 
 assertEqual(
-  ["div",{"class":"quad_root"},[
+  ["div",{"id":"quad","class":"quad_root"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_type","type":"hidden","value":"group"},[]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"customers"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-        ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\"customers.+\"},[[\"text_input\",{\"id\":\".name\"},[]]]]"},[]],
+        ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"_id\":\"customers.+\"},[[\"text_input\",{\"_id\":\".name\"},[]]]]"},[]],
         ["div",{"class":"quad_element quad_box"},[
           ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
@@ -40,7 +40,7 @@ assertEqual(
             ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
             ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
             ["span",{"class":"quad_key"},[".name"]],
-            ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"alfred"},[]]]],
+            ["input",{"id":"quad:quad:customers.0.name","class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"alfred"},[]]]],
           ["a",{"class":"quad_copy_button array_duplicate_button quad_button","href":"","onClick":"Quaderno.handlers.duplicateInArray(this); return false;"},[]]]],
         ["div",{"class":"quad_element quad_box"},[
           ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
@@ -49,7 +49,7 @@ assertEqual(
             ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
             ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
             ["span",{"class":"quad_key"},[".name"]],
-            ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"bob"},[]]]],
+            ["input",{"id":"quad:quad:customers.1.name","class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"bob"},[]]]],
           ["a",{"class":"quad_copy_button array_duplicate_button quad_button","href":"","onClick":"Quaderno.handlers.duplicateInArray(this); return false;"},[]]]],
         ["a",{"class":"quad_plus_button quad_button","href":"","onClick":"Quaderno.handlers.addToArray(this); return false;"},[]]]]]]]],
   $('.quad_root')[0].toArray());

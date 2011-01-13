@@ -2,7 +2,7 @@
 //
 // testing quaderno
 //
-// Tue Jan 11 16:44:59 JST 2011
+// Thu Jan 13 21:47:33 JST 2011
 //
 
 file = arguments[0];
@@ -13,9 +13,9 @@ load(dir + '/base.js');
 
 var template = " \n\
 group \n\
-  text_input customer disabled\n\
+  text_input customer id=king\n\
 "
-var data = { "customer": "ahomiya" };
+var data = { "customer": "oosama" };
 
 Quaderno.render('quad', template, data, {});
 
@@ -23,13 +23,13 @@ Quaderno.render('quad', template, data, {});
 //print(JSON.stringify(document.documentElement.toArray()));
 
 assertEqual(
-  ["div",{"class":"quad_root","id":"quad"},[
+  ["div",{"id":"quad","class":"quad_root"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_type","type":"hidden","value":"group"},[]],
-      ["div",{"class":"quad_element"},[
+      ["div",{"id":"king","class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"customer"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
         ["span",{"class":"quad_key"},["customer"]],
-        ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"ahomiya","disabled":"disabled","id":"quad:quad:customer"},[]]]]]]]],
+        ["input",{"id":"quad:quad:customer","class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"oosama"},[]]]]]]]],
   $('.quad_root')[0].toArray());
 

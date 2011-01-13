@@ -65,11 +65,11 @@ Quaderno.render('quad', template, data, {});
 // TODO : what with all the undefined in the first select ?
 
 assertEqual(
-  ["div",{"class":"quad_root"},[
+  ["div",{"class":"quad_root","id":"quad"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"audit.opinions"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-      ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\"audit.opinions.*^\",\"text\":\"opinions\"},[[\"box\",{\"id\":\".opinion_types.*^\"},[[\"select\",{\"id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]]]"},[]],
+      ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"_id\":\"audit.opinions.*^\",\"text\":\"opinions\"},[[\"box\",{\"_id\":\".opinion_types.*^\"},[[\"select\",{\"_id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"_id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"_id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]]]"},[]],
       ["div",{"class":"quad_element quad_box"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
@@ -77,7 +77,7 @@ assertEqual(
         ["div",{"class":"quad_element"},[
           ["input",{"class":"quad_id","type":"hidden","value":".opinion_types"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-          ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\".opinion_types.*^\"},[[\"select\",{\"id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]"},[]],
+          ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"_id\":\".opinion_types.*^\"},[[\"select\",{\"_id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"_id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"_id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]"},[]],
           ["div",{"class":"quad_element quad_box"},[
             ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
             ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
@@ -85,7 +85,7 @@ assertEqual(
               ["input",{"class":"quad_id","type":"hidden","value":".rating"},[]],
               ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],
               ["span",{"class":"quad_key"},["rating"]],
-              ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);"},[
+              ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);","id":"quad:quad:audit.opinions.0.opinion_types.0.rating"},[
                 ["option",{"class":"","value":"Not applicable"},["Not applicable"]],
                 ["option",{"class":"","value":"Not applicable"},["undefined"]],
                 ["option",{"class":"","value":"Unqualified"},["undefined"]],
@@ -98,12 +98,12 @@ assertEqual(
               ["input",{"class":"quad_id","type":"hidden","value":".rating_justification"},[]],
               ["input",{"class":"quad_type","type":"hidden","value":"text_area"},[]],
               ["span",{"class":"quad_key"},["rating justification"]],
-              ["textarea",{"class":"quad_value","id":"quad:quad:audit.opinions.0.opinion_types.0.rating_justification","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);"},[]]]],
+              ["textarea",{"class":"quad_value","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);"},[]]]],
             ["div",{"class":"quad_element"},[
               ["input",{"class":"quad_id","type":"hidden","value":".audit_report"},[]],
               ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],
               ["span",{"class":"quad_key"},["audit report"]],
-              ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);"},[]]]],
+              ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);","id":"quad:quad:audit.opinions.0.opinion_types.0.audit_report"},[]]]],
             ["a",{"class":"quad_minus_button array_remove_button quad_button","href":"","onClick":"Quaderno.handlers.removeFromArray(this); return false;"},[]],
             ["a",{"class":"quad_up_button array_move_button quad_button","href":"","onClick":"Quaderno.handlers.moveInArray(this, \"up\"); return false;"},[]],
             ["a",{"class":"quad_down_button array_move_button quad_button","href":"","onClick":"Quaderno.handlers.moveInArray(this, \"down\"); return false;"},[]],
@@ -120,7 +120,7 @@ assertEqual(
         ["div",{"class":"quad_element"},[
           ["input",{"class":"quad_id","type":"hidden","value":".opinion_types"},[]],
           ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-          ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"id\":\".opinion_types.*^\"},[[\"select\",{\"id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]"},[]],
+          ["input",{"class":"quad_array_template","type":"hidden","value":"[\"box\",{\"_id\":\".opinion_types.*^\"},[[\"select\",{\"_id\":\".rating\",\"text\":\"rating\",\"values\":\"misc.ratings\"},[]],[\"text_area\",{\"_id\":\".rating_justification\",\"text\":\"rating justification\"},[]],[\"select\",{\"_id\":\".audit_report\",\"text\":\"audit report\",\"values\":\"annual_audit.audit_reports\"},[]]]]"},[]],
           ["a",{"class":"quad_plus_button quad_button","href":"","onClick":"Quaderno.handlers.addToArray(this); return false;"},[]]]],
         ["a",{"class":"quad_minus_button array_remove_button quad_button","href":"","onClick":"Quaderno.handlers.removeFromArray(this); return false;"},[]],
         ["a",{"class":"quad_up_button array_move_button quad_button","href":"","onClick":"Quaderno.handlers.moveInArray(this, \"up\"); return false;"},[]],

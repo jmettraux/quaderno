@@ -23,7 +23,7 @@ var translations = { 'en': { 'customer': { 'name': 'Name' } } };
 Quaderno.render('quad', template, data, { 'translations': translations });
 
 assertEqual(
-  ["div",{"class":"quad_root"},[
+  ["div",{"class":"quad_root","id":"quad"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customer"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"group"},[]],
@@ -36,6 +36,6 @@ assertEqual(
         ["input",{"class":"quad_id","type":"hidden","value":".name"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
         ["span",{"class":"quad_key"},["Name"]],
-        ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"danza"},[]]]]]]]],
+        ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"danza","id":"quad:quad:customer.name"},[]]]]]]]],
   $('.quad_root')[0].toArray());
 
