@@ -46,10 +46,12 @@ function prettyAst(tree, indentation) {
 }
 
 function isArray(o) {
+
   return (o.constructor.toString().match(/^function Array/) != undefined);
 }
 
 function stringify(o) {
+
   if (isArray(o) &&
     o.length === 3 &&
     ((typeof o[0]) === 'string') &&

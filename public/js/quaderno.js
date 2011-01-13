@@ -475,7 +475,7 @@ var Quaderno = function () {
 
     var select = createSelect(container, '.quad_value');
 
-    if (id) select.id = 'quad:' + id;
+    if (id) select.id = 'quad:' + rootId(container) + ':' + id;
       // for webrat / capybara
 
     var value = lookup(data, id);
@@ -526,7 +526,7 @@ var Quaderno = function () {
 
     if (id) {
 
-      checkbox.id = 'quad:' + id;
+      checkbox.id = 'quad:' + rootId(container) + ':' + id;
         // for webrat / capybara
 
       var value = lookup(data, id) || '';
@@ -569,7 +569,7 @@ var Quaderno = function () {
 
     if (id) {
 
-      input.id = 'quad:' + id;
+      input.id = 'quad:' + rootId(container) + ':' + id;
         // for webrat / capybara
 
       $(input).attr('value', lookup(data, id) || '');
@@ -602,7 +602,7 @@ var Quaderno = function () {
 
       value = lookup(data, id) || '';
 
-      aid = 'quad:' + id;
+      aid = 'quad:' + rootId(container) + ':' + id;
         // for webrat / capybara
     }
 
@@ -679,9 +679,8 @@ var Quaderno = function () {
       setSelectValue(year, y);
       $(year).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
-      if (id) { // for webrat / capybara
-        year.id = 'quad:' + id + ':year';
-      }
+      if (id) year.id = 'quad:' + rootId(container) + ':' + id + ':year';
+        // for webrat / capybara
     }
 
     // month
@@ -700,9 +699,8 @@ var Quaderno = function () {
       }
       $(month).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
-      if (id) { // for webrat / capybara
-        month.id = 'quad:' + id + ':month';
-      }
+      if (id) month.id = 'quad:' + rootId(container) + ':' + id + ':month';
+        // for webrat / capybara
     }
 
     // day
@@ -720,9 +718,8 @@ var Quaderno = function () {
         create(day, 'option', { 'value': '' + i }, i);
       }
 
-      if (id) { // for webrat / capybara
-        day.id = 'quad:' + id + ':day';
-      }
+      if (id) day.id = 'quad:' + rootId(container) + ':' + id + ':day';
+        // for webrat / capybara
     }
 
     // set value
@@ -1032,6 +1029,10 @@ var Quaderno = function () {
     var $elt = $(elt);
     if ($elt.hasClass('quad_root')) return elt;
     return $elt.parents('.quad_root')[0];
+  }
+
+  function rootId (elt) {
+    return root(elt).id;
   }
 
   function childValue (elt, cname) {

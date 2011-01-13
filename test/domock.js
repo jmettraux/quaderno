@@ -310,6 +310,7 @@ function Document () {
   var elements = {};
 
   var quad = Element();
+  quad.id = 'quad';
   quad.tagName = 'div';
   quad.className = 'quad_root';
   body.appendChild(quad);
