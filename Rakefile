@@ -1,6 +1,16 @@
 
 #
-# TO THE WEB
+# testing
+
+task :test do
+
+  sh 'ruby test/test.rb'
+end
+
+task :default => :test
+
+#
+# to the web
 
 task :upload do
 
