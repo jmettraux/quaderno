@@ -72,3 +72,17 @@ assertEqual(
   ["text",{"text":"customer"},[]],
   Quaderno.parse("text \"customer\" # nada"));
 
+// hidden / disabled
+
+assertEqual(
+  ["text",{"text":"customer", "disabled":true},[]],
+  Quaderno.parse("text \"customer\" disabled"));
+
+assertEqual(
+  ["text",{"text":"customer", "disabled":true},[]],
+  Quaderno.parse("text \"customer\" disabled # nada"));
+
+assertEqual(
+  ["text",{"text":"customer", "disabled":true, "hidden":true},[]],
+  Quaderno.parse("text \"customer\" disabled hidden"));
+
