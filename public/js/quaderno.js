@@ -225,13 +225,18 @@ var Quaderno = function () {
 
   function parse (s) {
 
+    s = s.split(/\njavascript\s*\n/);
+
+    var javascript = s[1];
+    s = s[0];
+
     var lines = s.split('\n');
 
     var current;
     var clevel = -1;
     var definitions = {};
 
-    for (var i = 0; i < lines.length; i++) {
+    var l = lines.length; for (var i = 0; i < l; i++) {
 
       var line = lines[i];
       var tline = $.trim(line);
@@ -285,6 +290,8 @@ var Quaderno = function () {
     while (current.parent) { current = current.parent; }
 
     // done
+
+    current.javascript = javascript;
 
     return current;
   }
@@ -1173,6 +1180,8 @@ var Quaderno = function () {
 
     stack(container);
     container.original = container.stack[0].cloneNode(true);
+
+    if (template.javascript && options.eval) eval(template.javascript);
   }
 
   function produce (container, data) {

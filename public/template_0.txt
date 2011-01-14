@@ -1,5 +1,6 @@
 tabs
   tab "customers"
+    text_input surf "nada" id=xxx
     box customers.*^
       text "customer"
       text_input .name "customer.name"
@@ -20,3 +21,7 @@ tabs
       checkbox .active ".name"
   tab "misc"
     text_area comments
+
+javascript
+  $('#xxx').hide();
+

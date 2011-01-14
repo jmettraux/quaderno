@@ -123,6 +123,16 @@ You can bind to any quaderno root a callback :
     };
 
 
+## the javascript appendix
+
+  box customers.*^
+    text_input .name
+    text_input .city class=city
+
+  javascript
+    $('.city').hide();
+
+
 ## extending (custom types)
 
 TODO : Quaderno.renderers and Quaderno.handlers
