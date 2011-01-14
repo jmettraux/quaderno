@@ -1150,6 +1150,7 @@ var Quaderno = function () {
 
     if (template[1].hidden) div.style.display = 'none';
     if (template[1].id) div.id = template[1].id;
+    if (template[1]['class']) $(div).addClass(template[1]['class']);
 
     return div;
   }
