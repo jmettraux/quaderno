@@ -1,6 +1,7 @@
 tabs
   tab "customers"
-    text_input surf "nada" onchange=func
+    text_input hello1 onchange=func
+    text_input hello2 id=xxx
     box customers.*^
       text "customer"
       text_input .name "customer.name"
@@ -24,6 +25,7 @@ tabs
 
 javascript
   function func(source) {
-    console.log(source);
+    alert('changed to ' + $(source).children('.quad_value').val());
+    $('#xxx').children('.quad_value').val("hello!");
   }
 

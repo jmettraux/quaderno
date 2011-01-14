@@ -118,9 +118,6 @@
     translations = JSON.parse(translations);
     Jagaimo.render('#translations', translations, { mode: 'tree' });
 
-    var mode = qs.mode || 'use';
-    var lang = qs.lang || 'en';
-
     Jagaimo.render('#product', {});
 
     function render () {
@@ -131,7 +128,10 @@
           '#quad',
           template,
           data,
-          { 'translations': translations, 'lang': lang, 'mode': mode, 'eval': true });
+          { 'translations': translations,
+            'lang': qs.lang || 'en',
+            'mode': qs.mode || 'use',
+            'eval': true });
         return false;
       }
       catch (e) {
