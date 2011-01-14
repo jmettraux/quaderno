@@ -1163,6 +1163,17 @@ var Quaderno = function () {
     func(container, data);
   }
 
+  function jEval (javascript) {
+
+    //eval(javascript)
+      // would do the eval in the current 'namespace'
+
+    var script = $('<script>');
+    script.text(javascript);
+    $('head').append(script);
+      // does the eval in the global namespace
+  }
+
   function render (container, template, data, options) {
 
     container = toElement(container);
@@ -1182,7 +1193,7 @@ var Quaderno = function () {
     stack(container);
     container.original = container.stack[0].cloneNode(true);
 
-    if (template.javascript && options.eval) eval(template.javascript);
+    if (template.javascript && options.eval) jEval(template.javascript);
   }
 
   function produce (container, data) {
