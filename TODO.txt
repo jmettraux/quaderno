@@ -27,3 +27,6 @@
 
 [ ] pageflow / taskflow ?
 
+[ ] BUG customer.name in template0... on clicking parse the customer.name is
+    replaced with 名前
+

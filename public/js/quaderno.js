@@ -460,6 +460,19 @@ var Quaderno = function () {
     }
   }
 
+  function appendOnChange (target, template, evt) {
+
+    if (template[1].onchange) {
+
+      evt = evt || 'onChange';
+
+      $(target).attr(
+        evt,
+        $(target).attr(evt) + '; ' +
+        template[1].onchange + '($(this).parent(".quad_element")[0]);');
+    }
+  }
+
   function createSelect (container, cname) {
 
     return create(
@@ -481,6 +494,8 @@ var Quaderno = function () {
       container, 'span', '.quad_key', getKey(container, template, data, id));
 
     var select = createSelect(container, '.quad_value');
+
+    appendOnChange(select, template);
 
     if (id) select.id = 'quad:' + rootId(container) + ':' + id;
       // for webrat / capybara
@@ -530,6 +545,8 @@ var Quaderno = function () {
         'type': 'checkbox',
         'onClick': 'Quaderno.handlers.stackOnClick(this);' });
 
+    appendOnChange(checkbox, template, 'onClick');
+
     if (id) {
 
       checkbox.id = 'quad:' + rootId(container) + ':' + id;
@@ -572,6 +589,8 @@ var Quaderno = function () {
         'type': 'text',
         'onKeyPress': 'Quaderno.handlers.stackOnKey(this);',
         'onChange': 'Quaderno.handlers.stackOnChange(this);' });
+
+    appendOnChange(input, template);
 
     if (id) {
 
@@ -620,6 +639,8 @@ var Quaderno = function () {
         'onKeyPress' : 'Quaderno.handlers.stackOnKey(this);',
         'onChange': 'Quaderno.handlers.stackOnChange(this);' },
       value);
+
+    appendOnChange(area, template);
 
     if (template[1].disabled || options.mode === 'view') {
       $(area).attr('disabled', 'disabled');
@@ -685,6 +706,8 @@ var Quaderno = function () {
       setSelectValue(year, y);
       $(year).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
 
+      appendOnChange(year, template);
+
       if (id) year.id = 'quad:' + rootId(container) + ':' + id + ':year';
         // for webrat / capybara
     }
@@ -704,6 +727,8 @@ var Quaderno = function () {
         create(month, 'option', { 'value': '' + i }, i);
       }
       $(month).attr('onChange', 'Quaderno.handlers.checkDate(this, "' + type + '");');
+
+      appendOnChange(month, template);
 
       if (id) month.id = 'quad:' + rootId(container) + ':' + id + ':month';
         // for webrat / capybara
@@ -1163,7 +1188,7 @@ var Quaderno = function () {
     func(container, data);
   }
 
-  function jEval (javascript) {
+  function doEval (javascript) {
 
     //eval(javascript)
       // would do the eval in the current 'namespace'
@@ -1193,7 +1218,7 @@ var Quaderno = function () {
     stack(container);
     container.original = container.stack[0].cloneNode(true);
 
-    if (template.javascript && options.eval) jEval(template.javascript);
+    if (template.javascript && options.eval) doEval(template.javascript);
   }
 
   function produce (container, data) {

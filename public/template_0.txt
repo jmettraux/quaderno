@@ -1,6 +1,6 @@
 tabs
   tab "customers"
-    text_input surf "nada" id=xxx
+    text_input surf "nada" onchange=func
     box customers.*^
       text "customer"
       text_input .name "customer.name"
@@ -23,5 +23,7 @@ tabs
     text_area comments
 
 javascript
-  $('#xxx').hide();
+  function func(source) {
+    console.log(source);
+  }
 
