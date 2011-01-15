@@ -1,7 +1,6 @@
 tabs
   tab "customers"
     text_input hello1 onchange=func
-    text_input hello2 id=xxx
     box customers.*^
       text "customer"
       text_input .name "customer.name"
@@ -9,7 +8,7 @@ tabs
       checkbox .active "active"
   tab "destinations and dates"
     text_input audit.project.id "project"
-    select destination0 [roma, firenze, pisa]
+    select destination0 [roma, firenze, pisa] class=yyy
     select destination1 [destinations]
     select destination2 [country.france, country.us]
     box "dates"
@@ -25,7 +24,7 @@ tabs
 
 javascript
   function func(source) {
-    alert('changed to ' + $(source).children('.quad_value').val());
-    $('#xxx').children('.quad_value').val("hello!");
+    //$('.yyy')[0].fill([ 'a', 'b', 'c' ], 'c');
+    $('.yyy')[0].fill('destinations');
   }
 

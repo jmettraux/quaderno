@@ -500,7 +500,7 @@ var Quaderno = function () {
     if (id) select.id = 'quad:' + rootId(container) + ':' + id;
       // for webrat / capybara
 
-    var value = lookup(data, id);
+    var value = template[1].value || lookup(data, id);
     var values = template[1].values || [];
 
     if ( ! $.isArray(values)) values = lookup(data, values);
@@ -522,6 +522,13 @@ var Quaderno = function () {
 
     if (template[1].disabled || options.mode === 'view') {
       $(select).attr('disabled', 'disabled');
+    }
+
+    container.fill = function (values, value) {
+      template[1].values = values;
+      template[1].value = value;
+      options.replace = true;
+      renderElement(container, template, data, options);
     }
   }
 
@@ -1126,9 +1133,19 @@ var Quaderno = function () {
 
   function renderElement (container, template, data, options) {
 
+    var original = null;
+
+    if (options.replace) {
+      original = container;
+      container = container.parentNode;
+      delete options.replace;
+    }
+
     var func = renderers['render_' + template[0]] || renderers['render_'];
 
     var div = create(container, 'div', '.quad_element');
+
+    if (original) container.replaceChild(div, original);
 
     var arrayId = extractArrayId(container, template);
 
