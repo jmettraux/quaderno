@@ -194,7 +194,7 @@ var Quaderno = function () {
     if (m && m[1]) {
       var vs = m[1].slice(1, -1).split(',');
       var values = [];
-      for (var i = 0; i < vs.length; i++) { values.push($.trim(vs[i])); }
+      for (var i = 0, l = vs.length; i < l; i++) { values.push($.trim(vs[i])); }
       atts.values = values.length === 1 ? values[0] : values;
       s = m[2] || '';
     }
@@ -236,7 +236,7 @@ var Quaderno = function () {
     var clevel = -1;
     var definitions = {};
 
-    var l = lines.length; for (var i = 0; i < l; i++) {
+    for (var i = 0, l = lines.length; i < l; i++) {
 
       var line = lines[i];
       var tline = $.trim(line);
@@ -270,7 +270,7 @@ var Quaderno = function () {
 
       if (def) {
         def = deepCopy(def);
-        for (var j = 0; j < def.length; j++) {
+        for (var j = 0, ll = def.length; j < ll; j++) {
           elt.parent[2].push(def[j]);
         }
       }
@@ -307,7 +307,7 @@ var Quaderno = function () {
   }
 
   function renderChildren (container, template, data, options) {
-    for (var i = 0; i < template[2].length; i++) {
+    for (var i = 0, l = template[2].length; i < l; i++) {
       renderElement(container, template[2][i], data, options);
     }
   }
@@ -446,7 +446,7 @@ var Quaderno = function () {
 
     var opts = $(sel).children('option');
 
-    for (var i = 0; i < opts.length; i++) {
+    for (var i = 0, l = opts.length; i < l; i++) {
 
       var opt = opts[i]; var $opt = $(opt);
 
@@ -506,7 +506,7 @@ var Quaderno = function () {
     if ( ! $.isArray(values)) values = lookup(data, values);
     if ( ! $.isArray(values)) values = [ '' + values ];
 
-    for (var i = 0; i < values.length; i++) {
+    for (var i = 0, l = values.length; i < l; i++) {
 
       var v = values[i];
       var t = translate(container, v);
@@ -924,7 +924,7 @@ var Quaderno = function () {
 
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
-    for (var i = 0; i < tabs.length; i++) {
+    for (var i = 0, l = tabs.length; i < l; i++) {
       renderers.render_tab_label(tr0, tabs[i], data, options);
     }
 
@@ -937,7 +937,7 @@ var Quaderno = function () {
     var td = create(tr, 'td', { 'colspan': tabs.length });
     var qtb = create(td, 'div', '.quad_tab_body');
 
-    for (var i = 0; i < tabs.length; i++) {
+    for (var i = 0, l = tabs.length; i < l; i++) {
       var div = renderElement(qtb, tabs[i], data, options);
       if (i != 0) div.style.display = 'none';
     }
@@ -947,9 +947,7 @@ var Quaderno = function () {
 
   function computeSiblingOffset (elt, sel) {
     var cs = $(elt.parentNode).children(sel);
-    for (var i = 0; i < cs.length; i++) {
-      if (cs[i] == elt) return i;
-    }
+    for (var i = 0, l = cs.length; i < l; i++) { if (cs[i] == elt) return i; }
     return -1;
   }
   function findTabBody (td) {
@@ -966,7 +964,7 @@ var Quaderno = function () {
 
     var tab_body = findTabBody(td);
 
-    for (var i = 0; i < tab_body.parentNode.children.length; i++) {
+    for (var i = 0, l = tab_body.parentNode.children.length; i < l; i++) {
       tab_body.parentNode.children[i].style.display = 'none';
     }
     tab_body.style.display = 'block';
@@ -1160,7 +1158,7 @@ var Quaderno = function () {
       var a = lookup(data, currentId(div));
 
       if (a) {
-        for (var i = 0; i < a.length; i++) {
+        for (var i = 0, l = a.length; i < l; i++) {
 
           templ = deepCopy(template);
 

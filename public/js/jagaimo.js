@@ -44,7 +44,7 @@ var Jagaimo = function () {
     if (isArray(o)) {
 
       create(container, 'span', 'jagaimo_bracket', '[');
-      for (var i = 0; i < o.length; i++) {
+      for (var i = 0, l = o.length; i < l; i++) {
         renderFlat(container, o[i]);
         if (i < o.length - 1) {
           create(container, 'span', 'jagaimo_comma', ',');
@@ -59,7 +59,7 @@ var Jagaimo = function () {
       var keys = [];
       for (var k in o) keys.push(k);
 
-      for (var i = 0; i < keys.length; i++) {
+      for (var i = 0, l = keys.length; i < l; i++) {
         create(container, 'span', 'jagaimo_key', keys[i]);
         create(container, 'span', 'jagaimo_colon', ':');
         renderFlat(container, o[keys[i]]);
@@ -95,7 +95,7 @@ var Jagaimo = function () {
 
     if (isArray(o)) {
 
-      for (var i = 0; i < o.length; i++) {
+      for (var i = 0, l = o.length; i < l; i++) {
         var bullet = create(line, 'div', 'jagaimo_tree_bullet', '- ');
         renderTree(bullet, o[i]);
       }
@@ -106,7 +106,7 @@ var Jagaimo = function () {
       for (var k in o) keys.push(k);
       keys = keys.sort();
 
-      for (var i = 0; i < keys.length; i++) {
+      for (var i = 0, l = keys.length; i < l; i++) {
         var key = create(line, 'div', 'jagaimo_tree_key', keys[i] + ': ');
         renderTree(key, o[keys[i]]);
       }
