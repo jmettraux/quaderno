@@ -81,9 +81,9 @@ End of line comments starting with // or # are supported.
 TODO
 
 
-## macros
+## 'define'
 
-Expanded at parse time.
+Expanded at render time.
 
     define customer
       text "customer"
@@ -91,11 +91,12 @@ Expanded at parse time.
       text_input .city
     
     tabs
-      tab "a"
+      tab "current"
         box customers.*^
           customer
-      tab "b"
-        text "nada"
+      tab "former"
+        box former_customers.*^
+          customer
 
 
 ## disabled and hidden

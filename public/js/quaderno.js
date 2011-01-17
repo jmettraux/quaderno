@@ -234,7 +234,8 @@ var Quaderno = function () {
 
     var current;
     var clevel = -1;
-    var definitions = {};
+    //var definitions = {};
+    var definitions = [];
 
     for (var i = 0, l = lines.length; i < l; i++) {
 
@@ -268,18 +269,14 @@ var Quaderno = function () {
         elt.parent = current;
       }
 
-      if (def) {
-        def = deepCopy(def);
-        for (var j = 0, ll = def.length; j < ll; j++) {
-          elt.parent[2].push(def[j]);
-        }
-      }
-      else if (elt[0] === 'define') {
-        definitions[elt[1]._id] = elt[2];
-      }
-      else if (elt.parent) { // don't place macros in parent
+      if (elt.parent) { // don't place macros in parent
         elt.parent[2].push(elt);
       }
+      else if (elt[0] === 'define') {
+        definitions.push(elt);
+      }
+      //else { // well
+      //}
 
       current = elt;
       clevel = nlevel;
@@ -291,6 +288,14 @@ var Quaderno = function () {
 
     // done
 
+    for (var i = 0, l = definitions.length; i < l; i++) {
+      definitions[i].parent = current;
+      current[2].push(definitions[i]);
+    }
+
+    //var elt = [ 'javascript', { 'code': javascript }, [] ];
+    //elt.parent = current;
+    //current[2].push([ 'javascript', { 'code': javascript }, [] ]);
     current.javascript = javascript;
 
     return current;
@@ -925,6 +930,7 @@ var Quaderno = function () {
     var tr0 = create(table, 'tr', '.quad_tab_group');
 
     for (var i = 0, l = tabs.length; i < l; i++) {
+      if (tabs[i][0] === 'define') continue;
       renderers.render_tab_label(tr0, tabs[i], data, options);
     }
 
@@ -938,6 +944,7 @@ var Quaderno = function () {
     var qtb = create(td, 'div', '.quad_tab_body');
 
     for (var i = 0, l = tabs.length; i < l; i++) {
+      if (tabs[i][0] === 'define') continue;
       var div = renderElement(qtb, tabs[i], data, options);
       if (i != 0) div.style.display = 'none';
     }
@@ -1129,7 +1136,23 @@ var Quaderno = function () {
     return h;
   }
 
+  // looks up a "define x" and return its children
+  //
+  function lookupDefinition (template, defName) {
+
+    if ( ! template) return undefined;
+
+    for (var i = 0, l = template[2].length; i < l; i++) {
+      var elt = template[2][i];
+      if (elt[0] === 'define' && elt[1]._id === defName) return elt[2];
+    }
+
+    return lookupDefinition(template.parent, defName);
+  }
+
   function renderElement (container, template, data, options) {
+
+    if (template[0] === 'define') return;
 
     var original = null;
 
@@ -1139,7 +1162,21 @@ var Quaderno = function () {
       delete options.replace;
     }
 
-    var func = renderers['render_' + template[0]] || renderers['render_'];
+    var func = renderers['render_' + template[0]]
+
+    if ( ! func) {
+
+      var elts = lookupDefinition(template.parent, template[0]);
+
+      if (elts) {
+        for (var i = 0, l = elts.length; i < l; i++) {
+          renderElement(container, elts[i], data, options);
+        }
+        return;
+      }
+
+      func = renderers['render_']; // default renderer
+    }
 
     var div = create(container, 'div', '.quad_element');
 
@@ -1161,6 +1198,7 @@ var Quaderno = function () {
         for (var i = 0, l = a.length; i < l; i++) {
 
           templ = deepCopy(template);
+          rewire(templ, template.parent);
 
           templ[1]._id = '.0';
           var e = renderElement(div, templ, data, options);
@@ -1219,6 +1257,15 @@ var Quaderno = function () {
       // does the eval in the global namespace
   }
 
+  function rewire (template, parent) {
+
+    template.parent = parent;
+
+    for (var i = 0, l = template[2].length; i < l; i++) {
+      rewire(template[2][i], template);
+    }
+  }
+
   function render (container, template, data, options) {
 
     container = toElement(container);
@@ -1233,6 +1280,8 @@ var Quaderno = function () {
     while (container.firstChild) container.removeChild(container.firstChild);
 
     if ((typeof template) === 'string') template = parse(template);
+    rewire(template);
+
     renderElement(container, template, data, options);
 
     stack(container);
