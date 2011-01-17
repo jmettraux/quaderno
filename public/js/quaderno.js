@@ -292,7 +292,7 @@ var Quaderno = function () {
 
     if (javascript) {
       var elt = [ 'javascript', { 'code': javascript }, [] ];
-      //elt.parent = current;
+      //elt.parent = current; // not necessary
       current[2].push([ 'javascript', { 'code': javascript }, [] ]);
     }
 
@@ -1136,20 +1136,6 @@ var Quaderno = function () {
     return h;
   }
 
-  // looks up a "define x" and return its children
-  //
-  function lookupDefinition (template, defName) {
-
-    if ( ! template) return undefined;
-
-    for (var i = 0, l = template[2].length; i < l; i++) {
-      var elt = template[2][i];
-      if (elt[0] === 'define' && elt[1]._id === defName) return elt[2];
-    }
-
-    return lookupDefinition(template.parent, defName);
-  }
-
   function copyTemplate (template, parent) {
 
     var t = deepCopy(template);
@@ -1158,21 +1144,25 @@ var Quaderno = function () {
     return t;
   }
 
-  function renderElements (container, elts, data, options, parent) {
+  // looks up a "define x" and return its children
+  //
+  function lookupDefinition (template, defName, parent) {
 
-    var before = undefined;
+    if ( ! template) return undefined;
+    if ( ! parent) parent = template;
 
-    if (options.before) {
-      before = true;
-      delete options.replace;
+    for (var i = 0, l = template[2].length; i < l; i++) {
+
+      var elt = template[2][i];
+
+      if (elt[0] === 'define' && elt[1]._id === defName) {
+        var group = [ 'group', {}, deepCopy(elt[2]) ];
+        rewire(group, parent);
+        return group;
+      }
     }
 
-    for (var i = 0, l = elts.length; i < l; i++) {
-      options.before = before;
-      renderElement(container, copyTemplate(elts[i], parent), data, options);
-    }
-
-    if (before) container.parentNode.removeChild(container);
+    return lookupDefinition(template.parent, defName, parent);
   }
 
   function renderElement (container, template, data, options) {
@@ -1201,9 +1191,7 @@ var Quaderno = function () {
 
       var elts = lookupDefinition(template.parent, template[0]);
 
-      if (elts) {
-        return renderElements(container, elts, data, options, template.parent);
-      }
+      if (elts) return renderElement(container, elts, data, options);
 
       func = renderers['render_']; // default renderer
     }
@@ -1262,17 +1250,10 @@ var Quaderno = function () {
 
     div.replace = function (tree) {
 
-      if ($.isArray(tree)) {
+      if ( ! $.isArray(tree)) tree = lookupDefinition(template.parent, tree);
 
-        options.replace = true;
-        return renderElement(div, tree, data, options);
-      }
-      else {
-
-        var ts = lookupDefinition(template.parent, tree);
-        options.before = true;
-        renderElements(div, ts, data, options, template.parent);
-      }
+      options.replace = true;
+      renderElement(div, tree, data, options);
     }
     //div.replaceChildren = function (tree) {
     //  // TODO : implement me
