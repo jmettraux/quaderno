@@ -1156,8 +1156,12 @@ var Quaderno = function () {
       var elt = template[2][i];
 
       if (elt[0] === 'define' && elt[1]._id === defName) {
-        var group = [ 'group', {}, deepCopy(elt[2]) ];
+
+        var group = deepCopy(elt);
+        group[0] = 'group';
+        delete group[1]._id;
         rewire(group, parent);
+
         return group;
       }
     }
@@ -1255,9 +1259,10 @@ var Quaderno = function () {
       options.replace = true;
       renderElement(div, tree, data, options);
     }
+
     //div.replaceChildren = function (tree) {
-    //  // TODO : implement me
     //}
+      // TODO : implement me
 
     return div;
   }
@@ -1282,10 +1287,9 @@ var Quaderno = function () {
   function evalJavascript (template) {
 
     for (var i = 0, l = template[2].length; i < l; i++) {
-      if (template[2][i][0] === 'javascript') {
-        $.globalEval(template[2][i][1].code);
-        return;
-      }
+      if (template[2][i][0] !== 'javascript') continue;
+      $.globalEval(template[2][i][1].code);
+      return;
     }
   }
 
