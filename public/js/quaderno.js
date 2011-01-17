@@ -1246,17 +1246,6 @@ var Quaderno = function () {
     func(container, data);
   }
 
-  function doEval (javascript) {
-
-    //eval(javascript)
-      // would do the eval in the current 'namespace'
-
-    var script = $('<script>');
-    script.text(javascript);
-    $('head').append(script);
-      // does the eval in the global namespace
-  }
-
   function rewire (template, parent) {
 
     template.parent = parent;
@@ -1287,7 +1276,7 @@ var Quaderno = function () {
     stack(container);
     container.original = container.stack[0].cloneNode(true);
 
-    if (template.javascript && options.eval) doEval(template.javascript);
+    if (template.javascript && options.eval) $.globalEval(template.javascript);
   }
 
   function produce (container, data) {
