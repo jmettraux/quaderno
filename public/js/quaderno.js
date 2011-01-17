@@ -1192,6 +1192,11 @@ var Quaderno = function () {
     if (template[1].id) div.id = template[1].id;
     if (template[1]['class']) $(div).addClass(template[1]['class']);
 
+    div.replace = function (tree) {
+      options.replace = true;
+      renderElement(div, tree, data, options);
+    }
+
     return div;
   }
 

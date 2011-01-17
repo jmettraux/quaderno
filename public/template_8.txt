@@ -1,0 +1,18 @@
+
+define customer
+  text "customer"
+  text_input .name
+  text_input .city
+
+tabs
+  tab "x"
+    text_input hello1 onchange=func
+  tab "y"
+    text "customer" id=customer
+
+javascript
+  function func() {
+    //$('#customer')[0].replace('customer')
+    $('#customer')[0].replace([ 'text', { 'text': 'nada' }, [] ]);
+  }
+
