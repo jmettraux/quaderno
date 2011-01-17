@@ -5,14 +5,13 @@ define customer
   text_input .city
 
 tabs
-  tab "x"
+  tab "my unique tab"
     text_input hello1 onchange=func
-  tab "y"
     text "customer" id=customer
 
 javascript
   function func() {
-    //$('#customer')[0].replace('customer')
-    $('#customer')[0].replace([ 'text', { 'text': 'nada' }, [] ]);
+    $('#customer')[0].replace('customer')
+    //$('#customer')[0].replace([ 'text', { 'text': 'nada' }, [] ]);
   }
 

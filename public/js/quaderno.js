@@ -160,8 +160,6 @@ var Quaderno = function () {
 
     // id "text" value \[ values \] "title" [disabled]
 
-    // TODO : >value< if necessary
-
     var atts = {};
     var m;
 
@@ -1152,17 +1150,49 @@ var Quaderno = function () {
     return lookupDefinition(template.parent, defName);
   }
 
+  function copyTemplate (template, parent) {
+
+    var t = deepCopy(template);
+    rewire(t, parent || template.parent);
+
+    return t;
+  }
+
+  function renderElements (container, elts, data, options, parent) {
+
+    var before = undefined;
+
+    if (options.before) {
+      before = true;
+      delete options.replace;
+    }
+
+    for (var i = 0, l = elts.length; i < l; i++) {
+      options.before = before;
+      renderElement(container, copyTemplate(elts[i], parent), data, options);
+    }
+
+    if (before) container.parentNode.removeChild(container);
+  }
+
   function renderElement (container, template, data, options) {
 
     if (template[0] === 'define') return;
     if (template[0] === 'javascript') return;
 
-    var original = null;
+    var ref = undefined;
+    var special = undefined;
 
-    if (options.replace) {
-      original = container;
+    if (options.replace || options.before) {
+
+      ref = container;
       container = container.parentNode;
+
+      if (options.replace) special = 'replace';
+      else special = 'before';
+
       delete options.replace;
+      delete options.before;
     }
 
     var func = renderers['render_' + template[0]]
@@ -1172,10 +1202,7 @@ var Quaderno = function () {
       var elts = lookupDefinition(template.parent, template[0]);
 
       if (elts) {
-        for (var i = 0, l = elts.length; i < l; i++) {
-          renderElement(container, elts[i], data, options);
-        }
-        return;
+        return renderElements(container, elts, data, options, template.parent);
       }
 
       func = renderers['render_']; // default renderer
@@ -1183,7 +1210,8 @@ var Quaderno = function () {
 
     var div = create(container, 'div', '.quad_element');
 
-    if (original) container.replaceChild(div, original);
+    if (special === 'replace') container.replaceChild(div, ref);
+    else if (special === 'before') container.insertBefore(div, ref);
 
     var arrayId = extractArrayId(container, template);
 
@@ -1200,11 +1228,10 @@ var Quaderno = function () {
       if (a) {
         for (var i = 0, l = a.length; i < l; i++) {
 
-          templ = deepCopy(template);
-          rewire(templ, template.parent);
+          var t = copyTemplate(template);
 
-          templ[1]._id = '.0';
-          var e = renderElement(div, templ, data, options);
+          t[1]._id = '.0';
+          var e = renderElement(div, t, data, options);
 
           if (arrayId.canRemove) addRemoveButton(e);
           if (arrayId.canReorder) addReorderButtons(e);
@@ -1234,9 +1261,22 @@ var Quaderno = function () {
     if (template[1]['class']) $(div).addClass(template[1]['class']);
 
     div.replace = function (tree) {
-      options.replace = true;
-      renderElement(div, tree, data, options);
+
+      if ($.isArray(tree)) {
+
+        options.replace = true;
+        return renderElement(div, tree, data, options);
+      }
+      else {
+
+        var ts = lookupDefinition(template.parent, tree);
+        options.before = true;
+        renderElements(div, ts, data, options, template.parent);
+      }
     }
+    //div.replaceChildren = function (tree) {
+    //  // TODO : implement me
+    //}
 
     return div;
   }
@@ -1258,9 +1298,7 @@ var Quaderno = function () {
     }
   }
 
-  function evalJavascript (template, options) {
-
-    if ( ! options.eval) return;
+  function evalJavascript (template) {
 
     for (var i = 0, l = template[2].length; i < l; i++) {
       if (template[2][i][0] === 'javascript') {
@@ -1291,7 +1329,7 @@ var Quaderno = function () {
     stack(container);
     container.original = container.stack[0].cloneNode(true);
 
-    evalJavascript(template, options);
+    if (options.eval) evalJavascript(template);
   }
 
   function produce (container, data) {
