@@ -1,13 +1,13 @@
 tabs
   tab "customers"
-    text_input hello1 onchange=func
+    text_input hello1
     box customers.*^
       text "customer"
       text_input .name "customer.name"
       text_input .city "city"
       checkbox .active "active"
   tab "destinations and dates"
-    text_input audit.project.id "project"
+    text_input audit.project.id "project" onchange=func
     select destination0 [roma, firenze, pisa] class=yyy
     select destination1 [destinations]
     select destination2 [country.france, country.us]

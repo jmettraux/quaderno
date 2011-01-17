@@ -234,7 +234,6 @@ var Quaderno = function () {
 
     var current;
     var clevel = -1;
-    //var definitions = {};
     var definitions = [];
 
     for (var i = 0, l = lines.length; i < l; i++) {
@@ -293,10 +292,11 @@ var Quaderno = function () {
       current[2].push(definitions[i]);
     }
 
-    //var elt = [ 'javascript', { 'code': javascript }, [] ];
-    //elt.parent = current;
-    //current[2].push([ 'javascript', { 'code': javascript }, [] ]);
-    current.javascript = javascript;
+    if (javascript) {
+      var elt = [ 'javascript', { 'code': javascript }, [] ];
+      //elt.parent = current;
+      current[2].push([ 'javascript', { 'code': javascript }, [] ]);
+    }
 
     return current;
   }
@@ -931,6 +931,7 @@ var Quaderno = function () {
 
     for (var i = 0, l = tabs.length; i < l; i++) {
       if (tabs[i][0] === 'define') continue;
+      if (tabs[i][0] === 'javascript') continue;
       renderers.render_tab_label(tr0, tabs[i], data, options);
     }
 
@@ -945,6 +946,7 @@ var Quaderno = function () {
 
     for (var i = 0, l = tabs.length; i < l; i++) {
       if (tabs[i][0] === 'define') continue;
+      if (tabs[i][0] === 'javascript') continue;
       var div = renderElement(qtb, tabs[i], data, options);
       if (i != 0) div.style.display = 'none';
     }
@@ -1153,6 +1155,7 @@ var Quaderno = function () {
   function renderElement (container, template, data, options) {
 
     if (template[0] === 'define') return;
+    if (template[0] === 'javascript') return;
 
     var original = null;
 
@@ -1255,6 +1258,18 @@ var Quaderno = function () {
     }
   }
 
+  function evalJavascript (template, options) {
+
+    if ( ! options.eval) return;
+
+    for (var i = 0, l = template[2].length; i < l; i++) {
+      if (template[2][i][0] === 'javascript') {
+        $.globalEval(template[2][i][1].code);
+        return;
+      }
+    }
+  }
+
   function render (container, template, data, options) {
 
     container = toElement(container);
@@ -1276,7 +1291,7 @@ var Quaderno = function () {
     stack(container);
     container.original = container.stack[0].cloneNode(true);
 
-    if (template.javascript && options.eval) $.globalEval(template.javascript);
+    evalJavascript(template, options);
   }
 
   function produce (container, data) {

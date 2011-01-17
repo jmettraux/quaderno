@@ -24,9 +24,7 @@ var tree = Quaderno.parse(s);
 
 assertEqual(
   ["box",{},[
-    ["text",{"text":"nada"},[]]]],
+    ["text",{"text":"nada"},[]],
+    ["javascript",{"code":"  function func (source) { \n  } \n"},[]]]],
   tree);
-assertEqual(
-  "function func (source) { \n  }",
-  $.trim(tree.javascript));
 
