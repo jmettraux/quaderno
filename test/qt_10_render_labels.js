@@ -26,6 +26,7 @@ assertEqual(
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customer.name"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"text_input"},[]],
+      ["input",{"class":"quad_template","type":"hidden","value":"[\"text_input\",{\"_id\":\"customer.name\",\"text\":\"name\"},[]]"},[]],
       ["span",{"class":"quad_key"},["name"]],
       ["input",{"class":"quad_value","type":"text","onKeyPress":"Quaderno.handlers.stackOnKey(this);","onChange":"Quaderno.handlers.stackOnChange(this);","value":"kanazawa","id":"quad:quad:customer.name"},[]]]]]],
   $('.quad_root')[0].toArray());

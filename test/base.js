@@ -16,7 +16,7 @@ function prettyAst(tree, indentation) {
 
   var s = '';
 
-  indentation = indentation || 0;
+  indentation = indentation || 1;
   for (var i = 0; i < indentation; i++) s = s + '  ';
 
   var cs = "[\n";

@@ -1019,7 +1019,7 @@ var Quaderno = function () {
 
     stack(elt);
 
-    var t = JSON.parse(childValue(elt.parentNode, '.quad_array_template'));
+    var t = JSON.parse(childValue(elt.parentNode, '.quad_template'));
     var tid = t[1]._id;
     t[1]._id = '.0';
 
@@ -1079,7 +1079,8 @@ var Quaderno = function () {
   }
 
   function childValue (elt, cname) {
-    return $(elt).children(cname)[0].value;
+    var child = $(elt).children(cname)[0];
+    return child ? child.value : undefined;
   }
 
   function localId (elt) {
@@ -1136,37 +1137,31 @@ var Quaderno = function () {
     return h;
   }
 
-  function copyTemplate (template, parent) {
+  function lookupDefinition (container, defName) {
 
-    var t = deepCopy(template);
-    rewire(t, parent || template.parent);
+    if ( ! container) return undefined;
+    if ($(container).hasClass('quad_root')) return undefined;
 
-    return t;
-  }
+    var t = childValue(container, '.quad_template');
 
-  // looks up a "define x" and return its children
-  //
-  function lookupDefinition (template, defName, parent) {
+    if (t) {
 
-    if ( ! template) return undefined;
-    if ( ! parent) parent = template;
+      t = JSON.parse(t);
 
-    for (var i = 0, l = template[2].length; i < l; i++) {
+      for (var i = 0, l = t[2].length; i < l; i++) {
 
-      var elt = template[2][i];
+        var c = t[2][i];
 
-      if (elt[0] === 'define' && elt[1]._id === defName) {
-
-        var group = deepCopy(elt);
-        group[0] = 'group';
-        delete group[1]._id;
-        rewire(group, parent);
-
-        return group;
+        if (c[0] === 'define' && c[1]._id === defName) {
+          var group = deepCopy(c);
+          group[0] = 'group';
+          delete group[1]._id;
+          return group;
+        }
       }
     }
 
-    return lookupDefinition(template.parent, defName, parent);
+    return lookupDefinition(container.parentNode, defName);
   }
 
   function renderElement (container, template, data, options) {
@@ -1193,9 +1188,11 @@ var Quaderno = function () {
 
     if ( ! func) {
 
-      var elts = lookupDefinition(template.parent, template[0]);
+      var group = lookupDefinition(container, template[0]);
 
-      if (elts) return renderElement(container, elts, data, options);
+      console.log(group);
+
+      if (group) return renderElement(container, group, data, options);
 
       func = renderers['render_']; // default renderer
     }
@@ -1213,14 +1210,14 @@ var Quaderno = function () {
 
       hide(div, '.quad_id', arrayId.slicedId);
       hide(div, '.quad_type', '_array');
-      hide(div, '.quad_array_template', JSON.stringify(template));
+      hide(div, '.quad_template', JSON.stringify(template));
 
       var a = lookup(data, currentId(div));
 
       if (a) {
         for (var i = 0, l = a.length; i < l; i++) {
 
-          var t = copyTemplate(template);
+          var t = deepCopy(template);
 
           t[1]._id = '.0';
           var e = renderElement(div, t, data, options);
@@ -1244,7 +1241,9 @@ var Quaderno = function () {
     if (id) hide(div, '.quad_id', id);
 
     if (template[1].title) $(div).attr('title', template[1].title);
+
     hide(div, '.quad_type', template[0]);
+    hide(div, '.quad_template', JSON.stringify(template));
 
     func(div, template, data, options);
 
@@ -1254,7 +1253,7 @@ var Quaderno = function () {
 
     div.replace = function (tree) {
 
-      if ( ! $.isArray(tree)) tree = lookupDefinition(template.parent, tree);
+      if ( ! $.isArray(tree)) tree = lookupDefinition(container, tree);
 
       options.replace = true;
       renderElement(div, tree, data, options);
@@ -1273,15 +1272,6 @@ var Quaderno = function () {
     var func = renderers['produce_' + type] || renderers['produce_'];
 
     func(container, data);
-  }
-
-  function rewire (template, parent) {
-
-    template.parent = parent;
-
-    for (var i = 0, l = template[2].length; i < l; i++) {
-      rewire(template[2][i], template);
-    }
   }
 
   function evalJavascript (template) {
@@ -1307,7 +1297,6 @@ var Quaderno = function () {
     while (container.firstChild) container.removeChild(container.firstChild);
 
     if ((typeof template) === 'string') template = parse(template);
-    rewire(template);
 
     renderElement(container, template, data, options);
 

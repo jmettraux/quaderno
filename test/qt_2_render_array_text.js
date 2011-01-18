@@ -22,24 +22,27 @@ Quaderno.render('quad', template, data, {});
 //print(JSON.stringify($('.quad_root')[0].toArray()));
 
 assertEqual(
-  ["div",{"id":"quad","class":"quad_root"},[
+  ["div",{"class":"quad_root","id":"quad"},[
     ["div",{"class":"quad_element"},[
       ["input",{"class":"quad_id","type":"hidden","value":"customers"},[]],
       ["input",{"class":"quad_type","type":"hidden","value":"_array"},[]],
-      ["input",{"class":"quad_array_template","type":"hidden","value":"[\"text\",{\"_id\":\"customers.\"},[]]"},[]],
+      ["input",{"class":"quad_template","type":"hidden","value":"[\"text\",{\"_id\":\"customers.\"},[]]"},[]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"text\",{\"_id\":\".0\"},[]]"},[]],
         ["span",{"class":"quad_key"},[".0"]],
         ["span",{"class":"quad_value quad_text"},["alice"]]]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"text\",{\"_id\":\".0\"},[]]"},[]],
         ["span",{"class":"quad_key"},[".0"]],
         ["span",{"class":"quad_value quad_text"},["bob"]]]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":".0"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"text"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"text\",{\"_id\":\".0\"},[]]"},[]],
         ["span",{"class":"quad_key"},[".0"]],
         ["span",{"class":"quad_value quad_text"},["charly"]]]]]]]],
   $('.quad_root')[0].toArray());

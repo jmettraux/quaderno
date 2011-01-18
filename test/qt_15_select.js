@@ -34,9 +34,11 @@ assertEqual(
   ["div",{"class":"quad_root","id":"quad"},[
     ["div",{"class":"quad_element quad_box"},[
       ["input",{"class":"quad_type","type":"hidden","value":"box"},[]],
+      ["input",{"class":"quad_template","type":"hidden","value":"[\"box\",{},[[\"select\",{\"_id\":\"rating\",\"text\":\"rating\",\"values\":\"ratings\"},[]],[\"select\",{\"_id\":\"country\",\"text\":\"country\",\"values\":\"countries\"},[]],[\"select\",{\"_id\":\"city\",\"text\":\"city\",\"values\":\"cities\"},[]]]]"},[]],
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"rating"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"select\",{\"_id\":\"rating\",\"text\":\"rating\",\"values\":\"ratings\"},[]]"},[]],
         ["span",{"class":"quad_key"},["rating"]],
         ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);","id":"quad:quad:rating"},[
           ["option",{"class":"","value":"alpha"},["alpha"]],
@@ -44,6 +46,7 @@ assertEqual(
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"country"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"select\",{\"_id\":\"country\",\"text\":\"country\",\"values\":\"countries\"},[]]"},[]],
         ["span",{"class":"quad_key"},["country"]],
         ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);","id":"quad:quad:country"},[
           ["option",{"class":"","value":"burma"},["Burma"]],
@@ -51,6 +54,7 @@ assertEqual(
       ["div",{"class":"quad_element"},[
         ["input",{"class":"quad_id","type":"hidden","value":"city"},[]],
         ["input",{"class":"quad_type","type":"hidden","value":"select"},[]],
+        ["input",{"class":"quad_template","type":"hidden","value":"[\"select\",{\"_id\":\"city\",\"text\":\"city\",\"values\":\"cities\"},[]]"},[]],
         ["span",{"class":"quad_key"},["city"]],
         ["select",{"class":"quad_value","onFocus":"this.previousValue = this.value;","onChange":"Quaderno.handlers.stackOnChange(this);","id":"quad:quad:city"},[
           ["option",{"class":"","value":"NRT"},["Tōkyō"]],
