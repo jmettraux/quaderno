@@ -1,8 +1,8 @@
 
 define customer
   text "customer"
-  text_input .name
-  text_input .city
+  text_input name
+  text_input city
 
 tabs
   tab "my unique tab"

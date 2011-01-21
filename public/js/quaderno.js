@@ -1190,8 +1190,6 @@ var Quaderno = function () {
 
       var group = lookupDefinition(container, template[0]);
 
-      console.log(group);
-
       if (group) return renderElement(container, group, data, options);
 
       func = renderers['render_']; // default renderer
