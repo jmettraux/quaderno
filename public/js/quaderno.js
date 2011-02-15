@@ -91,7 +91,7 @@ var Quaderno = function () {
       'minus': translate(container, 'quaderno.button.remove', 'remove'),
       'up': translate(container, 'quaderno.button.up', 'move up'),
       'down': translate(container, 'quaderno.button.down', 'move down'),
-      'copy': translate(container, 'quaderno.button.duplicate', 'duplicate'),
+      'copy': translate(container, 'quaderno.button.duplicate', 'duplicate')
       //'cut': translate(container, 'quaderno.button.cut', 'cut'),
       //'paste': translate(container, 'quaderno.button.paste', 'paste'),
       //'go': translate(container, 'quaderno.button.go', 'go'),

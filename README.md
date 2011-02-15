@@ -164,15 +164,17 @@ will run the test test/qt_0_parse.js
 
 ## credits
 
-Jamandru Reynolds - <a href="http://geometron.net">http://geometron.net/</a> - CSS and general appearance
+Jamandru Reynolds - [http://geometron.net](http://geometron.net/) - CSS and general appearance
 
-Claudio Petasecca Donati - <a href="http://github.com/etapeta">http://github.com/etapeta</a> - lots of testing
+Claudio Petasecca Donati - [https://github.com/etapeta](https://github.com/etapeta) - lots of testing
 
-Torsten Schoenebaum - <a href="http://github.com/tosch">http://github.com/tosch</a> - testing on webkit
+Torsten Schoenebaum - [https://github.com/tosch](https://github.com/tosch) - testing on webkit
 
-Benjami Yu - [http://github.com/byu](http://github.com/byu) - for the callbacks ideas
+Benjami Yu - [https://github.com/byu](https://github.com/byu) - for the callbacks ideas
 
-The amazing jQuery - <a href="http://jquery.com/">http://jquery.com</a>
+Simone Carletti - [https://github.com/weppos](https://github.com/weppos) - lint run
+
+The amazing jQuery - [http://jquery.com/](http://jquery.com)
 
 
 ## license
